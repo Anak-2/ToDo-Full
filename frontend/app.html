@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 계정 로그인</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div id="loginBox">
+            <img class="logo"
+                src="https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_ee5c8d9fb6248c938fd0dc19370e90bd.svg">
+            <div id="heading">로그인</div>
+            <form id="login">
+                <!-- id or pw error -->
+                <p class="idError" style="color:red">id or pw error</p>
+                <div class="form-group">
+                    <input type="text" class="inputBox" id="username" placeholder="아이디 또는 이메일 입력" autofocus required
+                        spellcheck="false">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="inputBox" id="password" placeholder="비밀번호 입력" required>
+                </div>
+                <!-- google login box -->
+                <div class="google-btn">
+                    <div class="google-icon"></div>
+                    <span class="google-btn-text">Sign in with Google</span><br>
+                </div>
+                <div class="form-group">
+                    <div id="makeAccout">계정이 없으신가요?<a id="signup" href="signup/sign.html"> 계정을 만드세요!</a></div>
+                </div>
+                <div class="form-group">
+                    <a id="findAccount" href="/findAccount/findAccount.html">본인 계정으로 로그인할 수 없습니까?</a>
+                </div>
+                <div class="form-button">
+                    <input type="button" value="뒤로">
+                    <input type="button" value="다음" onclick="loginProcess()">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
+        integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+
+</html>
