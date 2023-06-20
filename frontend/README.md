@@ -1,4 +1,4 @@
-# TODO project by mogakso
+# TODO project FRONT
 Microsoft ToDo login page clone AND My ToDo Main Page coding
 
 ### Login Window
