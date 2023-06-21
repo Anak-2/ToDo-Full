@@ -29,7 +29,7 @@ function loginProcess() {
         // refresh token 은 back 에서 cookie 에 저장
           accessToken = result.accessToken;
           localStorage.setItem('accessToken',accessToken);
-          localStorage.setItem('accessTokenExpirationTime',result.accessTokenExpirationTime);
+          // localStorage.setItem('accessTokenExpirationTime',result.accessTokenExpirationTime);
           location.href="/mainPage/mainPage.html";
       },
       error:function(){

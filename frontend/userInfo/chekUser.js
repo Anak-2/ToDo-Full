@@ -17,6 +17,8 @@ if(accessToken == null){
       // 서버에서 201 을 보내면 새로운 Access Token 을 발행했다는 의미
       // 또는 request.getResponseHeader('authorization') 가 null 인지 아닌지로 처리해도 좋다
       // ToDo: Back 에서 request.getCookies 가 null 이 뜨는 이유 찾기 (JSESSION, cookie 이상 x)
+      // 해결: domain 이 달라서 (127.0.0.1 , localhost) 생겼던 문제
+      // ToDo: localhost 로 통일시킨 것 같은데 remote url request url 이 달라서 그런지 header 가 전달되지 않는 문제
       console.log("request status: " + request.status);
       if (request.status === 201) {
         console.log("Refresh Access Token");
@@ -28,23 +30,24 @@ if(accessToken == null){
         console.log("-----------------------------------------");
         console.log("[header content-type] : " + request.getResponseHeader('content-type'));
         console.log("-----------------------------------------");
-        console.log("[header authorization] : " + request.getResponseHeader('authorization'));
+        console.log("[header authorization] : " + request.getResponseHeader('Authorization'));
         console.log("-----------------------------------------");
         console.log("[textStatus] : " + JSON.stringify(textStatus));
         console.log("-----------------------------------------");
         console.log("[response data] : " + JSON.stringify(data));
         console.log("=========================================");
         console.log("");
-        accessToken = request.getResponseHeader('authorization');
+        accessToken = request.getResponseHeader('Authorization');
+        console.log("access token : "+accessToken);
         if(accessToken !== null){
           localStorage.setItem("accessToken", accessToken);
         }
       }
       document.querySelector(".user-name").textContent = data['username'];
     },
-    error: function (request,status,error) {
-      alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+    error: function (jqXHR) {
+      alert(jqXHR.responseText);
       localStorage.removeItem("accessToken");
-      location.href = "./app.html";
+      location.href = "/app.html";
     }
   })

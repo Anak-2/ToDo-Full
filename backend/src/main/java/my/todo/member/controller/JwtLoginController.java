@@ -52,6 +52,7 @@ public class JwtLoginController {
         String accessToken = response.getHeader("Authorization");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
+        System.out.println(response.getHeaderNames());
         if (accessToken != null) {
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }
@@ -66,13 +67,18 @@ public class JwtLoginController {
         else throw new NotAuthorizedException("회원가입 실패");
     }
 
-    //    logout
+    //    logout, delete refresh token
+        @PostMapping(value="/logout")
+        public void logout(HttpServletRequest request, HttpServletResponse response){
+            deleteRefreshTokenFromCookie(request, response);
+        }
 
 //    find user
 
-//    add refresh token to cookie
+    //    add refresh token to cookie
     public void addRefreshTokenToCookie(String refreshToken, HttpServletResponse response) throws IOException, ServletException {
         if (refreshToken != null) {
+            System.out.println("add refresh token to cookie");
             Cookie cookie = new Cookie("refreshToken", URLEncoder.encode(refreshToken, "UTF-8"));
             cookie.setMaxAge((int) JwtTokenProvider.ACCESS_TOKEN_EXPIRE_TIME);
             cookie.setSecure(true);
@@ -80,5 +86,21 @@ public class JwtLoginController {
             cookie.setPath("/");
             response.addCookie(cookie);
         }
+    }
+
+    //    delete refresh token from cookie
+    public void deleteRefreshTokenFromCookie(HttpServletRequest request, HttpServletResponse response){
+        Cookie[] cookies = request.getCookies();
+        String cookieName = "refreshToken";
+        String rJwt = null;
+        for(Cookie c : cookies){
+            if(cookieName.equals(c.getName())){
+                rJwt = c.getValue();
+            }
+        }
+        Cookie cookie = new Cookie("refreshToken",null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }

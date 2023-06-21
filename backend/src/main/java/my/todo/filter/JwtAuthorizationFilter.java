@@ -42,7 +42,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 //        accessToken 이 있을 때 Authentication 실행
         Authentication authentication = checkAccessToken(accessToken);
         Cookie[] cookies = request.getCookies();
-        System.out.println(Arrays.toString(cookies));
+        System.out.println("Cookies: "+Arrays.toString(cookies));
 //        accessToken 에 문제가 있을 때
         if(authentication == null){
             System.out.println("AccessToken Problem");

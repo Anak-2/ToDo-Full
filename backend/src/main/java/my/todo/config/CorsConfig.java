@@ -6,6 +6,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
+
 @Configuration
 public class CorsConfig {
 
@@ -19,6 +21,7 @@ public class CorsConfig {
         config.addAllowedOriginPattern("*"); // 허용할 URL
         config.addAllowedHeader("*"); // 허용할 Header
         config.addAllowedMethod("*"); // 허용할 Http Method
+        config.setExposedHeaders(Arrays.asList("Authorization", "Authorization-refresh")); // CORS 는 해결했지만 프론트에 응답 헤더에 추가한 Authorization 이 전달되지 않는 문제 해결
         source.registerCorsConfiguration("/**", config); // 모든 Url에 대해 설정한 CorsConfiguration 등록
         return new CorsFilter(source);
     }

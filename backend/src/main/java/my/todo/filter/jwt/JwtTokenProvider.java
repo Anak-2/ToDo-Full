@@ -91,13 +91,17 @@ public class JwtTokenProvider {
 //          RefreshToken 유효한지 검사
             DecodedJWT rJwt = JWT.require(HMAC512(secretKey)).build()
                     .verify(refreshToken);
+//            ToDo: RefreshToken 저장하는 저장소 따로 만들기 -> refresh token 이 유효하지만 서버에 없을 경우 오류 처리 못함
 
 //          AccessToken 에서 사용자 정보 추출
             DecodedJWT jwt = JWT.decode(accessToken);
             String username = jwt.getClaim("username").asString();
-
-//          새 AccessToken 생성
-            return generateAccessToken(username);
+            if(userJpaRepository.existsByUsername(username)){
+    //          새 AccessToken 생성
+                return generateAccessToken(username);
+            }else{
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"No Such User Found");
+            }
         }
         catch(TokenExpiredException e){
             log.error("Refresh Token is Expired on "+e.getExpiredOn());
