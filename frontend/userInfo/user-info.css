@@ -1,0 +1,9 @@
+.membership-btn {
+    background-color: #b83939b9;
+    color: #FFFFFF;
+    border-color: #b83939b9;
+}
+
+.membership-btn:hover {
+    background-color: #CC0000;
+}

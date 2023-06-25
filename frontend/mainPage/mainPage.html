@@ -15,7 +15,7 @@
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- login user check -->
-    <script src="/userInfo/chekUser.js" async></script>
+    <script src="/userInfo/chekUser.js" defer></script>
 </head>
 
 <body>
@@ -48,7 +48,7 @@
             <div class="dropdown-content">
                 <ul>
                     <li><span class="friend-list">친구 목록</span></li>
-                    <li><span class="user-info">회원 정보</span></li>
+                    <li><span class="user-info" onclick="memberInfo()">회원 정보</span></li>
                     <li><span class="logout" onclick="logout()">로그아웃</span></li>
                 </ul>
             </div>

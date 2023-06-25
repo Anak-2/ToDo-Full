@@ -43,7 +43,13 @@ if(accessToken == null){
           localStorage.setItem("accessToken", accessToken);
         }
       }
-      document.querySelector(".user-name").textContent = data['username'];
+      // ToDo: 이 js에서 선언한 변수를 다른 파일에서 쓸 수 있도록 더 좋은 방법 생각하기
+      $('.user-name').text(data['username']);
+      $('.id').text(data['id']);
+      $('.create-date').text(data['createDate']);
+      $('.email').text(data['email']);
+      $('.name').text(data['username']);
+      $('.role').text(data['role']);
     },
     error: function (jqXHR) {
       alert(jqXHR.responseText);

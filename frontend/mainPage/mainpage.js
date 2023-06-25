@@ -347,6 +347,10 @@ function logout(){
     }
   })
 }
+
+function memberInfo(){
+  location.href="/userInfo/user-info.html";
+}
 initInput();
 getClock();
 setInterval(getClock, 60000);
