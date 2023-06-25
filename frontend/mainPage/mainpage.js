@@ -221,10 +221,10 @@ function checkList(e) {
   let t2 = e.target.previousElementSibling;
   if (t2.classList.contains("complete-list")) {
     t2.classList.remove("complete-list");
-    gsap.to(t, { duration: 1, opacity: 1, ease: "line" });
+    gsap.to(t, { duration: 0.5, opacity: 1, ease: "line" });
   } else {
     t2.classList.add("complete-list");
-    gsap.to(t, { duration: 1, opacity: 0.5, ease: "line" });
+    gsap.to(t, { duration: 0.5, opacity: 0.5, ease: "line" });
   }
 }
 
@@ -259,6 +259,12 @@ function trashCompleted() {
   for (let i = 0; i < listItem.length; i++) {
     if (listItem[i].classList.contains("complete-list")) {
       listItem[i].parentElement.remove();
+    }
+  }
+  let outerList = document.querySelectorAll(".outer-list");
+  for(let i = 0; i < outerList.length; i++){
+    if(outerList[i].childElementCount == 1){
+      outerList[i].remove();
     }
   }
 }
@@ -308,6 +314,39 @@ function getClock() {
   inputDate.min = `${year}-${monthZero}-${dayZero}`;
 }
 
+var dropdownTimeout;
+
+function showDropdown() {
+  clearTimeout(dropdownTimeout);
+  var dropdownContent = document.querySelector('.dropdown-content');
+  dropdownContent.style.display = 'block';
+}
+
+function hideDropdown() {
+  dropdownTimeout = setTimeout(function() {
+    var dropdownContent = document.querySelector('.dropdown-content');
+    dropdownContent.style.display = 'none';
+  }, 200);
+}
+
+function logout(){
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:8080/user/logout",
+    headers: { 'Authorization': accessToken },
+    xhrFields: { // CORS 문제 우회해서 헤더 넘겨주기 --> Set-Cookie 헤더 넘겨 줄려면 필요!!!!
+      withCredentials: true
+    },
+    success: function(data, textStatus, request){
+      localStorage.removeItem('Authorization');
+      alert("로그인 페이지로 이동합니다");
+      location.href="/app.html";
+    },
+    error: function(){
+      alert("Error!");
+    }
+  })
+}
 initInput();
 getClock();
 setInterval(getClock, 60000);

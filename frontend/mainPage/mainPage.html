@@ -25,7 +25,7 @@
     <div id="header">
         <div class="logo">
             <button class="menu">
-                <img src="./menu-svgrepo-com.svg">
+                <img src="./menu-svgrepo-com.svg" style="min-width: 100%;">
             </button>
             <span>ToDo</span>
             <div class="current-time"></div>
@@ -37,20 +37,21 @@
                 <input type="submit" value="Search" class="searchButton">
             </div>
         </div>
-        <div class="user">
-            <!-- <button class="userBtn"> -->
+        <div class="user dropdown" onmouseover="showDropdown()" onmouseout="hideDropdown()">
             <svg class="user-svg" width="458" height="457" viewBox="0 0 458 457" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M229 0C102.583 0 0.5 102.397 0.5 228.5C0.5 354.748 102.771 457 229 457C355.229 457 457.5 354.265 457.5 228.5C457.5 102.1 355.027 0 229 0ZM346.586 363.081C314.015 391.624 272.709 407.218 229 407.218C185.299 407.218 144 391.629 111.432 363.097C107.026 359.238 105.035 353.306 106.209 347.568C117.46 292.613 152.464 249.273 197.021 235.014C173.77 221.25 157.812 192.972 157.812 160.298C157.812 114.109 189.684 77.5 229 77.5C268.316 77.5 300.188 114.109 300.188 160.298C300.188 192.968 284.235 221.241 260.991 235.007C305.547 249.263 340.552 292.602 351.807 347.552C352.98 353.282 350.985 359.226 346.586 363.081Z"
                     fill="white" />
             </svg>
-            <div class="dropdown-content">
-                <a href="#">친구 목록</a>
-                <a href="#">회원 정보 수정</a>
-                <a href="#">로그아웃</a>
-            </div>
             <div class="user-name"></div>
+            <div class="dropdown-content">
+                <ul>
+                    <li><span class="friend-list">친구 목록</span></li>
+                    <li><span class="user-info">회원 정보</span></li>
+                    <li><span class="logout" onclick="logout()">로그아웃</span></li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="side-menu side-menu-hidden">

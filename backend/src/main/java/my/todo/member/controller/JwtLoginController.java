@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Optional;
 
 
 @RestController
@@ -68,10 +69,10 @@ public class JwtLoginController {
     }
 
     //    logout, delete refresh token
-        @PostMapping(value="/logout")
-        public void logout(HttpServletRequest request, HttpServletResponse response){
-            deleteRefreshTokenFromCookie(request, response);
-        }
+    @PostMapping(value="/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response){
+        deleteRefreshTokenFromCookie(request, response);
+    }
 
 //    find user
 

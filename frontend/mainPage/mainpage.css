@@ -20,7 +20,7 @@ body {
     /* when I use width: 100vw, horizontal scroll is created  */
     /* width: 100vw; */
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .logo {
@@ -36,6 +36,8 @@ body {
 .current-time {
     margin-left: 50px;
     font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .menu {
@@ -63,10 +65,14 @@ button {
 
 .user-svg {
     width: 30px;
-    height: 30px
+    height: 30px;
+    float: left;
 }
 
 .user-name {
+    width: 200px; /* 원하는 너비로 설정 */
+    overflow: hidden; /* 텍스트를 숨기는 스타일 설정 */
+    float: left;
     font-family: sans-serif;
     margin-left: 5px;
     color: white;
@@ -82,6 +88,7 @@ button {
     padding-top: 20px;
     top: 10vh;
     overflow: hidden;
+    z-index: 1;
     /* overflow-wrap: normal; */
     height: 100vh;
     left: 0;
@@ -309,15 +316,39 @@ button {
     cursor: pointer;
 }
 
+.dropdown{
+    position: relative;
+    display: inline-block;
+}
 .dropdown-content {
     display: none;
     position: absolute;
+    margin-top:35px;
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 8px;
     z-index: 1;
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown:hover .dropdown-content, .dropdown-content:hover{
     display: block;
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-content span{
+    text-decoration: none;
+    display: block;
+    padding: 4px;
+    color: inherit;
+    cursor: pointer;
+}
+
+li:hover {
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경색 설정 */
 }
