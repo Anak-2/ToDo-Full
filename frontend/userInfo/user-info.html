@@ -26,51 +26,59 @@
     <title>회원 정보</title>
 </head>
 
-<body style="height: 80%; width: 80%;">
+<body style="height: 80%; width: 80%; margin:0 auto">
     <div class="container" style="margin-top:20px; margin-bottom: 20px">
         <i class="fa fa-home fa-lg" aria-hidden="true"></i>
     </div>
-    <table class="table align-middle mb-0 bg-white">
-        <thead>
-            <tr>
-                <th scope="col">id</th>
-                <th scope="col">create_date</th>
-                <th scope="col">email</th>
-                <th scope="col">name</th>
-                <th scope="col">role</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <p class="fw-normal mb-1 id"></p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1 create-date"></p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1 email"></p>
-                </td>
-                <td>
-                    <p class="d-flex align-items-center name"></p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1 role"></p>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <input class="btn btn-secondary logout-btn revise-btn" type="button" value="회원 수정">
-    <input class="btn btn-secondary logout-btn membership-btn" type="button" value="회원 탈퇴">
+    <hr class="mt-0 mb-4">
+    <div class="container row" style="float: none; margin: auto">
+        <div class="col-mb-3 row" style="float: none; margin: 0 auto">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Account Details</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="small mb-1" for="UserId">User Id</label>
+                        <input class="id form-control" id="UserId" type="text" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small mb-1" for="Username">Username (how your name will appear to other
+                            users on the site)</label>
+                        <input class="user-name form-control" id="Username" type="text" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small mb-1" for="Password">Password</label>
+                        <input class="password form-control" id="Password" type="text">
+                    </div>
+                    <div class="mb-3">
+                        <label class="small mb-1" for="CreateDate">Create Date</label>
+                        <input class="create-date form-control" id="CreateDate" type="text" disabled>
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="small mb-1" for="EmailAddress">Email address</label>
+                        <input class="email form-control" id="EmailAddress" type="email" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small mb-1" for="Authority">Authority</label>
+                        <input class="role form-control" id="Authority" type="email" disabled>
+                    </div>
+                    <input class="btn btn-secondary revise-btn" id="Revise" onclick="reviseUser()" type="button" value="회원 수정">
+                    <input class="btn btn-secondary membership-btn" type="button" value="회원 탈퇴">
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script>
-     $('.fa-home').on("click",function(){
-        location.href="/mainPage/mainPage.html";
+    $('.fa-home').on("click", function () {
+        location.href = "/mainPage/mainPage.html";
     });
-    $('.fa-home').hover(function(){
-        $(this).css('cursor','pointer');
-    }, function(){
-        $(this).css('cursor','none');
+    $('.fa-home').hover(function () {
+        $(this).css('cursor', 'pointer');
+    }, function () {
+        $(this).css('cursor', 'none');
     })
 </script>
+
 </html>

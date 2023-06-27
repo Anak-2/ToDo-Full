@@ -2,6 +2,7 @@ package my.todo.controlleradvice;
 
 import lombok.extern.slf4j.Slf4j;
 import my.todo.global.error.NotAuthorizedException;
+import my.todo.global.error.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,7 +15,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class LoginControllerAdvice {
     @ExceptionHandler(NotAuthorizedException.class)
     @ResponseBody
-    public ResponseEntity handleNotAuthorizedException(NotAuthorizedException notAuthorizedException){
-        return new ResponseEntity(notAuthorizedException.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> handleNotAuthorizedException(NotAuthorizedException notAuthorizedException){
+        return new ResponseEntity<>(notAuthorizedException.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseBody
+    public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException notFoundException){
+        return new ResponseEntity<>(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

@@ -13,4 +13,13 @@ public class UserRequestDto {
         @NotEmpty
         private String password;
     }
+
+    @Getter
+    @Setter
+    public static class UpdateDTO{
+        @NotEmpty
+        private String username;
+        @NotEmpty
+        private String password;
+    }
 }

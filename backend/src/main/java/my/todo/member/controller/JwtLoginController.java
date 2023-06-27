@@ -17,6 +17,7 @@ import my.todo.member.service.UserJpaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -53,7 +54,6 @@ public class JwtLoginController {
         String accessToken = response.getHeader("Authorization");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
-        System.out.println(response.getHeaderNames());
         if (accessToken != null) {
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }
@@ -74,7 +74,16 @@ public class JwtLoginController {
         deleteRefreshTokenFromCookie(request, response);
     }
 
-    //    find user
+    //  update user info
+    @PostMapping(value="/update")
+    public ResponseEntity<?> update(@RequestBody UserRequestDto.UpdateDTO updateDTO){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+//        user needs to be updated
+        User updateBeforeUser = principalDetails.getUser();
+        userJpaService.userUpdate(updateBeforeUser.getUsername(), updateDTO);
+        return ResponseEntity.ok().build();
+    }
 
     //    add refresh token to cookie
     public void addRefreshTokenToCookie(String refreshToken, HttpServletResponse response) throws IOException, ServletException {

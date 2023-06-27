@@ -11,5 +11,5 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
     //    OAuth 유저를 찾기 위한 메서드
     Optional<User> findByProviderAndProviderId(String provider, String providerId);
-
+//    ToDo: update query 만들기
 }

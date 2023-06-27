@@ -35,6 +35,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
+    @Builder(builderClassName = "normalBuilder", builderMethodName = "normalBuilder")
+    public User(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
     @Builder(builderClassName = "oauthBuilder", builderMethodName = "oauthBuilder")
     public User(String username, String email, Role role, String provider, String providerId) {
         this.username = username;

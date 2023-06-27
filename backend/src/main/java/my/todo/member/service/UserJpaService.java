@@ -8,17 +8,23 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.filter.jwt.JwtTokenProvider;
+import my.todo.global.error.NotAuthorizedException;
+import my.todo.global.error.UserNotFoundException;
+import my.todo.member.domain.dto.UserRequestDto;
 import my.todo.member.domain.dto.UserResponseDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +65,20 @@ public class UserJpaService {
         }
         return null;
     }
+
+//    update user info
+    public void userUpdate(String updateBeforeUser, UserRequestDto.UpdateDTO updateDTO) {
+        Optional<User> findUser = userJpaRepository.findByUsername(updateBeforeUser);
+        if(findUser.isPresent()){
+//            update by "dirty checking"
+            findUser.get().setPassword(updateDTO.getPassword());
+        }else {
+            throw new UserNotFoundException("Can't Find Such User");
+        }
+    }
 //    logout
 
 //    delete
-//    modify
 
 //
 }
