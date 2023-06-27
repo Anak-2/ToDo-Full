@@ -85,6 +85,15 @@ public class JwtLoginController {
         return ResponseEntity.ok().build();
     }
 
+    // delete user
+    @DeleteMapping(value="/delete")
+    public ResponseEntity<?> delete(@RequestBody UserRequestDto.DeleteDTO deleteDTO, HttpServletRequest request, HttpServletResponse response){
+        User deleteBeforeUser = getUserFromAuthentication();
+        userJpaService.deleteUser(deleteBeforeUser);
+        deleteRefreshTokenFromCookie(request, response);
+        return ResponseEntity.ok().build();
+    }
+
     //    add refresh token to cookie
     public void addRefreshTokenToCookie(String refreshToken, HttpServletResponse response) throws IOException, ServletException {
         if (refreshToken != null) {
@@ -112,5 +121,12 @@ public class JwtLoginController {
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    //    get principal from authentication
+    public User getUserFromAuthentication(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        return principalDetails.toEntity();
     }
 }

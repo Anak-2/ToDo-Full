@@ -79,6 +79,13 @@ public class UserJpaService {
 //    logout
 
 //    delete
+    public void deleteUser(User user){
+        try{
+            userJpaRepository.delete(user);
+        }catch (IllegalArgumentException e){
+            throw new UserNotFoundException(e.getMessage());
+        }
+    }
 
 //
 }

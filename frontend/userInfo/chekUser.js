@@ -56,8 +56,8 @@ $.ajax({
     $('.name').val(data['username']);
     $('.role').val(data['role']);
   },
-  error: function (jqXHR) {
-    alert(jqXHR.responseText);
+  error: function (jqXHR, errorThrown) {
+    alert(errorThrown);
     localStorage.removeItem("accessToken");
     location.href = "/app.html";
   }
@@ -72,23 +72,48 @@ function reviseUser() {
   let username = $('.user-name').val();
   let password = $('.password').val();
   var user = {
-    "username":username,
-    "password":password
+    "username": username,
+    "password": password
   }
   $.ajax({
     url: 'http://localhost:8080/user/update',
     type: 'POST',
-    headers: { 'Authorization': accessToken , 'Content-Type':'application/json'},
+    headers: { 'Authorization': accessToken, 'Content-Type': 'application/json' },
     data: JSON.stringify(user),
     crossDomain: true,
     xhrFields: {
       withCredentials: true
     },
-    success: function(){
+    success: function () {
       alert("회원 정보가 수정됐습니다!");
     },
-    error: function(){
+    error: function () {
 
     }
   })
+}
+
+function deleteUser() {
+  let username = $('.user-name').val();
+  var user = { "username": username };
+  let result = confirm("탈퇴하시겠습니까?");
+  if (result) {
+    $.ajax({
+      url: 'http://localhost:8080/user/delete',
+      type: 'DELETE',
+      headers: { 'Authorization': accessToken, 'Content-Type': 'application/json' },
+      data: JSON.stringify(user),
+      crossDomain: true,
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function () {
+        alert("정상적으로 탈퇴했습니다!");
+        location.href="/app.html";
+      },
+      error: function (errorThrown) {
+        alert(errorThrown);
+      }
+    });
+  }
 }

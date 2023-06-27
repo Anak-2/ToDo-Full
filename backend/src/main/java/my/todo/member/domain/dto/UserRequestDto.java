@@ -22,4 +22,11 @@ public class UserRequestDto {
         @NotEmpty
         private String password;
     }
+
+    @Getter
+    @Setter
+    public static class DeleteDTO{
+        @NotEmpty
+        private String username;
+    }
 }
