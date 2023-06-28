@@ -14,6 +14,7 @@ import my.todo.member.domain.dto.UserResponseDto;
 import my.todo.member.domain.user.Role;
 import my.todo.member.domain.user.User;
 import my.todo.member.service.UserJpaService;
+import my.todo.schedule.domain.schedule.Schedule;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

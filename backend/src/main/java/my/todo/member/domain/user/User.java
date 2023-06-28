@@ -6,9 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.CreationTimestamp;
+import my.todo.schedule.domain.schedule.Schedule;
+import org.springframework.data.annotation.CreatedDate;
 
-import java.sql.Timestamp;
+import java.sql.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,11 +31,14 @@ public class User {
     private String provider;
     private String providerId;
 
-    @CreationTimestamp
-    private Timestamp createDate;
+    @CreatedDate
+    private Date createDate;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
+
+    @OneToMany(mappedBy = "user")
+    private List<Schedule> scheduleList;
 
     @Builder(builderClassName = "normalBuilder", builderMethodName = "normalBuilder")
     public User(String username, String password){

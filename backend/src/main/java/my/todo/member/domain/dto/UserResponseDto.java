@@ -26,4 +26,11 @@ public class UserResponseDto {
         private User user;
         private String accessToken;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class ScheduleDTO{
+
+    }
 }

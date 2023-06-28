@@ -29,4 +29,11 @@ public class UserRequestDto {
         @NotEmpty
         private String username;
     }
+
+    @Getter
+    @Setter
+    public static class ScheduleDTO{
+        @NotEmpty
+        private String title;
+    }
 }

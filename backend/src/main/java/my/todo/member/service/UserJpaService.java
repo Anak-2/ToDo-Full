@@ -61,9 +61,8 @@ public class UserJpaService {
             return JwtTokenProvider.generateToken(authentication);
         }catch(Exception e){
 //            ToDo: ExceptionHandler 를 사용하거나 throw new CustomException() 로 처리해주기
-            log.error("로그인 실패");
+            throw new UserNotFoundException("No User Found");
         }
-        return null;
     }
 
 //    update user info
