@@ -1,13 +1,30 @@
 package my.todo.member.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import jakarta.persistence.*;
+import lombok.*;
+import my.todo.member.domain.user.Role;
 import my.todo.member.domain.user.User;
+import my.todo.schedule.domain.schedule.Schedule;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserResponseDto {
+
+    private Long id;
+    private String username;
+    private String password;
+    private String email;
+    private String provider;
+    private String providerId;
+    private Date createDate;
+    private Role role;
+
     @Builder
     @Getter
     @AllArgsConstructor
@@ -18,19 +35,15 @@ public class UserResponseDto {
         private Date refreshTokenExpirationTime;
     }
 
-    //    User info + Token info ( when access token is republished, this response is required to change old one )
-    @Builder
-    @Getter
-    @AllArgsConstructor
-    public static class UserAndTokenInfo{
-        private User user;
-        private String accessToken;
+    public UserResponseDto(User user){
+        id = user.getId();
+        username = user.getUsername();
+        password = user.getPassword();
+        email = user.getEmail();
+        provider = user.getProvider();
+        providerId = user.getProviderId();
+        createDate = user.getCreateDate();
+        role = user.getRole();
     }
 
-    @Builder
-    @Getter
-    @AllArgsConstructor
-    public static class ScheduleDTO{
-
-    }
 }

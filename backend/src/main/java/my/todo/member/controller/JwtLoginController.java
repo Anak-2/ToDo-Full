@@ -55,16 +55,12 @@ public class JwtLoginController {
         String accessToken = response.getHeader("Authorization");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
-        if (accessToken != null) {
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return userJpaService.userInfo(accessToken, user);
     }
 
     //    join
     @PostMapping(value = "/join")
     public User join(@RequestBody User user) {
-        System.out.println("join");
         if(userJpaService.join(user)) return user;
         else throw new NotAuthorizedException("회원가입 실패");
     }

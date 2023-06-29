@@ -56,8 +56,8 @@ $.ajax({
     $('.name').val(data['username']);
     $('.role').val(data['role']);
   },
-  error: function (jqXHR, errorThrown) {
-    alert(errorThrown);
+  error:function(request,status,error){
+    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
     localStorage.removeItem("accessToken");
     location.href = "/app.html";
   }

@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.schedule.domain.schedule.Schedule;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,8 +39,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @OneToMany(mappedBy = "user")
-    private List<Schedule> scheduleList;
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
+    private List<Schedule> scheduleList = new ArrayList<>();
 
     @Builder(builderClassName = "normalBuilder", builderMethodName = "normalBuilder")
     public User(String username, String password){

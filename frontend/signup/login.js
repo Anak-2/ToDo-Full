@@ -15,20 +15,7 @@ $(document).ready(function () {
     }
   }
   if (accessToken !== null) {
-    $.ajax({
-      url: "http://localhost:8080/user/user-info",
-      type: "GET",
-      headers: { 'Authorization': accessToken, 'Authorization_refresh': refreshToken },
-      async: false,
-      success: function (result) {
-        // alert("Success! Move to main page");
-        let url = "/mainpage/mainPage.html";
-        location.replace(url);
-      },
-      error: function () {
-        alert("fail");
-      }
-    })
+    location.href = "/mainPage/mainPage.html";
   }
 }
 );

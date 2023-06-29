@@ -15,6 +15,7 @@ import my.todo.member.domain.dto.UserResponseDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -84,6 +85,15 @@ public class UserJpaService {
         }catch (IllegalArgumentException e){
             throw new UserNotFoundException(e.getMessage());
         }
+    }
+
+    public ResponseEntity<UserResponseDto> userInfo(String accessToken, User user) {
+        UserResponseDto userResponseDto = new UserResponseDto(user);
+
+        if (accessToken != null) {
+            return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
 //
