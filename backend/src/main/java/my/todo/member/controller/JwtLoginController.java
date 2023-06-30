@@ -50,15 +50,16 @@ public class JwtLoginController {
 
     //    login with authorization header
     @GetMapping(value = "/user-info")
-    public ResponseEntity<?> userPage(HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public User userPage(HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 //        Filter 를 거쳐서 Request 의 header 에 AccessToken 이 유효하지 않다면 response 의 header 에 새로 발급한 AccessToken 추가
         String accessToken = response.getHeader("Authorization");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
-        return userJpaService.userInfo(accessToken, user);
+//        return userJpaService.userInfo(accessToken, user);
+        return user;
     }
 
-    //    join
+    //    join ToDo: DTO 로 Request 받기
     @PostMapping(value = "/join")
     public User join(@RequestBody User user) {
         if(userJpaService.join(user)) return user;

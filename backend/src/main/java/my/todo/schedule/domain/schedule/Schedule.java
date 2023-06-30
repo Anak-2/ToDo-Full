@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 public class Schedule {
     @Id
     @GeneratedValue
@@ -26,8 +25,8 @@ public class Schedule {
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
-    private List<Todo> todoList;
+//    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+//    private List<Todo> todoList;
 
     @Builder.Default
     private boolean isFinished = false;

@@ -18,11 +18,6 @@ import java.util.List;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 //    add schedule
-    @PostMapping(value = "add")
-    public ResponseEntity<?> addSchedule(String title){
-        List<Todo> todoList = scheduleService.getTodoList(title);
-        return new ResponseEntity<>(todoList, HttpStatus.OK);
-    }
 //    find schedule
 //    get to_do list from schedule
 //    modify schedule
