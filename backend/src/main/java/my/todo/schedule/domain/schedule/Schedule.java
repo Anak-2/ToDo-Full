@@ -1,5 +1,6 @@
 package my.todo.schedule.domain.schedule;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import my.todo.member.domain.user.User;
@@ -12,6 +13,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Schedule {
     @Id
     @GeneratedValue
@@ -25,11 +29,10 @@ public class Schedule {
     @JoinColumn(name="user_id")
     private User user;
 
+//    @JsonIgnore
 //    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
 //    private List<Todo> todoList;
 
-    @Builder.Default
-    private boolean isFinished = false;
     @Builder.Default
     private boolean isPublic = false;
 

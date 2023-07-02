@@ -14,6 +14,7 @@ import my.todo.member.domain.dto.UserRequestDto;
 import my.todo.member.domain.dto.UserResponseDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
+import my.todo.schedule.domain.schedule.Schedule;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,11 +26,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 @Slf4j
 public class UserJpaService {
 
@@ -88,6 +90,9 @@ public class UserJpaService {
     }
 
     public ResponseEntity<UserResponseDto> userInfo(String accessToken, User user) {
+        List<Schedule> scheduleList = findAllSchedule(user);
+//        lazily exception 을 해결하기 위해 user 의 scheduleList 초기화
+        user.setScheduleList(scheduleList);
         UserResponseDto userResponseDto = new UserResponseDto(user);
 
         if (accessToken != null) {
@@ -96,5 +101,7 @@ public class UserJpaService {
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
-//
+    public List<Schedule> findAllSchedule(User user){
+        return userJpaRepository.findScheduleListByUser(user).orElse(null);
+    }
 }

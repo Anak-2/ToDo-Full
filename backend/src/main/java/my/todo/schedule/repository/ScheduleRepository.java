@@ -15,6 +15,6 @@ import java.util.Optional;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     Optional<Schedule> findByTitle(String title);
     Optional<Schedule> findById(Long id);
-    @Query("select s from Schedule s join fetch User u on s.id = u.id")
-    Optional<List<Schedule>> findByUser(User user);
+    @Query("select t from Schedule s join fetch Todo t on t.id = s.id")
+    Optional<List<Todo>> findTodoListBySchedule(Schedule schedule);
 }

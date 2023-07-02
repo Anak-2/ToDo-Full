@@ -1,10 +1,7 @@
 package my.todo.member.domain.user;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.schedule.domain.schedule.Schedule;
 import net.minidev.json.annotate.JsonIgnore;
