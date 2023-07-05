@@ -3,10 +3,9 @@ package my.todo.member.domain.dto;
 import lombok.*;
 import my.todo.member.domain.user.Role;
 import my.todo.member.domain.user.User;
-import my.todo.schedule.domain.dto.ScheduleResponseDto;
+import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

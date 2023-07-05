@@ -1,4 +1,4 @@
-package my.todo.schedule.domain.dto;
+package my.todo.schedule.domain.dto.request;
 
 import lombok.*;
 import my.todo.member.domain.dto.UserRequestDto;

@@ -10,8 +10,7 @@ import my.todo.member.domain.dto.UserRequestDto;
 import my.todo.member.domain.dto.UserResponseDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
-import my.todo.schedule.domain.dto.ScheduleResponseDto;
-import my.todo.schedule.domain.schedule.Schedule;
+import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import my.todo.schedule.repository.CustomScheduleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +58,6 @@ public class UserJpaService {
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             return JwtTokenProvider.generateToken(authentication);
         }catch(Exception e){
-//            ToDo: ExceptionHandler 를 사용하거나 throw new CustomException() 로 처리해주기
             throw new UserNotFoundException("No User Found");
         }
     }
@@ -83,17 +81,12 @@ public class UserJpaService {
 
     public ResponseEntity<UserResponseDto> userInfo(String accessToken, User user) {
         List<ScheduleResponseDto> scheduleResponseDtoListList = customScheduleRepository.getScheduleListByUser(user);
-//        lazily exception 을 해결하기 위해 user 의 scheduleList 초기화 or Schedule 관련 DTO 는 Schedule Repository 에서 처리
-//        user.createScheduleList(scheduleList);
         UserResponseDto userResponseDto = new UserResponseDto(user, scheduleResponseDtoListList);
 
+//        check if the token has been refreshed
         if (accessToken != null) {
             return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
-    }
-
-    private List<Schedule> findAllSchedule(User user){
-        return userJpaRepository.findScheduleListByUser(user).orElse(null);
     }
 }

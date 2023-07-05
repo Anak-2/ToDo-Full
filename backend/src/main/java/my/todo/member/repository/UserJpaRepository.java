@@ -17,8 +17,6 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
     Optional<User> findByProviderAndProviderId(String provider, String providerId);
 //    ToDo 문제: update query 만들기
 //    ToDo 해결: jpql 의 dirty check 으로 save() 하면 자동으로 update 쿼리 나감
-    @Query("select s from User u join fetch Schedule s on u.id = s.user.id")
-    Optional<List<Schedule>> findScheduleListByUser(User user);
 
     default User getByUsername(String username){
         return findByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found"));

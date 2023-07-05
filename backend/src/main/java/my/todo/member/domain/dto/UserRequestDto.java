@@ -38,4 +38,5 @@ public class UserRequestDto {
         @NotEmpty
         private String title;
     }
+
 }

@@ -3,9 +3,8 @@ package my.todo.schedule.repository;
 import lombok.RequiredArgsConstructor;
 import my.todo.global.error.ScheduleNotFoundException;
 import my.todo.member.domain.user.User;
-import my.todo.schedule.domain.dto.ScheduleResponseDto;
+import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import my.todo.schedule.domain.schedule.Schedule;
-import my.todo.todo.domain.todo.Todo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,9 +27,7 @@ public class CustomScheduleRepository{
     public Schedule getScheduleById(Long id){
         return scheduleRepository.findById(id).orElseThrow(ScheduleNotFoundException::new);
     }
-    public List<Todo> getTodoListBySchedule(Schedule schedule){
-        return scheduleRepository.findTodoListBySchedule(schedule);
-    }
+
     public  List<ScheduleResponseDto> getScheduleListByUser(User user){
         return scheduleRepository.findByUser(user).stream()
                 .map(schedule -> new ScheduleResponseDto(schedule))

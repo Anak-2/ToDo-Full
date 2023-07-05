@@ -1,4 +1,4 @@
-package my.todo.schedule.domain.dto;
+package my.todo.schedule.domain.dto.response;
 
 import lombok.*;
 import my.todo.member.domain.dto.UserResponseDto;
@@ -20,8 +20,6 @@ public class ScheduleResponseDto {
     private Timestamp createdDate;
     @NonNull
     private String title;
-//    //        ToDo: dto로 넘겨주기
-    private List<TodoResponseDto> todoList;
     private boolean isPublic = false;
 
     public ScheduleResponseDto(Schedule schedule){
@@ -29,8 +27,5 @@ public class ScheduleResponseDto {
         this.createdDate = schedule.getCreatedDate();
         this.title = schedule.getTitle();
         this.isPublic = schedule.isPublic();
-//        this.todoList = schedule.getTodoList().stream()
-//                .map(todo -> new TodoResponseDto(todo))
-//                .collect(Collectors.toList());
     }
 }
