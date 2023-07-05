@@ -5,17 +5,21 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.schedule.domain.schedule.Schedule;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @Slf4j
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -30,30 +34,28 @@ public class User {
     private String provider;
     private String providerId;
 
-    @CreatedDate
-    private Date createDate;
+    @CreationTimestamp
+    private Timestamp createDate;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade=CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> scheduleList = new ArrayList<>();
 
-    @Builder(builderClassName = "normalBuilder", builderMethodName = "normalBuilder")
-    public User(String username, String password){
-        this.username = username;
+    public void updatePassword(String password){
         this.password = password;
     }
-    @Builder(builderClassName = "oauthBuilder", builderMethodName = "oauthBuilder")
-    public User(String username, String email, Role role, String provider, String providerId) {
-        this.username = username;
+
+    public void updateEmail(String email){
         this.email = email;
-        this.role = role;
-        this.provider = provider;
-        this.providerId = providerId;
     }
 
     public String getRoleKey(){
         return this.role.getKey();
+    }
+
+    public void createScheduleList(List<Schedule> scheduleList) {
+        this.scheduleList = scheduleList;
     }
 }

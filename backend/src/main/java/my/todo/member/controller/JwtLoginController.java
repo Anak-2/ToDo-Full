@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.todo.config.auth.PrincipalDetails;
 import my.todo.filter.jwt.JwtTokenProvider;
 import my.todo.global.error.NotAuthorizedException;
+import my.todo.global.error.UserNotFoundException;
 import my.todo.member.domain.dto.UserRequestDto;
 import my.todo.member.domain.dto.UserResponseDto;
 import my.todo.member.domain.user.Role;
@@ -43,7 +44,7 @@ public class JwtLoginController {
     public ResponseEntity<?> login(@RequestBody UserRequestDto.LoginDTO loginDTO, HttpServletResponse response) throws ServletException, IOException {
         UserResponseDto.TokenInfo tokenInfo = userJpaService.login(loginDTO.getUsername(), loginDTO.getPassword());
         if (tokenInfo == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No User Found", new RuntimeException("No User Found"));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No User Found", new UserNotFoundException("No User Found"));
         addRefreshTokenToCookie(tokenInfo.getRefreshToken(), response);
         return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
     }
@@ -55,15 +56,13 @@ public class JwtLoginController {
         String accessToken = response.getHeader("Authorization");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
-//        return userJpaService.userInfo(accessToken, user);
         return userJpaService.userInfo(accessToken, user);
     }
 
-    //    join ToDo: DTO 로 Request 받기
+    //    join
     @PostMapping(value = "/join")
-    public User join(@RequestBody User user) {
-        if(userJpaService.join(user)) return user;
-        else throw new NotAuthorizedException("회원가입 실패");
+    public void join(@RequestBody User user) {
+        userJpaService.join(user);
     }
 
     //    logout, delete refresh token
@@ -75,10 +74,8 @@ public class JwtLoginController {
     //  update user info
     @PostMapping(value="/update")
     public ResponseEntity<?> update(@RequestBody UserRequestDto.UpdateDTO updateDTO){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 //        user needs to be updated
-        User updateBeforeUser = principalDetails.getUser();
+        User updateBeforeUser = getUserFromAuthentication();
         userJpaService.userUpdate(updateBeforeUser.getUsername(), updateDTO);
         return ResponseEntity.ok().build();
     }

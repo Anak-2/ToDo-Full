@@ -1,20 +1,18 @@
 package my.todo.member.service;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.filter.jwt.JwtTokenProvider;
-import my.todo.global.error.NotAuthorizedException;
+import my.todo.global.error.DuplicatedException;
 import my.todo.global.error.UserNotFoundException;
 import my.todo.member.domain.dto.UserRequestDto;
 import my.todo.member.domain.dto.UserResponseDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
+import my.todo.schedule.domain.dto.ScheduleResponseDto;
 import my.todo.schedule.domain.schedule.Schedule;
+import my.todo.schedule.repository.CustomScheduleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,12 +20,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -36,19 +30,21 @@ import java.util.Optional;
 public class UserJpaService {
 
     private final UserJpaRepository userJpaRepository;
+//    ToDo: User , Schedule 사이의 데이터 전송을 어떻게 구상할 지 생각하기
+//    ToDo: UserController 에서 User, Schedule Service 를 가져다 DTO 를 생성하는게 좋을지
+//          UserJpaService 에서 User, Schedule Repository 를 가져다 DTO 를 생성하는게 좋을지
+    private final CustomScheduleRepository customScheduleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     //    join
-    public boolean join(User user) {
+    public void join(User user) {
 //        duplicate check
         if (!userJpaRepository.existsByUsername(user.getUsername())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.updatePassword(passwordEncoder.encode(user.getPassword()));
             userJpaRepository.save(user);
-            return true;
         }else{
-            System.out.println("중복된 아이디 존재");
-            return false;
+            throw new DuplicatedException("중복된 아이디 존재");
         }
     }
 
@@ -70,13 +66,9 @@ public class UserJpaService {
 
 //    update user info
     public void userUpdate(String updateBeforeUser, UserRequestDto.UpdateDTO updateDTO) {
-        Optional<User> findUser = userJpaRepository.findByUsername(updateBeforeUser);
-        if(findUser.isPresent()){
 //            update by "dirty checking"
-            findUser.get().setPassword(updateDTO.getPassword());
-        }else {
-            throw new UserNotFoundException("Can't Find Such User");
-        }
+        User user = userJpaRepository.getByUsername(updateDTO.getUsername());
+        user.updatePassword(updateDTO.getPassword());
     }
 //    logout
 
@@ -90,9 +82,9 @@ public class UserJpaService {
     }
 
     public ResponseEntity<UserResponseDto> userInfo(String accessToken, User user) {
-        List<Schedule> scheduleList = findAllSchedule(user);
+        List<ScheduleResponseDto> scheduleResponseDtoListList = customScheduleRepository.getScheduleListByUser(user);
 //        lazily exception 을 해결하기 위해 user 의 scheduleList 초기화
-        user.setScheduleList(scheduleList);
+//        user.createScheduleList(scheduleList);
         UserResponseDto userResponseDto = new UserResponseDto(user);
 
         if (accessToken != null) {
@@ -101,7 +93,7 @@ public class UserJpaService {
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
-    public List<Schedule> findAllSchedule(User user){
+    private List<Schedule> findAllSchedule(User user){
         return userJpaRepository.findScheduleListByUser(user).orElse(null);
     }
 }

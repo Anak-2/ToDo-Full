@@ -1,15 +1,9 @@
 package my.todo.member.domain.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 import my.todo.member.domain.user.Role;
 import my.todo.member.domain.user.User;
 import my.todo.schedule.domain.dto.ScheduleResponseDto;
-import my.todo.schedule.domain.schedule.Schedule;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,15 +33,15 @@ public class UserResponseDto {
     }
 
     public UserResponseDto(User user){
-        id = user.getId();
-        username = user.getUsername();
-        password = user.getPassword();
-        email = user.getEmail();
-        provider = user.getProvider();
-        providerId = user.getProviderId();
-        createDate = user.getCreateDate();
-        role = user.getRole();
-        scheduleResponseDtoList = user.getScheduleList().stream()
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.provider = user.getProvider();
+        this.providerId = user.getProviderId();
+        this.createDate = user.getCreateDate();
+        this.role = user.getRole();
+        this.scheduleResponseDtoList = user.getScheduleList().stream()
                         .map(o->new ScheduleResponseDto(o))
                 .collect(Collectors.toList());
     }

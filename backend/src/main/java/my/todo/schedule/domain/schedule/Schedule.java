@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -20,8 +21,8 @@ public class Schedule {
     @Id
     @GeneratedValue
     private long id;
-    @CreatedDate
-    private Date createdDate;
+    @CreationTimestamp
+    private Timestamp createdDate;
     @NonNull
     private String title;
 
@@ -29,9 +30,8 @@ public class Schedule {
     @JoinColumn(name="user_id")
     private User user;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
-//    private List<Todo> todoList;
+    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<Todo> todoList;
 
     @Builder.Default
     private boolean isPublic = false;

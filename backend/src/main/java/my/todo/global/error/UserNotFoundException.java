@@ -2,7 +2,7 @@ package my.todo.global.error;
 
 public class UserNotFoundException extends RuntimeException{
     public UserNotFoundException() {
-        super();
+        super("User not found");
     }
 
     public UserNotFoundException(String message) {

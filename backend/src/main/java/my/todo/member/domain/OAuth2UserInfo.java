@@ -37,13 +37,12 @@ public class OAuth2UserInfo {
     }
 
     public User toEntity(){
-        User user = User.oauthBuilder()
+        return User.builder()
                 .username(platform+"_"+this.getProviderId())
                 .email(this.getEmail())
                 .role(Role.USER)
                 .provider(platform)
                 .providerId(this.getProviderId())
                 .build();
-        return user;
     }
 }

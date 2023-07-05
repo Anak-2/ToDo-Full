@@ -3,8 +3,10 @@ package my.todo.member.domain.dto;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import my.todo.member.domain.user.User;
 
 public class UserRequestDto {
+
     @Getter
     @Setter
     public static class LoginDTO{

@@ -51,7 +51,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 //          가입한 회원이 있으면 업데이트만
         else{
             User updateUser = findUser.get();
-            updateUser.setEmail(oAuth2UserInfo.getEmail());
+            updateUser.updateEmail(oAuth2UserInfo.getEmail());
             userJpaRepository.save(updateUser);
         }
 

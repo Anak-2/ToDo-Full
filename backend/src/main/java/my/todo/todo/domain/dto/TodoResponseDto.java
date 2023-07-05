@@ -9,7 +9,11 @@ public class TodoResponseDto {
     private String title;
     private String content;
     private boolean isFinished;
-    public TodoResponseDto(Todo todo){
 
+    public TodoResponseDto(Todo todo){
+        this.createdDate = todo.getCreatedDate();
+        this.title = todo.getTitle();
+        this.content = todo.getContent();
+        this.isFinished = todo.isFinished();
     }
 }
