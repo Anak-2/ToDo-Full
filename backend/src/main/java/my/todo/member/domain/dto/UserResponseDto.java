@@ -32,7 +32,7 @@ public class UserResponseDto {
         private Date refreshTokenExpirationTime;
     }
 
-    public UserResponseDto(User user){
+    public UserResponseDto(User user, List<ScheduleResponseDto> scheduleResponseDto){
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
@@ -41,9 +41,7 @@ public class UserResponseDto {
         this.providerId = user.getProviderId();
         this.createDate = user.getCreateDate();
         this.role = user.getRole();
-        this.scheduleResponseDtoList = user.getScheduleList().stream()
-                        .map(o->new ScheduleResponseDto(o))
-                .collect(Collectors.toList());
+        this.scheduleResponseDtoList = scheduleResponseDto;
     }
 
 }

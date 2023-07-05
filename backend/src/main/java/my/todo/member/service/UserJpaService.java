@@ -83,9 +83,9 @@ public class UserJpaService {
 
     public ResponseEntity<UserResponseDto> userInfo(String accessToken, User user) {
         List<ScheduleResponseDto> scheduleResponseDtoListList = customScheduleRepository.getScheduleListByUser(user);
-//        lazily exception 을 해결하기 위해 user 의 scheduleList 초기화
+//        lazily exception 을 해결하기 위해 user 의 scheduleList 초기화 or Schedule 관련 DTO 는 Schedule Repository 에서 처리
 //        user.createScheduleList(scheduleList);
-        UserResponseDto userResponseDto = new UserResponseDto(user);
+        UserResponseDto userResponseDto = new UserResponseDto(user, scheduleResponseDtoListList);
 
         if (accessToken != null) {
             return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
