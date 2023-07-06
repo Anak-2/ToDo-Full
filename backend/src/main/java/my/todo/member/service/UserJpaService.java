@@ -89,4 +89,10 @@ public class UserJpaService {
         }
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
+
+    public ResponseEntity<UserResponseDto> findUserByUsername(String username){
+        User user = userJpaRepository.getByUsername(username);
+        List<ScheduleResponseDto> scheduleResponseDtoList = customScheduleRepository.getScheduleListByUser(user);
+        return new ResponseEntity<>(new UserResponseDto(user, scheduleResponseDtoList), HttpStatus.OK);
+    }
 }

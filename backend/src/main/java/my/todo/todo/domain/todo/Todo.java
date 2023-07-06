@@ -3,21 +3,24 @@ package my.todo.todo.domain.todo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 import my.todo.schedule.domain.schedule.Schedule;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
-@Transactional
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Todo {
     @Id @GeneratedValue
     private Long id;
-    @CreatedDate
-    private Date createdDate;
+    @CreationTimestamp
+    private Timestamp createdDate;
     private String title;
     private String content;
     private boolean isFinished;
@@ -30,4 +33,6 @@ public class Todo {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
     private String hyperLink;
+
+
 }

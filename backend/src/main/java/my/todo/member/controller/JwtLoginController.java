@@ -43,8 +43,6 @@ public class JwtLoginController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody UserRequestDto.LoginDTO loginDTO, HttpServletResponse response) throws ServletException, IOException {
         UserResponseDto.TokenInfo tokenInfo = userJpaService.login(loginDTO.getUsername(), loginDTO.getPassword());
-        if (tokenInfo == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No User Found", new UserNotFoundException("No User Found"));
         addRefreshTokenToCookie(tokenInfo.getRefreshToken(), response);
         return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
     }
@@ -124,4 +122,5 @@ public class JwtLoginController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return principalDetails.toEntity();
     }
+
 }

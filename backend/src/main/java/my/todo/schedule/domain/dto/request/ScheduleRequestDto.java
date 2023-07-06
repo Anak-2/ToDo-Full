@@ -15,11 +15,13 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 @ToString
 public class ScheduleRequestDto {
         @NonNull
         private String title;
         private Long userId;
+        @Builder.Default
         private boolean isPublic = false;
 
         public Schedule toEntity(User user){

@@ -2,7 +2,9 @@ package my.todo.todo.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import my.todo.todo.domain.dto.TodoRequestDto;
 import my.todo.todo.service.StorageService;
+import my.todo.todo.service.TodoService;
 import org.apache.coyote.Response;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +24,7 @@ import java.io.IOException;
 public class TodoController {
 
     private final StorageService storageService;
+    private final TodoService todoService;
 
     @PostMapping(value="/upload-file")
     public ResponseEntity<String> uploadFile(MultipartFile file) throws IllegalStateException, IOException{
@@ -49,5 +52,10 @@ public class TodoController {
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not delete file: "+filename);
         }
+    }
+
+    @PostMapping(value="add")
+    public void add(@RequestBody TodoRequestDto todoRequestDto){
+        todoService.addTodo(todoRequestDto);
     }
 }

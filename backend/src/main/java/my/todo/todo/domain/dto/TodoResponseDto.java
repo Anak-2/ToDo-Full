@@ -1,11 +1,14 @@
 package my.todo.todo.domain.dto;
 
+import lombok.Getter;
 import my.todo.todo.domain.todo.Todo;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
+@Getter
 public class TodoResponseDto {
-    private Date createdDate;
+    private Timestamp createdDate;
     private String title;
     private String content;
     private boolean isFinished;

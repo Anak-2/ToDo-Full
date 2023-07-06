@@ -34,14 +34,13 @@ public class ScheduleService {
         customScheduleRepository.save(schedule);
     }
 
-    public List<ScheduleResponseDto> findScheduleList(UserRequestDto.LoginDTO loginDTO){
-        User user = userJpaRepository.getByUsername(loginDTO.getUsername());
+    public List<ScheduleResponseDto> findScheduleList(UserRequestDto.UpdateDTO updateDTO){
+        User user = userJpaRepository.getByUsername(updateDTO.getUsername());
         return customScheduleRepository.getScheduleListByUser(user);
     }
 
     public ScheduleWithTodoResponse findScheduleWithTodo(ScheduleWithTodoRequest scheduleWithTodoRequest){
         Schedule schedule = scheduleWithTodoRequest.toEntity();
-//        Todo: ToDo list ToDo Repository 통해서 받기
         List<TodoResponseDto> todoResponseDtoList = customTodoRepository.getTodoListBySchedule(schedule);
         return new ScheduleWithTodoResponse(schedule, todoResponseDtoList);
     }

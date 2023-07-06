@@ -38,9 +38,11 @@ public class User {
     private Timestamp createDate;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Role role = Role.USER;
 
     @OneToMany(mappedBy = "user", cascade=CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Schedule> scheduleList = new ArrayList<>();
 
     public void updatePassword(String password){
@@ -57,5 +59,10 @@ public class User {
 
     public void createScheduleList(List<Schedule> scheduleList) {
         this.scheduleList = scheduleList;
+    }
+
+    public User(String username, String password){
+        this.username = username;
+        this.password = password;
     }
 }

@@ -33,8 +33,10 @@ class TodoApplicationTests {
 	@DisplayName("유저 비밀번호 업데이트")
 	void 유저_정보_업데이트(){
 		//given
-		User save = userJpaRepository.save(new User("test1",
-				"password1"));
+		User save = userJpaRepository.save(User.builder()
+                .username("test1")
+                .password("password1")
+                .build());
 		//when
 		String updatePassword = "password2";
 		UserRequestDto.UpdateDTO updateDTO = new UserRequestDto.UpdateDTO();

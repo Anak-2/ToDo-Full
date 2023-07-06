@@ -31,8 +31,8 @@ public class ScheduleController {
 
 //    get schedule list by user id
     @GetMapping("/schedules")
-    public List<ScheduleResponseDto> getScheduleList(UserRequestDto.LoginDTO loginDTO){
-        return scheduleService.findScheduleList(loginDTO);
+    public List<ScheduleResponseDto> getScheduleList(UserRequestDto.UpdateDTO updateDTO){
+        return scheduleService.findScheduleList(updateDTO);
     }
 //    get schedule info with todo list
     public ScheduleWithTodoResponse getScheduleWithToDoList(ScheduleWithTodoRequest scheduleWithToDoRequest){

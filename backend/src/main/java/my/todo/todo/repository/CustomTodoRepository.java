@@ -21,4 +21,12 @@ public class CustomTodoRepository {
                 .map(TodoResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    public Todo getTodoByTitle(String title){
+        return todoRepository.findByTitle(title).orElseThrow();
+    }
+
+    public void save(Todo todo){
+        todoRepository.save(todo);
+    }
 }
