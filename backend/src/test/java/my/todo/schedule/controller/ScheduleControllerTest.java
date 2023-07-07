@@ -72,10 +72,10 @@ class ScheduleControllerTest {
         //when
         List<ScheduleResponseDto> scheduleResponseDtoList = customScheduleRepository.getScheduleListByUser(findUser);
         //then
-        for(ScheduleResponseDto s : scheduleResponseDtoList){
+        for (ScheduleResponseDto s : scheduleResponseDtoList) {
             System.out.println(s.getTitle());
         }
-        Assertions.assertEquals(scheduleResponseDtoList.size(),3);
+        Assertions.assertEquals(scheduleResponseDtoList.size(), 3);
     }
 
     @Test
