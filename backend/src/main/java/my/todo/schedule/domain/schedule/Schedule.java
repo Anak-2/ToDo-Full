@@ -1,14 +1,12 @@
 package my.todo.schedule.domain.schedule;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import my.todo.member.domain.user.User;
+import my.todo.schedule.domain.dto.request.ScheduleUpdateRequestDto;
 import my.todo.todo.domain.todo.Todo;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -36,4 +34,11 @@ public class Schedule {
     @Builder.Default
     private boolean isPublic = false;
 
+    public void updateTitle(String title){
+        this.title = title;
+    }
+
+    public void updateIsPublic(boolean isPublic){
+        this.isPublic = isPublic;
+    }
 }

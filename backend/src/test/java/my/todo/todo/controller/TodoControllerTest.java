@@ -7,9 +7,8 @@ import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
 import my.todo.schedule.domain.dto.request.ScheduleWithTodoRequest;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.repository.CustomScheduleRepository;
-import my.todo.schedule.repository.ScheduleRepository;
 import my.todo.schedule.service.ScheduleService;
-import my.todo.todo.domain.dto.TodoRequestDto;
+import my.todo.todo.domain.dto.request.TodoRequestDto;
 import my.todo.todo.domain.todo.Todo;
 import my.todo.todo.repository.CustomTodoRepository;
 import my.todo.todo.repository.TodoRepository;
@@ -22,8 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @RunWith(SpringRunner.class)

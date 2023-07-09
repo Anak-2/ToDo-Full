@@ -2,19 +2,17 @@ package my.todo.todo.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import my.todo.todo.domain.dto.TodoRequestDto;
+import my.todo.todo.domain.dto.request.TodoRequestDto;
+import my.todo.todo.domain.dto.request.TodoUpdateRequestDto;
 import my.todo.todo.service.StorageService;
 import my.todo.todo.service.TodoService;
-import org.apache.coyote.Response;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 
 @RestController
@@ -44,7 +42,7 @@ public class TodoController {
                 "attachment; filename=\""+file.getFilename()+"\"").body(file);
     }
 
-    @DeleteMapping(value="delete-file")
+    @DeleteMapping(value="/delete-file")
     public ResponseEntity<String> deleteFile(String filename){
         boolean result = storageService.delete(filename);
         if(result){
@@ -54,8 +52,20 @@ public class TodoController {
         }
     }
 
-    @PostMapping(value="add")
-    public void add(@RequestBody TodoRequestDto todoRequestDto){
+    @PostMapping(value="/add")
+    public void addTodo(@RequestBody TodoRequestDto todoRequestDto){
         todoService.addTodo(todoRequestDto);
     }
+
+//    delete todo
+    @DeleteMapping(value = "/delete")
+    public void deleteTodo(@RequestBody Long todoId){
+        todoService.deleteTodo(todoId);
+    }
+//    update todo
+    @GetMapping(value = "/update")
+    public void updateTodo(@RequestBody TodoUpdateRequestDto todoUpdateRequestDto){
+        todoService.updateTodo(todoUpdateRequestDto);
+    }
+//
 }

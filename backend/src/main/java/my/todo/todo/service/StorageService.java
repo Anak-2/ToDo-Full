@@ -20,4 +20,5 @@ public interface StorageService {
     boolean delete(String filename);
 
     void deleteAll();
+
 }

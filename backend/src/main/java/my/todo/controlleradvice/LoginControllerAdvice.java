@@ -1,10 +1,7 @@
 package my.todo.controlleradvice;
 
 import lombok.extern.slf4j.Slf4j;
-import my.todo.global.error.DuplicatedException;
-import my.todo.global.error.NotAuthorizedException;
-import my.todo.global.error.ScheduleNotFoundException;
-import my.todo.global.error.UserNotFoundException;
+import my.todo.global.error.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,6 +33,12 @@ public class LoginControllerAdvice {
     @ExceptionHandler(ScheduleNotFoundException.class)
     @ResponseBody
     public ResponseEntity<?> handleScheduleNotFoundException(ScheduleNotFoundException notFoundException){
+        return new ResponseEntity<>(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TodoNotFoundException.class)
+    @ResponseBody
+    public ResponseEntity<?> handleTodoNotFoundException(TodoNotFoundException notFoundException){
         return new ResponseEntity<>(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

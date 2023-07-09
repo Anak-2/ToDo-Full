@@ -1,4 +1,4 @@
-package my.todo.todo.domain.dto;
+package my.todo.todo.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

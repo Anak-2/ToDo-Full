@@ -35,4 +35,15 @@ public class Todo {
     private String hyperLink;
 
 
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateIsFinished(boolean isFinished) {
+        this.isFinished = isFinished;
+    }
 }

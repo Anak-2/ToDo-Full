@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.member.domain.dto.UserRequestDto;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
+import my.todo.schedule.domain.dto.request.ScheduleUpdateRequestDto;
 import my.todo.schedule.domain.dto.request.ScheduleWithTodoRequest;
 import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import my.todo.schedule.domain.dto.response.ScheduleWithTodoResponse;
-import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.service.ScheduleService;
-import my.todo.todo.domain.dto.TodoResponseDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,18 +30,23 @@ public class ScheduleController {
 
 //    get schedule list by user id
     @GetMapping("/schedules")
-    public List<ScheduleResponseDto> getScheduleList(UserRequestDto.UpdateDTO updateDTO){
+    public List<ScheduleResponseDto> getScheduleList(@RequestBody UserRequestDto.UpdateDTO updateDTO){
         return scheduleService.findScheduleList(updateDTO);
     }
 //    get schedule info with todo list
-    public ScheduleWithTodoResponse getScheduleWithToDoList(ScheduleWithTodoRequest scheduleWithToDoRequest){
+    @GetMapping("/todos")
+    public ScheduleWithTodoResponse getScheduleWithToDoList(@RequestBody ScheduleWithTodoRequest scheduleWithToDoRequest){
         return scheduleService.findScheduleWithTodo(scheduleWithToDoRequest);
     }
 
 //    modify schedule
+    @PostMapping("/update")
+    public void updateSchedule(@RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto){
+        scheduleService.updateSchedule(scheduleUpdateRequestDto);
+    }
 //    delete schedule
-//    switch to public
-//    switch to private
-//    finish check
-//    cancel finish check
+    @DeleteMapping("/delete")
+    public void deleteSchedule(@RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto){
+        scheduleService.deleteSchedule(scheduleUpdateRequestDto);
+    }
 }

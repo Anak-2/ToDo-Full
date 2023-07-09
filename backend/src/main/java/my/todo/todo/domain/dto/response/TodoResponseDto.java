@@ -1,4 +1,4 @@
-package my.todo.todo.domain.dto;
+package my.todo.todo.domain.dto.response;
 
 import lombok.Getter;
 import my.todo.todo.domain.todo.Todo;

@@ -37,4 +37,12 @@ public class CustomScheduleRepository{
     public void save(Schedule schedule) {
         scheduleRepository.save(schedule);
     }
+
+    public void delete(Schedule schedule){
+        try{
+            scheduleRepository.delete(schedule);
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+        }
+    }
 }

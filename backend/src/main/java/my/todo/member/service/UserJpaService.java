@@ -62,7 +62,7 @@ public class UserJpaService {
         }
     }
 
-//    update user info
+//    update user password
     public void userUpdate(String updateBeforeUser, UserRequestDto.UpdateDTO updateDTO) {
 //            update by "dirty checking"
         User user = userJpaRepository.getByUsername(updateDTO.getUsername());

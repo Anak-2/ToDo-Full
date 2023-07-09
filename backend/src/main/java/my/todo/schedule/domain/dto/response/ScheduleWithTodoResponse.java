@@ -2,7 +2,7 @@ package my.todo.schedule.domain.dto.response;
 
 import lombok.NonNull;
 import my.todo.schedule.domain.schedule.Schedule;
-import my.todo.todo.domain.dto.TodoResponseDto;
+import my.todo.todo.domain.dto.response.TodoResponseDto;
 
 import java.sql.Timestamp;
 import java.util.List;
