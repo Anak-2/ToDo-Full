@@ -24,6 +24,9 @@ public class CustomScheduleRepository{
     public Schedule getScheduleByTitle(String title){
         return scheduleRepository.findByTitle(title).orElseThrow(ScheduleNotFoundException::new);
     }
+    public boolean existsByTitle(String title){
+        return scheduleRepository.existsByTitle(title);
+    }
     public Schedule getScheduleById(Long id){
         return scheduleRepository.findById(id).orElseThrow(ScheduleNotFoundException::new);
     }

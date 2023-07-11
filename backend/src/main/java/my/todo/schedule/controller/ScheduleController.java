@@ -24,7 +24,6 @@ public class ScheduleController {
 //    add schedule
     @PostMapping("/add")
     public void add(@RequestBody ScheduleRequestDto scheduleRequestDto){
-        log.debug(scheduleRequestDto.toString());
         scheduleService.add(scheduleRequestDto);
     }
 
@@ -40,7 +39,7 @@ public class ScheduleController {
     }
 
 //    modify schedule
-    @PostMapping("/update")
+    @PutMapping("/update")
     public void updateSchedule(@RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto){
         scheduleService.updateSchedule(scheduleUpdateRequestDto);
     }

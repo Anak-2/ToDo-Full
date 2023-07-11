@@ -262,8 +262,8 @@ function trashCompleted() {
     }
   }
   let outerList = document.querySelectorAll(".outer-list");
-  for(let i = 0; i < outerList.length; i++){
-    if(outerList[i].childElementCount == 1){
+  for (let i = 0; i < outerList.length; i++) {
+    if (outerList[i].childElementCount == 1) {
       outerList[i].remove();
     }
   }
@@ -323,13 +323,13 @@ function showDropdown() {
 }
 
 function hideDropdown() {
-  dropdownTimeout = setTimeout(function() {
+  dropdownTimeout = setTimeout(function () {
     var dropdownContent = document.querySelector('.dropdown-content');
     dropdownContent.style.display = 'none';
   }, 200);
 }
 
-function logout(){
+function logout() {
   $.ajax({
     type: "POST",
     url: "http://localhost:8080/user/logout",
@@ -337,19 +337,36 @@ function logout(){
     xhrFields: { // CORS 문제 우회해서 헤더 넘겨주기 --> Set-Cookie 헤더 넘겨 줄려면 필요!!!!
       withCredentials: true
     },
-    success: function(data, textStatus, request){
+    success: function (data, textStatus, request) {
       localStorage.removeItem('Authorization');
       alert("로그인 페이지로 이동합니다");
-      location.href="/app.html";
+      location.href = "/app.html";
     },
-    error: function(){
+    error: function () {
       alert("Error!");
     }
   })
 }
 
-function memberInfo(){
-  location.href="/userInfo/user-info.html";
+function addTodo(todo) {
+  var todo = {
+
+  }
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:8080/todo/add",
+    data: JSON.stringify(todo),
+    success: function (data, textStatus, request) {
+
+    },
+    error: function (request, status, error) {
+
+    }
+  })
+}
+
+function memberInfo() {
+  location.href = "/userInfo/user-info.html";
 }
 initInput();
 getClock();

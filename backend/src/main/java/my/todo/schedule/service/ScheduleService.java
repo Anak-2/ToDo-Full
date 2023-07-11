@@ -2,6 +2,7 @@ package my.todo.schedule.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import my.todo.global.error.DuplicatedException;
 import my.todo.member.domain.dto.UserRequestDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
@@ -31,6 +32,9 @@ public class ScheduleService {
     public void add(ScheduleRequestDto scheduleRequestDto) {
         User user = userJpaRepository.getById(scheduleRequestDto.getUserId());
         Schedule schedule = scheduleRequestDto.toEntity(user);
+        if(customScheduleRepository.existsByTitle(schedule.getTitle())){
+            throw new DuplicatedException("Title Is Duplicated");
+        }
         customScheduleRepository.save(schedule);
     }
 
@@ -40,7 +44,7 @@ public class ScheduleService {
     }
 
     public ScheduleWithTodoResponse findScheduleWithTodo(ScheduleWithTodoRequest scheduleWithTodoRequest){
-        Schedule schedule = scheduleWithTodoRequest.toEntity();
+        Schedule schedule = customScheduleRepository.getScheduleByTitle(scheduleWithTodoRequest.getTitle());
         List<TodoResponseDto> todoResponseDtoList = customTodoRepository.getTodoListBySchedule(schedule);
         return new ScheduleWithTodoResponse(schedule, todoResponseDtoList);
     }

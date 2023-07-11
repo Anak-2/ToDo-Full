@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Date;
 import java.util.List;
 
 @Transactional
@@ -58,19 +59,25 @@ class TodoControllerTest {
                 .title(findSchedule.getTitle())
                 .build();
         todoService.addTodo(TodoRequestDto.builder()
-                .content("할일1")
+                .title("할일1")
+                .content("내용1")
                 .isFinished(false)
                 .scheduleId(findSchedule.getId())
+                .finishDate(new Date(1))
                 .build());
         todoService.addTodo(TodoRequestDto.builder()
-                .content("할일2")
+                .title("할일2")
+                .content("내용2")
                 .isFinished(false)
                 .scheduleId(findSchedule.getId())
+                .finishDate(new Date(1))
                 .build());
         todoService.addTodo(TodoRequestDto.builder()
-                .content("할일3")
+                .title("할일3")
+                .content("내용3")
                 .isFinished(false)
                 .scheduleId(findSchedule.getId())
+                .finishDate(new Date(1))
                 .build());
         //when
         List<Todo> todoList = todoRepository.findBySchedule(findSchedule);

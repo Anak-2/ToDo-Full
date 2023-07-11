@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.todo.domain.dto.request.TodoRequestDto;
 import my.todo.todo.domain.dto.request.TodoUpdateRequestDto;
+import my.todo.todo.domain.dto.response.TodoResponseDto;
 import my.todo.todo.service.StorageService;
 import my.todo.todo.service.TodoService;
 import org.springframework.core.io.Resource;
@@ -57,15 +58,23 @@ public class TodoController {
         todoService.addTodo(todoRequestDto);
     }
 
+//    todoId 를 pathVariable 로 받게 된 이유 : API 방식이기 때문에 RequestMapping(...?id=id값) 을 이용해 현재 주소를 사용하기엔 API 스럽지 않다 (쿼리 스트링),
+//    todo 특징 상 PK 는 todoId 뿐이므로 URL 을 통해 전달받아야한다.
+    @GetMapping(value="/{todoId}")
+    public TodoResponseDto getTodo(@PathVariable Long todoId){
+        return todoService.getTodo(todoId);
+    }
+
 //    delete todo
-    @DeleteMapping(value = "/delete")
-    public void deleteTodo(@RequestBody Long todoId){
+    @DeleteMapping(value = "/{todoId}")
+    public void deleteTodo(@PathVariable Long todoId){
         todoService.deleteTodo(todoId);
     }
 //    update todo
-    @GetMapping(value = "/update")
-    public void updateTodo(@RequestBody TodoUpdateRequestDto todoUpdateRequestDto){
-        todoService.updateTodo(todoUpdateRequestDto);
+//    TODO: 근데 수정 권한이 없는 사용자가 바꾸려는 시도를 막기 위해 암호화한 ID 를 사용해야겠는데... uuid?
+    @PutMapping(value = "/{todoId}")
+    public void updateTodo(@PathVariable Long todoId, @RequestBody TodoUpdateRequestDto todoUpdateRequestDto){
+        todoService.updateTodo(todoId, todoUpdateRequestDto);
     }
 //
 }
