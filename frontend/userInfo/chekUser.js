@@ -1,5 +1,6 @@
-let accessToken = localStorage.getItem("accessToken");
-console.log(accessToken);
+export let accessToken = localStorage.getItem("accessToken");
+
+// console.log(accessToken);
 if (accessToken == null) {
   alert("로그인이 필요합니다!");
   location.href = "/app.html";
@@ -21,22 +22,22 @@ $.ajax({
     // ToDo: localhost 로 통일시킨 것 같은데 remote url request url 이 달라서 그런지 header 가 전달되지 않는 문제
     console.log("request status: " + request.status);
     if (request.status === 201) {
-      console.log("Refresh Access Token");
-      console.log("");
-      console.log("=========================================");
-      console.log("[testMain] : [http success]");
-      console.log("-----------------------------------------");
-      console.log("[header all] : " + request.getAllResponseHeaders());
-      console.log("-----------------------------------------");
-      console.log("[header content-type] : " + request.getResponseHeader('content-type'));
-      console.log("-----------------------------------------");
-      console.log("[header authorization] : " + request.getResponseHeader('Authorization'));
-      console.log("-----------------------------------------");
-      console.log("[textStatus] : " + JSON.stringify(textStatus));
-      console.log("-----------------------------------------");
-      console.log("[response data] : " + JSON.stringify(data));
-      console.log("=========================================");
-      console.log("");
+      // console.log("Refresh Access Token");
+      // console.log("");
+      // console.log("=========================================");
+      // console.log("[testMain] : [http success]");
+      // console.log("-----------------------------------------");
+      // console.log("[header all] : " + request.getAllResponseHeaders());
+      // console.log("-----------------------------------------");
+      // console.log("[header content-type] : " + request.getResponseHeader('content-type'));
+      // console.log("-----------------------------------------");
+      // console.log("[header authorization] : " + request.getResponseHeader('Authorization'));
+      // console.log("-----------------------------------------");
+      // console.log("[textStatus] : " + JSON.stringify(textStatus));
+      // console.log("-----------------------------------------");
+      // console.log("[response data] : " + JSON.stringify(data));
+      // console.log("=========================================");
+      // console.log("");
       accessToken = request.getResponseHeader('Authorization');
       if (accessToken !== null) {
         localStorage.setItem("accessToken", accessToken);
@@ -56,8 +57,8 @@ $.ajax({
     $('.name').val(data['username']);
     $('.role').val(data['role']);
   },
-  error:function(request,status,error){
-    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+  error: function (request, status, error) {
+    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
     localStorage.removeItem("accessToken");
     location.href = "/app.html";
   }
@@ -109,7 +110,7 @@ function deleteUser() {
       },
       success: function () {
         alert("정상적으로 탈퇴했습니다!");
-        location.href="/app.html";
+        location.href = "/app.html";
       },
       error: function (errorThrown) {
         alert(errorThrown);

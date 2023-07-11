@@ -38,8 +38,8 @@ public class ScheduleService {
         customScheduleRepository.save(schedule);
     }
 
-    public List<ScheduleResponseDto> findScheduleList(UserRequestDto.UpdateDTO updateDTO){
-        User user = userJpaRepository.getByUsername(updateDTO.getUsername());
+    public List<ScheduleResponseDto> findScheduleList(String username){
+        User user = userJpaRepository.getByUsername(username);
         return customScheduleRepository.getScheduleListByUser(user);
     }
 

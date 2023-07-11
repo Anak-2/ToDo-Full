@@ -13,6 +13,7 @@ import my.todo.schedule.service.ScheduleService;
 import my.todo.todo.domain.dto.request.TodoRequestDto;
 import my.todo.todo.repository.CustomTodoRepository;
 import my.todo.todo.service.TodoService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -38,12 +39,17 @@ public class InitDb {
         private final ScheduleService scheduleService;
         private final CustomScheduleRepository customScheduleRepository;
         private final TodoService todoService;
+        private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
         public void doInit1() {
             // user init
-            User user = new User("user1", "pw1");
+            User user = User.builder()
+                    .username("1234")
+                    .password("1234")
+                    .build();
+            user.updatePassword(bCryptPasswordEncoder.encode(user.getPassword()));
             userJpaRepository.save(user);
-            User findUser = userJpaRepository.getByUsername("user1");
+            User findUser = userJpaRepository.getByUsername("1234");
 
             // schedule init
             scheduleService.add(ScheduleRequestDto.builder()

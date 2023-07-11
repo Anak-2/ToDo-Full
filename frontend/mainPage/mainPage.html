@@ -12,15 +12,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
         integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- login user check -->
+    <script src="/userInfo/chekUser.js" type="module"></script>
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- login user check -->
-    <script src="/userInfo/chekUser.js" defer></script>
 </head>
 
 <body>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
     </style>
     <div id="header">
         <div class="logo">
@@ -55,7 +56,15 @@
         </div>
     </div>
     <div class="side-menu side-menu-hidden">
-        <ul class="todo-list">
+        <div>
+            <div class="schedule-input">
+                <input type="text">
+                <button class="schedule-add-btn">
+                    할 일 추가
+                </button>
+            </div>
+        </div>
+        <ul class="schedule-list">
             <li>할 일 목록1</li>
         </ul>
     </div>

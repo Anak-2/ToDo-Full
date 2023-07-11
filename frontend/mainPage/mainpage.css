@@ -70,8 +70,10 @@ button {
 }
 
 .user-name {
-    width: 200px; /* 원하는 너비로 설정 */
-    overflow: hidden; /* 텍스트를 숨기는 스타일 설정 */
+    width: 200px;
+    /* 원하는 너비로 설정 */
+    overflow: hidden;
+    /* 텍스트를 숨기는 스타일 설정 */
     float: left;
     font-family: sans-serif;
     margin-left: 5px;
@@ -83,7 +85,7 @@ button {
 /*  Side Menu CSS */
 .side-menu {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     position: fixed;
     padding-top: 20px;
     top: 10vh;
@@ -111,11 +113,47 @@ button {
     /* overflow-wrap: normal; */
 }
 
-.todo-list {
-    list-style: none;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 600;
+.schedule-input {
+    display: flex;
+    width: 90%;
+    justify-items: auto;
+    margin: 0 auto;
+    margin-bottom: 10px;
 }
+
+.schedule-input input {
+    width: 60%;
+    border: 0;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.schedule-input input:hover {
+    cursor: pointer;
+}
+
+.schedule-input button {
+    width: 60%;
+    box-sizing: content-box;
+    float: right;
+}
+
+.schedule-list {
+    display: block;
+    list-style: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    width: 90%;
+    text-align: center;
+}
+
+.schedule-list li {
+    height: 30px;
+}
+
+.schedule-list li:hover {
+    cursor: pointer;
+}
+
 
 /* Search Conatiner CSS */
 .searchContainer {
@@ -316,32 +354,34 @@ button {
     cursor: pointer;
 }
 
-.dropdown{
+.dropdown {
     position: relative;
     display: inline-block;
 }
+
 .dropdown-content {
     display: none;
     position: absolute;
-    margin-top:35px;
+    margin-top: 35px;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     padding: 8px;
     z-index: 1;
 }
 
-.dropdown:hover .dropdown-content, .dropdown-content:hover{
+.dropdown:hover .dropdown-content,
+.dropdown-content:hover {
     display: block;
 }
 
-ul{
+ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.dropdown-content span{
+.dropdown-content span {
     text-decoration: none;
     display: block;
     padding: 4px;
@@ -350,5 +390,6 @@ ul{
 }
 
 li:hover {
-    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경색 설정 */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 반투명 배경색 설정 */
 }

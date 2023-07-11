@@ -1,6 +1,10 @@
 let inputBox = document.querySelector(".input-container .inputBox");
 let searchBox = document.querySelector(".searchBox");
 let list = document.querySelector(".list");
+// import { accessToken } from "../userInfo/chekUser.js"; -> cannot use import statement outside a module 문제 발생
+let accessToken = localStorage.getItem("accessToken");
+
+
 searchBox.addEventListener("keyup", function (e) {
   let listItem = document.querySelectorAll(".list-container .list-item");
   for (let i = 0; i < listItem.length; i++) {
@@ -15,36 +19,57 @@ searchBox.addEventListener("keyup", function (e) {
 function initInput() {
   const inputDate = document.querySelector(".date-input");
   const inputTime = document.querySelector(".time-input");
+
   //init input values and date input
   inputBox.value = "";
   inputDate.value = inputDate.min;
+
   // init time input
   const date = new Date();
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
   inputTime.value = `${hours}:${minutes}`;
+
 }
 
-//delete one list
-function deleteList(e) {
-  let s = e.target.parentElement;
-  let outerList = s.parentElement;
-  let t1 = new TimelineMax({
-    //remove를 애니메이션 다 끝난 후 호출하기 위한 방법
-    onComplete: function () {
-      s.remove();
-      if (outerList.children.length == 1) {
-        outerList.remove();
-      }
-    },
-  });
-  t1.to(s, { duration: 0.5, opacity: 0, y: -50, ease: "line" });
+//open side menu
+function openSideMenu() {
+  const sideMenu = document.querySelector(".side-menu");
+  if (sideMenu.classList.contains("side-menu-hidden")) {
+    sideMenu.classList.remove("side-menu-hidden");
+    sideMenu.classList.add("side-menu-visible");
+  } else {
+    sideMenu.classList.remove("side-menu-visible");
+    sideMenu.classList.add("side-menu-hidden");
+  }
 }
+
+// get shcedule list from backend
+function getScheduleList() {
+  $.ajax({
+    method: "GET",
+    url: "http://localhost:8080/schedule/schedules",
+    headers: { 'Authorization': accessToken },
+    // 다른 Domain (같은 localhost 이지만! 127.0.0.1 != localhost) 에 document cookie 를 보내기 위한 설정
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true
+    },
+    success: function (data) {
+      console.log(data);
+    },
+    error: function () {
+      console.log("getScheduleList 실패");
+    }
+  })
+}
+
+getScheduleList();
 
 //add key event listencer
 inputBox.addEventListener("keyup", function (e) {
   if (e.keyCode === 13) {
-    addList(e);
+    insertList(e);
   }
 });
 
@@ -76,41 +101,46 @@ document.addEventListener("mouseup", function (e) {
   }
 });
 
-//add list
-function addList(e) {
+function makeListWrapper() {
+  const listWrapper = document.createElement("div");
+  listWrapper.classList.add("list-wrapper");
+  const listItem = document.createElement("li");
+
+  //combine list with inputdate and put in listWrapper
+  const inputTime = document.querySelector(".time-input");
+  const deadline = document.createElement("span");
+  deadline.innerText = inputTime.value;
+  deadline.classList.add("deadline");
+  listItem.classList.add("list-item");
+  listItem.innerText = inputBox.value;
+  listItem.appendChild(deadline);
+  listWrapper.appendChild(listItem);
+
+  // make check Btn and put in listWrapper
+  const checkBtn = document.createElement("button");
+  checkBtn.addEventListener("click", checkList);
+  checkBtn.classList.add("complete-check");
+  checkBtn.innerText = "✅";
+  listWrapper.appendChild(checkBtn);
+
+  //make delete Btn and put in listWrapper
+  const deleteBtn = document.createElement("button");
+  deleteBtn.addEventListener("click", deleteList);
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.innerText = "❌";
+  listWrapper.appendChild(deleteBtn);
+
+  return listWrapper;
+}
+//find location to insert list
+function insertList(e) {
   if (inputBox.value != "") {
-    const listWrapper = document.createElement("div");
-    listWrapper.classList.add("list-wrapper");
-    const listItem = document.createElement("li");
-
-    //combine list with inputdate and put in listWrapper
-    const inputTime = document.querySelector(".time-input");
-    const deadline = document.createElement("span");
-    deadline.innerText = inputTime.value;
-    deadline.classList.add("deadline");
-    listItem.classList.add("list-item");
-    listItem.innerText = inputBox.value;
-    listItem.appendChild(deadline);
-    listWrapper.appendChild(listItem);
-
-    // make check Btn and put in listWrapper
-    const checkBtn = document.createElement("button");
-    checkBtn.addEventListener("click", checkList);
-    checkBtn.classList.add("complete-check");
-    checkBtn.innerText = "✅";
-    listWrapper.appendChild(checkBtn);
-
-    //make delete Btn and put in listWrapper
-    const deleteBtn = document.createElement("button");
-    deleteBtn.addEventListener("click", deleteList);
-    deleteBtn.classList.add("delete-btn");
-    deleteBtn.innerText = "❌";
-    listWrapper.appendChild(deleteBtn);
-
+    const listWrapper = makeListWrapper();
     // input in date order
     const inputDate = document.querySelector(".date-input");
     const dateItem = document.querySelectorAll(".date-item");
     let outerListIndex = 0;
+    // if there is no date-item, then makes new date box (date-item)
     if (dateItem.length == 0) {
       const outerList = document.createElement("div");
       outerList.classList.add("outer-list");
@@ -126,6 +156,7 @@ function addList(e) {
     const outerListArr = document.querySelectorAll(".outer-list");
 
     // input in time order
+    const inputTime = document.querySelector(".time-input");
     // finally, find index where to put todo
     const listWrapperIndex = findTimeLocation(
       outerListArr[outerListIndex],
@@ -134,8 +165,26 @@ function addList(e) {
     outerListArr[outerListIndex].children[
       listWrapperIndex
     ].insertAdjacentElement("afterend", listWrapper);
+
+    // input box 초기화
     initInput();
   }
+}
+
+//delete one list
+function deleteList(e) {
+  let s = e.target.parentElement;
+  let outerList = s.parentElement;
+  let t1 = new TimelineMax({
+    //remove를 애니메이션 다 끝난 후 호출하기 위한 방법
+    onComplete: function () {
+      s.remove();
+      if (outerList.children.length == 1) {
+        outerList.remove();
+      }
+    },
+  });
+  t1.to(s, { duration: 0.5, opacity: 0, y: -50, ease: "line" });
 }
 
 // decide where to put the date and return the index which points to a place
@@ -194,7 +243,7 @@ function findDateLocation(inputDate, dateItem) {
 function findTimeLocation(wrapperArr, inputTime) {
   const wrapperArrLen = wrapperArr.children.length;
   const inputTimeArr = inputTime.value.split(":");
-  if (wrapperArrLen == 1) {
+  if (wrapperArrLen <= 2) {
     return 0;
   }
   for (let i = 1; i < wrapperArrLen; i++) {
@@ -228,29 +277,6 @@ function checkList(e) {
   }
 }
 
-//init deleteBtn and checkBtn
-const deleteBtn = document.querySelectorAll(".delete-btn");
-for (let i = 0; i < deleteBtn.length; i++) {
-  deleteBtn[i].addEventListener("click", deleteList);
-}
-const addBtn = document.querySelector(".addButton");
-addBtn.addEventListener("click", addList);
-const checkBtn = document.querySelectorAll(".complete-check");
-for (let i = 0; i < checkBtn.length; i++) {
-  checkBtn[i].addEventListener("click", checkList);
-}
-
-//open side menu
-function openSideMenu() {
-  const sideMenu = document.querySelector(".side-menu");
-  if (sideMenu.classList.contains("side-menu-hidden")) {
-    sideMenu.classList.remove("side-menu-hidden");
-    sideMenu.classList.add("side-menu-visible");
-  } else {
-    sideMenu.classList.remove("side-menu-visible");
-    sideMenu.classList.add("side-menu-hidden");
-  }
-}
 document.querySelector(".menu").addEventListener("click", openSideMenu);
 
 //make trash-btn function
@@ -284,6 +310,7 @@ function changeTrashColorIn() {
     trashHover[i].style.fill = "#7c9499";
   }
 }
+
 document
   .querySelector(".trash-svg")
   .addEventListener("mouseout", changeTrashColorOut);
@@ -368,6 +395,11 @@ function addTodo(todo) {
 function memberInfo() {
   location.href = "/userInfo/user-info.html";
 }
+
+//init addBtn
+const addBtn = document.querySelector(".addButton");
+addBtn.addEventListener("click", insertList);
+
 initInput();
 getClock();
 setInterval(getClock, 60000);
