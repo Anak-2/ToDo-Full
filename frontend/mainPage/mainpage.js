@@ -31,6 +31,7 @@ function initInput() {
   inputTime.value = `${hours}:${minutes}`;
 
 }
+// ******** Side Menu Func ********
 
 //open side menu
 function openSideMenu() {
@@ -44,6 +45,26 @@ function openSideMenu() {
   }
 }
 
+function insertSchedule(title){
+  if (title === null || title === undefined || title === '') {
+    return 0;
+  }
+  let scheduleList = document.querySelector(".schedule-list");
+  scheduleList.insertAdjacentHTML("beforeend", `<li>${title}</li>`);
+}
+// insert schedule in list
+document.querySelector(".schedule-add-btn").addEventListener("click", function(){
+    let scheduleInput = document.querySelector(".schedule-inputBox").value;
+    document.querySelector(".schedule-inputBox").value = "";
+    insertSchedule(scheduleInput);
+});
+document.querySelector(".schedule-inputBox").addEventListener("keyup", function(e){
+  if(e.keyCode===13){
+    let scheduleInput = document.querySelector(".schedule-inputBox").value;
+    document.querySelector(".schedule-inputBox").value = "";
+    insertSchedule(scheduleInput);
+  }
+});
 // get shcedule list from backend
 function getScheduleList() {
   $.ajax({
@@ -57,6 +78,10 @@ function getScheduleList() {
     },
     success: function (data) {
       console.log(data);
+      data.forEach(element => {
+         console.log(element);
+          insertSchedule(element['title']);
+       });
     },
     error: function () {
       console.log("getScheduleList 실패");

@@ -51,7 +51,10 @@ class ScheduleControllerTest {
     @Test
     void 유저가_가지고있는_스케쥴들을_가져오는_테스트() {
         //given
-        User user = new User("user1", "pw1");
+        User user = User.builder()
+                .username("1234")
+                .password("1234")
+                .build();
         userJpaRepository.save(user);
         User findUser = userJpaRepository.getByUsername("user1");
         scheduleService.add(ScheduleRequestDto.builder()
@@ -81,7 +84,10 @@ class ScheduleControllerTest {
     @Test
     void 스케쥴을_조회했을때_유저도_조회되는지_테스트() {
         //given
-        User user = new User("user1", "pw1");
+        User user = User.builder()
+                .username("1234")
+                .password("1234")
+                .build();
         userJpaRepository.save(user);
         User findUser = userJpaRepository.getByUsername("user1");
         scheduleService.add(ScheduleRequestDto.builder()
