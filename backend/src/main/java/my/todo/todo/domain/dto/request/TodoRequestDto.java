@@ -4,14 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
-import my.todo.schedule.domain.dto.request.ScheduleWithTodoRequest;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.todo.domain.todo.Todo;
-import org.springframework.data.jpa.repository.query.JSqlParserUtils;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @Getter

@@ -1,5 +1,6 @@
 package my.todo.schedule.domain.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import my.todo.member.domain.user.User;
 import my.todo.schedule.domain.schedule.Schedule;
@@ -10,10 +11,11 @@ import my.todo.schedule.domain.schedule.Schedule;
 @Builder
 @ToString
 public class ScheduleRequestDto {
+        private Long id;
         @NonNull
         private String title;
-        private Long userId;
         @Builder.Default
+        @JsonProperty("isPublic")
         private boolean isPublic = false;
 
         public Schedule toEntity(User user){

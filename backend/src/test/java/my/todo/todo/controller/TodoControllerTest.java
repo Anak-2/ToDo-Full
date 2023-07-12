@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
-import my.todo.schedule.domain.dto.request.ScheduleWithTodoRequest;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.repository.CustomScheduleRepository;
 import my.todo.schedule.service.ScheduleService;
@@ -20,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Transactional
@@ -44,11 +43,13 @@ class TodoControllerTest {
     @Test
     void todo에_schedule을_이용해_가져오는_테스트() {
         //given
-        User user = new User("user1", "pw1");
+        User user = User.builder()
+                .username("user1")
+                .password("1234")
+                .build();
         userJpaRepository.save(user);
         User findUser = userJpaRepository.getByUsername("user1");
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴1")
                 .isPublic(false)
                 .build());
@@ -63,21 +64,21 @@ class TodoControllerTest {
                 .content("내용1")
                 .isFinished(false)
                 .scheduleId(findSchedule.getId())
-                .finishDate(new Date(1))
+                .finishDate(new Timestamp(1))
                 .build());
         todoService.addTodo(TodoRequestDto.builder()
                 .title("할일2")
                 .content("내용2")
                 .isFinished(false)
                 .scheduleId(findSchedule.getId())
-                .finishDate(new Date(1))
+                .finishDate(new Timestamp(1))
                 .build());
         todoService.addTodo(TodoRequestDto.builder()
                 .title("할일3")
                 .content("내용3")
                 .isFinished(false)
                 .scheduleId(findSchedule.getId())
-                .finishDate(new Date(1))
+                .finishDate(new Timestamp(1))
                 .build());
         //when
         List<Todo> todoList = todoRepository.findBySchedule(findSchedule);

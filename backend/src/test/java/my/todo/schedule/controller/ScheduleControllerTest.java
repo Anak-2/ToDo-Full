@@ -6,7 +6,6 @@ import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
 import my.todo.member.service.UserJpaService;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
-import my.todo.schedule.domain.dto.request.ScheduleWithTodoRequest;
 import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.repository.CustomScheduleRepository;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -57,18 +55,15 @@ class ScheduleControllerTest {
                 .build();
         userJpaRepository.save(user);
         User findUser = userJpaRepository.getByUsername("user1");
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴1")
                 .isPublic(false)
                 .build());
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴2")
                 .isPublic(false)
                 .build());
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴3")
                 .isPublic(false)
                 .build());
@@ -90,8 +85,7 @@ class ScheduleControllerTest {
                 .build();
         userJpaRepository.save(user);
         User findUser = userJpaRepository.getByUsername("user1");
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴1")
                 .isPublic(false)
                 .build());

@@ -45,26 +45,51 @@ function openSideMenu() {
   }
 }
 
-function insertSchedule(title){
+function insertSchedule(id, title, isPublic) {
+  let isLocked = isPublic ? "unlocked" : "locked";
+  let imgSrc = isPublic ? "/img/unlock.png" : "/img/lock.png";
+  let scheduleList = document.querySelector(".schedule-list");
+  scheduleList.insertAdjacentHTML("beforeend",
+    `<li>
+    <div class="schedule-id">${id}</div>
+    <span>${title}</span>
+    <img class="lock ${isLocked}" onClick="lockEvent(this)" src="${imgSrc}">
+    </li>`);
+}
+// insert schedule in list
+function addSchedule() {
+  let title = document.querySelector(".schedule-inputBox").value;
   if (title === null || title === undefined || title === '') {
     return 0;
   }
-  let scheduleList = document.querySelector(".schedule-list");
-  scheduleList.insertAdjacentHTML("beforeend", `<li>${title}</li>`);
-}
-// insert schedule in list
-document.querySelector(".schedule-add-btn").addEventListener("click", function(){
-    let scheduleInput = document.querySelector(".schedule-inputBox").value;
-    document.querySelector(".schedule-inputBox").value = "";
-    insertSchedule(scheduleInput);
-});
-document.querySelector(".schedule-inputBox").addEventListener("keyup", function(e){
-  if(e.keyCode===13){
-    let scheduleInput = document.querySelector(".schedule-inputBox").value;
-    document.querySelector(".schedule-inputBox").value = "";
-    insertSchedule(scheduleInput);
+  let schedule = {
+    "title": title,
+    "isPublic": false
+  }
+  $.ajax({
+    method: "POST",
+    url: "http://localhost:8080/schedule/add",
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true
+    },
+    headers: { "Content-Type": "application/json", 'Authorization': accessToken },
+    data: JSON.stringify(schedule),
+    success: function (data) {
+      document.querySelector(".schedule-inputBox").value = "";
+      insertSchedule(data['id'], data['title'], data['isPublic']);
+    },
+    error: function () {
+      console.log("add schedule 실패");
+    }
+  })
+};
+document.querySelector(".schedule-inputBox").addEventListener("keyup", function (e) {
+  if (e.keyCode === 13) {
+    addSchedule();
   }
 });
+document.querySelector(".schedule-add-btn").addEventListener("click", addSchedule);
 // get shcedule list from backend
 function getScheduleList() {
   $.ajax({
@@ -79,9 +104,8 @@ function getScheduleList() {
     success: function (data) {
       console.log(data);
       data.forEach(element => {
-         console.log(element);
-          insertSchedule(element['title']);
-       });
+        insertSchedule(element['id'], element['title'], element['isPublic']);
+      });
     },
     error: function () {
       console.log("getScheduleList 실패");
@@ -91,6 +115,52 @@ function getScheduleList() {
 
 getScheduleList();
 
+//  ToDo: public , private 조건 주기
+function lockEvent(lockElement) {
+  const lockWrapper = lockElement.parentElement;
+  const scheduleId = lockWrapper.children[0].innerText;
+  const title = lockWrapper.children[1].innerText;
+  var locked = lockElement.classList.contains('locked') ? true : false;
+  console.log(locked);
+  const requestData = {
+    "id": scheduleId,
+    "title": title,
+    "isPublic": locked
+  }
+  console.log(requestData);
+  $.ajax({
+    method: "PUT",
+    url: "http://localhost:8080/schedule/update",
+    headers: { "Content-Type": "application/json", 'Authorization': accessToken },
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true
+    },
+    data: JSON.stringify(requestData),
+    success: function () {
+      if (!locked) {
+        lockElement.classList.remove('unlocked');
+        lockElement.classList.add('locked');
+        lockElement.src = "/img/lock.png";
+        console.log('Lock closed');
+      } else {
+        lockElement.classList.remove('locked');
+        lockElement.classList.add('unlocked');
+        lockElement.src = "/img/unlock.png";
+        console.log('Lock opened');
+      }
+    },
+    error: function () {
+      alert("schedule update 실패");
+    }
+  })
+}
+
+// ******** List Func ********
+
+function getTodoList(scheduleTitle) {
+
+}
 //add key event listencer
 inputBox.addEventListener("keyup", function (e) {
   if (e.keyCode === 13) {
@@ -108,12 +178,12 @@ inputBox.addEventListener("focus", function (e) {
   }
 });
 
-//when inputBox lost focus (it works but it couldn't handle hiding input-info)
+//when inputBox lost focus, it activates (it works but it couldn't handle hiding input-info)
 // inputBox.addEventListener("blur", function (e) {
 //   inputBox.parentElement.style.boxShadow = "none";
 // });
 
-//when click outside the list-input, hide box-shadow and input-info
+//when click outside of the list-input, hide box-shadow and input-info
 document.addEventListener("mouseup", function (e) {
   let container = document.querySelector(".list-input");
   const inputInfo = document.querySelector(".input-info");
@@ -165,16 +235,14 @@ function insertList(e) {
     const inputDate = document.querySelector(".date-input");
     const dateItem = document.querySelectorAll(".date-item");
     let outerListIndex = 0;
-    // if there is no date-item, then makes new date box (date-item)
+    // if there is no date-item, then makes new outer list and date box (date-item)
     if (dateItem.length == 0) {
-      const outerList = document.createElement("div");
-      outerList.classList.add("outer-list");
-      const newDate = document.createElement("div");
-      newDate.classList.add("date-item");
-      newDate.innerText = inputDate.value;
-      outerList.appendChild(newDate);
-      outerList.appendChild(listWrapper);
-      list.appendChild(outerList);
+      const outerListAndNewDate = `
+        <div class="outer-list">
+          <div class="date-item">${inputDate.value}</div>
+        </div>
+      `;
+      list.insertAdjacentHTML("beforeend", outerListAndNewDate);
     } else {
       outerListIndex = findDateLocation(inputDate, dateItem);
     }
@@ -182,14 +250,13 @@ function insertList(e) {
 
     // input in time order
     const inputTime = document.querySelector(".time-input");
-    // finally, find index where to put todo
-    const listWrapperIndex = findTimeLocation(
+    // finally, find out the index where to put todo
+    const outerListChildIdx = findTimeLocation(
       outerListArr[outerListIndex],
       inputTime
     );
-    outerListArr[outerListIndex].children[
-      listWrapperIndex
-    ].insertAdjacentElement("afterend", listWrapper);
+    outerListArr[outerListIndex].children[outerListChildIdx]
+      .insertAdjacentElement("afterend", listWrapper);
 
     // input box 초기화
     initInput();
@@ -224,9 +291,11 @@ function findDateLocation(inputDate, dateItem) {
   outerList.appendChild(newDate);
   for (let i = 0; i < dateItem.length; i++) {
     const date = dateItem[i].innerText.split("-");
+    console.log(date);
     if (inputDateArr[0] == date[0]) {
       if (inputDateArr[1] == date[1]) {
         if (inputDateArr[2] == date[2]) {
+          console.log("no date insert");
           return i;
         } else {
           if (inputDateArr[2] > date[2] && i == dateItem.length - 1) {
@@ -265,29 +334,20 @@ function findDateLocation(inputDate, dateItem) {
 
 // decide where to put the time and return the index which points to a place
 // to write to-do
-function findTimeLocation(wrapperArr, inputTime) {
-  const wrapperArrLen = wrapperArr.children.length;
-  const inputTimeArr = inputTime.value.split(":");
-  if (wrapperArrLen <= 2) {
-    return 0;
+function findTimeLocation(outerList, inputTime) {
+  let outerListChildIdx = 0;
+  const outerListChildLen = outerList.childElementCount;
+  const [inputHour, inputMin] = inputTime.value.split(":");
+  const onlyDateBoxLen = 1; // wrapper has only date box alone
+  if (outerListChildLen == onlyDateBoxLen) return outerListChildIdx;
+  let compareHour, compareMin;
+  for (outerListChildIdx = 1; outerListChildIdx < outerListChildLen; outerListChildIdx++) {
+    const deadline = outerList.children[outerListChildIdx].children[0].children[0].innerText;
+    [compareHour, compareMin] = deadline.split(":");
+    if (inputHour <= compareHour && inputMin <= compareMin) return outerListChildIdx - 1;
+    if (inputHour < compareHour) return outerListChildIdx - 1;
   }
-  for (let i = 1; i < wrapperArrLen; i++) {
-    const time =
-      wrapperArr.children[i].children[0].firstElementChild.innerText.split(":");
-    if (time[0] == inputTimeArr[0]) {
-      if (time[1] == inputTimeArr[1] && i == wrapperArrLen - 1) {
-        return i;
-      } else if (time[1] < inputTimeArr[1] && i == wrapperArrLen - 1) {
-        return i;
-      } else if (time[1] > inputTimeArr[1]) {
-        return i - 1;
-      }
-    } else if (time[0] < inputTimeArr[0] && i == wrapperArrLen - 1) {
-      return i + 1;
-    } else if (time[0] > inputTimeArr[0]) {
-      return i - 1;
-    }
-  }
+  return outerListChildIdx - 1;
 }
 
 function checkList(e) {

@@ -1,19 +1,14 @@
 package my.todo.schedule.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.config.auth.PrincipalDetails;
-import my.todo.member.domain.dto.UserRequestDto;
 import my.todo.member.domain.user.User;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
 import my.todo.schedule.domain.dto.request.ScheduleUpdateRequestDto;
-import my.todo.schedule.domain.dto.request.ScheduleWithTodoRequest;
 import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import my.todo.schedule.domain.dto.response.ScheduleWithTodoResponse;
 import my.todo.schedule.service.ScheduleService;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +23,10 @@ public class ScheduleController {
 
 //    add schedule
     @PostMapping("/add")
-    public void add(@RequestBody ScheduleRequestDto scheduleRequestDto){
-        scheduleService.add(scheduleRequestDto);
+    public ScheduleResponseDto add(@RequestBody ScheduleRequestDto scheduleRequestDto, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = principalDetails.getUser();
+        return scheduleService.add(user, scheduleRequestDto);
     }
 
 //    get schedule list by user id
@@ -41,13 +38,14 @@ public class ScheduleController {
     }
 //    get schedule info with todo list
     @GetMapping("/todos")
-    public ScheduleWithTodoResponse getScheduleWithToDoList(@RequestBody ScheduleWithTodoRequest scheduleWithToDoRequest){
-        return scheduleService.findScheduleWithTodo(scheduleWithToDoRequest);
+    public ScheduleWithTodoResponse getScheduleWithToDoList(@RequestBody ScheduleRequestDto scheduleRequestDto){
+        return scheduleService.findScheduleWithTodo(scheduleRequestDto);
     }
 
 //    modify schedule
     @PutMapping("/update")
     public void updateSchedule(@RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto){
+        System.out.println(scheduleUpdateRequestDto);
         scheduleService.updateSchedule(scheduleUpdateRequestDto);
     }
 //    delete schedule

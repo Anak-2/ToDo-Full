@@ -52,22 +52,19 @@ public class InitDb {
             User findUser = userJpaRepository.getByUsername("1234");
 
             // schedule init
-            scheduleService.add(ScheduleRequestDto.builder()
-                    .userId(findUser.getId())
+            scheduleService.add(findUser, ScheduleRequestDto.builder()
                     .title("스케쥴1")
                     .isPublic(false)
                     .build());
-            scheduleService.add(ScheduleRequestDto.builder()
-                    .userId(findUser.getId())
+            scheduleService.add(findUser, ScheduleRequestDto.builder()
                     .title("스케쥴2")
                     .isPublic(false)
                     .build());
-            scheduleService.add(ScheduleRequestDto.builder()
-                    .userId(findUser.getId())
+            scheduleService.add(findUser, ScheduleRequestDto.builder()
                     .title("스케쥴3")
                     .isPublic(false)
                     .build());
-            Schedule schedule = customScheduleRepository.getScheduleByTitle("스케쥴1");
+            Schedule schedule = customScheduleRepository.getScheduleByTitleAndUser("스케쥴1", findUser);
             Schedule findSchedule = customScheduleRepository.getScheduleById(schedule.getId());
 
             // todo init

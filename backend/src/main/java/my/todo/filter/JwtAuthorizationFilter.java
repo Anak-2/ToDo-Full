@@ -48,6 +48,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             System.out.println("AccessToken Problem");
 //            RefreshToken 을 쿠키에서 가져와서 AccessToken 재발급
             String cookieName = "refreshToken";
+            if(cookies == null){
+                System.out.println("Cookie is null");
+            }
             String rJwt = null;
             for(Cookie c : cookies){
                 if(cookieName.equals(c.getName())){

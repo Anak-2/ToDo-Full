@@ -21,11 +21,11 @@ public class CustomScheduleRepository{
 //    ScheduleRepository interface 에서 또 ScheduleRepositoryImpl 을 생성하려 했기 때문인가보다
     private final ScheduleRepository scheduleRepository;
 
-    public Schedule getScheduleByTitle(String title){
-        return scheduleRepository.findByTitle(title).orElseThrow(ScheduleNotFoundException::new);
+    public Schedule getScheduleByTitleAndUser(String title, User user){
+        return scheduleRepository.findScheduleByTitleAndUser(title, user).orElseThrow(ScheduleNotFoundException::new);
     }
-    public boolean existsByTitle(String title){
-        return scheduleRepository.existsByTitle(title);
+    public boolean existsScheduleByTitleAndUser(String title, User user){
+        return scheduleRepository.existsScheduleByTitleAndUser(title, user);
     }
     public Schedule getScheduleById(Long id){
         return scheduleRepository.findById(id).orElseThrow(ScheduleNotFoundException::new);

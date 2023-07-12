@@ -1,5 +1,6 @@
 package my.todo.schedule.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import my.todo.schedule.domain.schedule.Schedule;
 
@@ -7,12 +8,15 @@ import java.sql.Timestamp;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class ScheduleResponseDto {
 
     private long id;
     private Timestamp createdDate;
     @NonNull
     private String title;
+    @JsonProperty("isPublic")
     private boolean isPublic = false;
 
     public ScheduleResponseDto(Schedule schedule){

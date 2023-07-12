@@ -1,5 +1,6 @@
 package my.todo.schedule.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NonNull;
 import my.todo.schedule.domain.schedule.Schedule;
@@ -13,6 +14,7 @@ public class ScheduleWithTodoResponse {
     private long id;
     @NonNull
     private String title;
+    @JsonProperty("isPublic")
     private boolean isPublic = false;
     private List<TodoResponseDto> todoResponseDtoList;
 

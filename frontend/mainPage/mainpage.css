@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+div:hover {
+    cursor: default;
+}
+
 html,
 body {
     min-height: 100%;
@@ -38,6 +42,7 @@ body {
     font-size: 15px;
     white-space: nowrap;
     overflow: hidden;
+    cursor: default;
 }
 
 .menu {
@@ -73,6 +78,8 @@ button {
     width: 200px;
     /* 원하는 너비로 설정 */
     overflow: hidden;
+    line-height: 30px;
+    vertical-align: middle;
     /* 텍스트를 숨기는 스타일 설정 */
     float: left;
     font-family: sans-serif;
@@ -84,11 +91,8 @@ button {
 
 /*  Side Menu CSS */
 .side-menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: block;
     position: fixed;
-    padding-top: 20px;
     top: 10vh;
     overflow: hidden;
     z-index: 1;
@@ -101,6 +105,14 @@ button {
     font-size: 15px;
 }
 
+.side-menu-flex {
+    position: absolute;
+    top: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .side-menu-hidden {
     /* overflow-wrap: normal; */
     white-space: nowrap;
@@ -108,10 +120,23 @@ button {
 }
 
 .side-menu-visible {
+    display: block;
     /* flex-wrap: nowrap; */
     width: 20vw;
     white-space: nowrap;
     /* overflow-wrap: normal; */
+}
+
+.side-menu-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.side-menu-btn:hover {
+    cursor: pointer;
 }
 
 .schedule-input {
@@ -141,9 +166,13 @@ button {
     float: right;
 }
 
-.schedule-input button:hover{
+.schedule-input button:hover {
     cursor: pointer;
     background-color: rgba(93, 181, 240, 0.247);
+}
+
+.schedule-id {
+    display: none;
 }
 
 .schedule-list {
@@ -156,10 +185,37 @@ button {
 
 .schedule-list li {
     height: 30px;
+    display: flex;
 }
 
-.schedule-list li:hover {
+.schedule-list li span {
+    /* span 수직 정렬하기 위해 line-height 를 부모랑 동일하게 */
+    width: 80%;
+    line-height: 30px;
+    vertical-align: middle;
+}
+
+.schedule-list li span:hover {
+    background-color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
+}
+
+.schedule-list li img {
+    cursor: pointer;
+}
+
+.lock {
+    height: 30px;
+}
+
+.unlocked {
+    border-radius: 50%;
+    background-color: lightgreen;
+}
+
+.locked {
+    border-radius: 50%;
+    background-color: lightcoral;
 }
 
 
@@ -395,9 +451,4 @@ ul {
     padding: 4px;
     color: inherit;
     cursor: pointer;
-}
-
-li:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-    /* 반투명 배경색 설정 */
 }

@@ -1,15 +1,9 @@
 package my.todo.todo.service;
 
-import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaDelete;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.metamodel.Metamodel;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import my.todo.schedule.domain.dto.request.ScheduleWithTodoRequest;
+import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.repository.CustomScheduleRepository;
 import my.todo.todo.domain.dto.request.TodoRequestDto;
@@ -20,7 +14,6 @@ import my.todo.todo.repository.CustomTodoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +30,7 @@ public class TodoService {
     }
 
 //    query todo list by schedule
-    public List<TodoResponseDto> getTodosBySchedule(ScheduleWithTodoRequest scheduleWithTodoRequest){
-        customTodoRepository.getTodoListBySchedule(scheduleWithTodoRequest.toEntity());
-        return null;
-    }
+    public List<TodoResponseDto> getTodosBySchedule(){return null;}
 
 //    add todo
     public void addTodo(TodoRequestDto todoRequestDto){
