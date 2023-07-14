@@ -5,17 +5,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microsoft 계정</title>
+    <title>MASTER OF TODO 계정</title>
     <link rel="stylesheet" href="signStyle.css">
     <!-- jQuery library -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
     <div class="container">
         <div id="signBox">
-            <img class="logo"
-                src="https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_ee5c8d9fb6248c938fd0dc19370e90bd.svg">
+            <img class="logo" src="/img/아주대 50주년.png">
             <div id="heading">계정 생성</div>
             <!-- id 중복 -->
             <p class="idError" style="color: red">id 오류 메시지</p>
@@ -23,13 +22,10 @@
             <p class="pwError" style="color: red">pw 오류 메시지</p>
             <form id="login" method="post" action="">
                 <div class="form-group">
-                    <label for="idBox">아이디 </label>
-                    <input type="text" id="idBox" placeholder="username" autofocus required
-                        spellcheck="false">
+                    <input type="text" id="idBox" placeholder="이메일 입력" autofocus required spellcheck="false">
                 </div>
                 <div class="form-group">
-                    <label for="pwBox">비밀번호 </label>
-                    <input type="password" id="pwBox" placeholder="password" requireds>
+                    <input type="password" id="pwBox" placeholder="비밀번호 입력" requireds>
                 </div>
                 <div class="google-btn">
                     <div class="google-icon"></div>

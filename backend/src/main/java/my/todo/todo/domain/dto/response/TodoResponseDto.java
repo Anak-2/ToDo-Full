@@ -12,16 +12,31 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class TodoResponseDto {
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Long todoId;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Timestamp finishDate;
+
     private String title;
+
     private String content;
+
     private boolean isFinished;
 
     public TodoResponseDto(Todo todo){
+        this.todoId = todo.getId();
         this.finishDate = todo.getFinishDate();
         this.title = todo.getTitle();
         this.content = todo.getContent();
         this.isFinished = todo.isFinished();
     }
+
+//    public static TodoResponseDto of(Todo todo){
+//        return TodoResponseDto.builder()
+//                .content(todo.getContent())
+//                .todoId(todo.getId())
+//                .finishDate(todo.getFinishDate())
+//                .isFinished(todo.isFinished())
+//                .build();
+//    }
 }

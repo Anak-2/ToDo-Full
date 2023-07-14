@@ -1,6 +1,5 @@
 package my.todo.schedule.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import my.todo.global.error.DuplicatedException;
 import my.todo.member.domain.user.User;
@@ -15,11 +14,12 @@ import my.todo.schedule.repository.CustomScheduleRepository;
 import my.todo.todo.domain.dto.response.TodoResponseDto;
 import my.todo.todo.repository.CustomTodoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ScheduleService {
 
@@ -27,6 +27,7 @@ public class ScheduleService {
     private final CustomTodoRepository customTodoRepository;
     private final UserJpaRepository userJpaRepository;
 
+    @Transactional
     public ScheduleResponseDto add(User user, ScheduleRequestDto scheduleRequestDto) {
         Schedule schedule = scheduleRequestDto.toEntity(user);
         if(customScheduleRepository.existsScheduleByTitleAndUser(schedule.getTitle(), user)){
@@ -47,12 +48,7 @@ public class ScheduleService {
         return customScheduleRepository.getScheduleListByUser(user);
     }
 
-    public ScheduleWithTodoResponse findScheduleWithTodo(ScheduleRequestDto scheduleRequestDto){
-        Schedule schedule = customScheduleRepository.getScheduleById(scheduleRequestDto.getId());
-        List<TodoResponseDto> todoResponseDtoList = customTodoRepository.getTodoListBySchedule(schedule);
-        return new ScheduleWithTodoResponse(schedule, todoResponseDtoList);
-    }
-
+    @Transactional
     public void updateSchedule(ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
         Schedule schedule = customScheduleRepository.getScheduleById(scheduleUpdateRequestDto.getId());
         schedule.updateTitle(scheduleUpdateRequestDto.getTitle());
@@ -60,6 +56,7 @@ public class ScheduleService {
         System.out.println("isPublic: "+scheduleUpdateRequestDto.isPublic());
     }
 
+    @Transactional
     public void deleteSchedule(ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
         Schedule schedule = customScheduleRepository.getScheduleById(scheduleUpdateRequestDto.getId());
         customScheduleRepository.delete(schedule);

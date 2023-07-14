@@ -15,12 +15,17 @@ import java.sql.Timestamp;
 public class Todo {
     @Id @GeneratedValue
     private Long id;
+
     private String title;
+
 //    *** Date 객체가 아닌 Timestamp 로 바꿔서 HH.mm 표시 되도록 함 ***
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Timestamp finishDate;
+
     private String content;
+
     private boolean isFinished;
+
 //    ToDo: 파일 업로드를 DB 에 직접 BLOB 타입으로 넣을지, 폴더에 경로로 저장할지 결정하기
 //    @Lob @Basic(fetch=FetchType.LAZY)
 //    @Column(name="contents", columnDefinition = "BLOB")
@@ -28,6 +33,7 @@ public class Todo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
     private String hyperLink;
 
 

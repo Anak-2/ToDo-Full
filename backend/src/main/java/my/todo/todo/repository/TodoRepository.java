@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    List<Todo> findBySchedule(Schedule schedule);
+    List<Todo> findByScheduleId(Long scheduleId);
     Optional<Todo> findByTitle(String title);
     @Query("select t from Todo t join fetch Schedule s")
     List<Todo> findAll();

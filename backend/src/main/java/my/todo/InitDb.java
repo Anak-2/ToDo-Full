@@ -54,7 +54,7 @@ public class InitDb {
             // schedule init
             scheduleService.add(findUser, ScheduleRequestDto.builder()
                     .title("스케쥴1")
-                    .isPublic(false)
+                    .isPublic(true)
                     .build());
             scheduleService.add(findUser, ScheduleRequestDto.builder()
                     .title("스케쥴2")
@@ -71,7 +71,7 @@ public class InitDb {
             todoService.addTodo(TodoRequestDto.builder()
                     .title("할일1")
                     .content("내용1")
-                    .isFinished(false)
+                    .isFinished(true)
                     .scheduleId(findSchedule.getId())
                     .finishDate(new Timestamp(1))
                     .build());

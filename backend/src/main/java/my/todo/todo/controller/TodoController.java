@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/todo")
@@ -54,8 +55,13 @@ public class TodoController {
     }
 
     @PostMapping(value="/add")
-    public void addTodo(@RequestBody TodoRequestDto todoRequestDto){
-        todoService.addTodo(todoRequestDto);
+    public Long addTodo(@RequestBody TodoRequestDto todoRequestDto){
+        return todoService.addTodo(todoRequestDto);
+    }
+
+    @GetMapping(value="/todos")
+    public List<TodoResponseDto> getTodoList(@RequestParam Long scheduleId){
+        return todoService.getTodosByScheduleId(scheduleId);
     }
 
 //    todoId 를 pathVariable 로 받게 된 이유 : API 방식이기 때문에 RequestMapping(...?id=id값) 을 이용해 현재 주소를 사용하기엔 API 스럽지 않다 (쿼리 스트링),
@@ -72,9 +78,13 @@ public class TodoController {
     }
 //    update todo
 //    TODO: 근데 수정 권한이 없는 사용자가 바꾸려는 시도를 막기 위해 암호화한 ID 를 사용해야겠는데... uuid?
-    @PutMapping(value = "/{todoId}")
+    @PatchMapping(value = "/{todoId}")
     public void updateTodo(@PathVariable Long todoId, @RequestBody TodoUpdateRequestDto todoUpdateRequestDto){
         todoService.updateTodo(todoId, todoUpdateRequestDto);
     }
-//
+//   update finished of todo
+    @PatchMapping(value = "/{todoId}")
+    public void updateFinishedOfTodo(@PathVariable Long todoId, @RequestParam boolean finished){
+        
+    }
 }

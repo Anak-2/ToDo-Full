@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Schedule {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @CreationTimestamp
     private Timestamp createdDate;

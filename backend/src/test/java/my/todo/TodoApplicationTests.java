@@ -1,8 +1,7 @@
 package my.todo;
 
 import jakarta.transaction.Transactional;
-import my.todo.member.domain.dto.UserRequestDto;
-import my.todo.member.domain.user.Role;
+import my.todo.member.domain.dto.request.UserRequestDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
 import my.todo.member.service.UserJpaService;

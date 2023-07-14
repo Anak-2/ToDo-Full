@@ -19,8 +19,8 @@ public class CustomTodoRepository {
         return todoRepository.findById(todoId).orElseThrow();
     }
 
-    public List<TodoResponseDto> getTodoListBySchedule(Schedule schedule) {
-        List<Todo> todoList = todoRepository.findBySchedule(schedule);
+    public List<TodoResponseDto> getTodoListByScheduleId(Long scheduleId) {
+        List<Todo> todoList = todoRepository.findByScheduleId(scheduleId);
         return todoList.stream()
                 .map(TodoResponseDto::new)
                 .collect(Collectors.toList());
@@ -30,8 +30,9 @@ public class CustomTodoRepository {
         return todoRepository.findByTitle(title).orElseThrow();
     }
 
-    public void save(Todo todo){
-        todoRepository.save(todo);
+//    저장 후 ResponseDto를 만들기 위해 getId 를 통해 방금 저장한 데이터의 PK 반환
+    public Long save(Todo todo){
+        return todoRepository.save(todo).getId();
     }
 
     public List<TodoResponseDto> findAll(){

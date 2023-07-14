@@ -15,7 +15,7 @@ public class TodoUpdateRequestDto {
     private String title;
     private String content;
     private boolean isFinished;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Timestamp finishDate;
 
     public Todo toEntity(){

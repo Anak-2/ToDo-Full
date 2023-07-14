@@ -30,12 +30,12 @@ public class TodoService {
     }
 
 //    query todo list by schedule
-    public List<TodoResponseDto> getTodosBySchedule(){return null;}
+    public List<TodoResponseDto> getTodosByScheduleId(Long scheduleId){return customTodoRepository.getTodoListByScheduleId(scheduleId);}
 
 //    add todo
-    public void addTodo(TodoRequestDto todoRequestDto){
+    public Long addTodo(TodoRequestDto todoRequestDto){
         Schedule findSchedule = customScheduleRepository.getScheduleById(todoRequestDto.getScheduleId());
-        customTodoRepository.save(todoRequestDto.toEntity(findSchedule));
+        return customTodoRepository.save(todoRequestDto.toEntity(findSchedule));
     }
 
     public void deleteTodo(Long todoId) {

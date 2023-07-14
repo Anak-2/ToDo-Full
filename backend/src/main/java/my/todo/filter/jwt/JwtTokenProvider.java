@@ -5,7 +5,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.config.auth.PrincipalDetails;
-import my.todo.member.domain.dto.UserResponseDto;
+import my.todo.member.domain.dto.response.UserResponseDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

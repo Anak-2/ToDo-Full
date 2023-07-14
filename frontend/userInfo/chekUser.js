@@ -1,6 +1,5 @@
-export let accessToken = localStorage.getItem("accessToken");
-
-// console.log(accessToken);
+let accessToken = localStorage.getItem("accessToken");
+// export { accessToken };
 if (accessToken == null) {
   alert("로그인이 필요합니다!");
   location.href = "/app.html";

@@ -36,14 +36,9 @@ public class ScheduleController {
         User user = principalDetails.getUser();
         return scheduleService.findScheduleList(user.getUsername());
     }
-//    get schedule info with todo list
-    @GetMapping("/todos")
-    public ScheduleWithTodoResponse getScheduleWithToDoList(@RequestBody ScheduleRequestDto scheduleRequestDto){
-        return scheduleService.findScheduleWithTodo(scheduleRequestDto);
-    }
 
 //    modify schedule
-    @PutMapping("/update")
+    @PatchMapping("/update")
     public void updateSchedule(@RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto){
         System.out.println(scheduleUpdateRequestDto);
         scheduleService.updateSchedule(scheduleUpdateRequestDto);

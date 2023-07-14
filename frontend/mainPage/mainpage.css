@@ -69,13 +69,13 @@ button {
 }
 
 .user-svg {
-    width: 30px;
+    width: 15%;
     height: 30px;
     float: left;
 }
 
 .user-name {
-    width: 200px;
+    width: 70%;
     /* 원하는 너비로 설정 */
     overflow: hidden;
     line-height: 30px;
@@ -107,6 +107,7 @@ button {
 
 .side-menu-flex {
     position: absolute;
+    width: 100%;
     top: 35px;
     display: flex;
     flex-direction: column;
@@ -332,16 +333,24 @@ button {
 /* List Contatiner & Trash Btn CSS */
 .list-container {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-items: center;
     min-height: calc(100vh - 10vh - 60px);
     padding-top: 30px;
     background: linear-gradient(to bottom, rgb(219, 231, 231), rgb(228, 237, 228));
-    justify-content: center;
 }
+
+/* .list-container>div,
+.list-container>ul {
+    width: 85%;
+} */
 
 .list-container .list {
     min-width: 300px;
     list-style: none;
     font-size: 1rem;
+    display: block;
 }
 
 .outer-list .date-item {
@@ -355,6 +364,10 @@ button {
     display: flex;
     align-content: center;
     background-color: rgb(216, 224, 221);
+}
+
+.list-container .list-wrapper .todo-id {
+    display: none;
 }
 
 .list-container .list .list-item {
@@ -393,19 +406,20 @@ button {
     cursor: pointer;
 }
 
+
 .complete-list {
     text-decoration: line-through;
 }
 
 .trash-btn {
-    display: flex;
     overflow: hidden;
+    margin-left: auto;
+    margin-right: 5%;
+    vertical-align: center;
     /* justify-content가 처음에 안 먹혔던 이유는
     width가 충분하지 않았기 때문이었다!
     ★ flex item들이 이동할 수 있도록 충분한 공간 확보하기 ★ */
-    justify-content: flex-end;
-    width: 100%;
-    height: 30px;
+    height: 25px;
 }
 
 .trash-btn .trash-svg {
@@ -451,4 +465,8 @@ ul {
     padding: 4px;
     color: inherit;
     cursor: pointer;
+}
+
+.dropdown-content span:hover {
+    background-color: rgba(0, 0, 0, 0.159);
 }

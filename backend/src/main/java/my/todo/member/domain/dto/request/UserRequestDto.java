@@ -1,4 +1,4 @@
-package my.todo.member.domain.dto;
+package my.todo.member.domain.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;

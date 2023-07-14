@@ -12,18 +12,19 @@ import my.todo.schedule.domain.schedule.Schedule;
 @ToString
 public class ScheduleRequestDto {
         private Long id;
+
         @NonNull
         private String title;
+
         @Builder.Default
         @JsonProperty("isPublic")
         private boolean isPublic = false;
 
         public Schedule toEntity(User user){
-            Schedule schedule = Schedule.builder()
+            return Schedule.builder()
                     .title(title)
                     .user(user)
                     .isPublic(isPublic)
                     .build();
-            return schedule;
         }
 }

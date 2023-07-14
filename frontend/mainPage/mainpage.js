@@ -1,3 +1,16 @@
+function dateFormatting(source, delimiter = '-') {
+  let year = source.getFullYear(); // 년도
+  let month = source.getMonth() + 1; // 월
+  let day = source.getDate(); // 날짜
+  return [year, month, day].join(delimiter);
+}
+
+function timeFormatting(source, delimiter = ':') {
+  const hours = String(source.getHours()).padStart(2, "0");
+  const minutes = String(source.getMinutes()).padStart(2, "0");
+  return [hours, minutes].join(delimiter);
+}
+
 let inputBox = document.querySelector(".input-container .inputBox");
 let searchBox = document.querySelector(".searchBox");
 let list = document.querySelector(".list");
@@ -31,6 +44,7 @@ function initInput() {
   inputTime.value = `${hours}:${minutes}`;
 
 }
+
 // ******** Side Menu Func ********
 
 //open side menu
@@ -52,7 +66,7 @@ function insertSchedule(id, title, isPublic) {
   scheduleList.insertAdjacentHTML("beforeend",
     `<li>
     <div class="schedule-id">${id}</div>
-    <span>${title}</span>
+    <span onClick="getTodoListByScheduleId(this)">${title}</span>
     <img class="lock ${isLocked}" onClick="lockEvent(this)" src="${imgSrc}">
     </li>`);
 }
@@ -68,7 +82,7 @@ function addSchedule() {
   }
   $.ajax({
     method: "POST",
-    url: "http://localhost:8080/schedule/add",
+    url: `http://localhost:8080/schedule/add`,
     crossDomain: true,
     xhrFields: {
       withCredentials: true
@@ -102,7 +116,6 @@ function getScheduleList() {
       withCredentials: true
     },
     success: function (data) {
-      console.log(data);
       data.forEach(element => {
         insertSchedule(element['id'], element['title'], element['isPublic']);
       });
@@ -113,7 +126,6 @@ function getScheduleList() {
   })
 }
 
-getScheduleList();
 
 //  ToDo: public , private 조건 주기
 function lockEvent(lockElement) {
@@ -121,15 +133,13 @@ function lockEvent(lockElement) {
   const scheduleId = lockWrapper.children[0].innerText;
   const title = lockWrapper.children[1].innerText;
   var locked = lockElement.classList.contains('locked') ? true : false;
-  console.log(locked);
   const requestData = {
     "id": scheduleId,
     "title": title,
     "isPublic": locked
   }
-  console.log(requestData);
   $.ajax({
-    method: "PUT",
+    method: "PATCH",
     url: "http://localhost:8080/schedule/update",
     headers: { "Content-Type": "application/json", 'Authorization': accessToken },
     crossDomain: true,
@@ -142,12 +152,10 @@ function lockEvent(lockElement) {
         lockElement.classList.remove('unlocked');
         lockElement.classList.add('locked');
         lockElement.src = "/img/lock.png";
-        console.log('Lock closed');
       } else {
         lockElement.classList.remove('locked');
         lockElement.classList.add('unlocked');
         lockElement.src = "/img/unlock.png";
-        console.log('Lock opened');
       }
     },
     error: function () {
@@ -156,15 +164,14 @@ function lockEvent(lockElement) {
   })
 }
 
+document.querySelector(".menu").addEventListener("click", openSideMenu);
+
 // ******** List Func ********
 
-function getTodoList(scheduleTitle) {
-
-}
 //add key event listencer
 inputBox.addEventListener("keyup", function (e) {
   if (e.keyCode === 13) {
-    insertList(e);
+    insertInputList(e);
   }
 });
 
@@ -196,18 +203,52 @@ document.addEventListener("mouseup", function (e) {
   }
 });
 
-function makeListWrapper() {
+function getTodoListByScheduleId(e) {
+  const scheduleId = e.parentElement.children[0].innerText;
+  localStorage.setItem("scheduleId", scheduleId);
+  getTodoList(scheduleId);
+}
+
+// getTodoList when click schedule
+function getTodoList(scheduleId) {
+  if (!valueCheck(scheduleId)) return;
+  $.ajax({
+    method: "GET",
+    url: `http://localhost:8080/todo/todos?scheduleId=${scheduleId}`,
+    success: function (data) {
+      console.log(data);
+      list.innerHTML = "";
+      data.forEach(todo => {
+        let date = todo['finishDate'];
+        insertTodo(todo['todoId'], date, todo['title'], todo['content'], todo['finished']);
+      })
+    },
+    error: function () {
+      alert("failed to get todo list");
+    }
+  })
+}
+
+function makeListWrapper(todoId, timeValue, title, finished) {
+
   const listWrapper = document.createElement("div");
   listWrapper.classList.add("list-wrapper");
-  const listItem = document.createElement("li");
 
-  //combine list with inputdate and put in listWrapper
-  const inputTime = document.querySelector(".time-input");
-  const deadline = document.createElement("span");
-  deadline.innerText = inputTime.value;
-  deadline.classList.add("deadline");
+  const todoIdDiv = `<div class="todo-id">${todoId}</div>`;
+  listWrapper.insertAdjacentHTML("afterbegin", todoIdDiv);
+
+  const listItem = document.createElement("li");
+  if (finished) {
+    listItem.classList.add("complete-list");
+    listWrapper.style.opacity = 0.5;
+  }
   listItem.classList.add("list-item");
-  listItem.innerText = inputBox.value;
+  listItem.innerText = title;
+
+  const deadline = document.createElement("span");
+  deadline.innerText = timeValue;
+  deadline.classList.add("deadline");
+
   listItem.appendChild(deadline);
   listWrapper.appendChild(listItem);
 
@@ -227,37 +268,73 @@ function makeListWrapper() {
 
   return listWrapper;
 }
+
 //find location to insert list
-function insertList(e) {
-  if (inputBox.value != "") {
-    const listWrapper = makeListWrapper();
-    // input in date order
-    const inputDate = document.querySelector(".date-input");
-    const dateItem = document.querySelectorAll(".date-item");
-    let outerListIndex = 0;
-    // if there is no date-item, then makes new outer list and date box (date-item)
-    if (dateItem.length == 0) {
-      const outerListAndNewDate = `
+function insertTodo(todoId, date, title, content, finished) {
+  const dateItem = document.querySelectorAll(".date-item");
+  const NO_ITEM = 0;
+  date = new Date(date);
+  dateValue = dateFormatting(date, '-');
+  timeValue = timeFormatting(date, ':');
+  const listWrapper = makeListWrapper(todoId, timeValue, title, finished);
+
+  let outerListIndex = 0;
+  // if there is no date-item, then makes new outer list and date box (date-item)
+  if (dateItem.length == NO_ITEM) {
+    const outerListAndNewDate = `
         <div class="outer-list">
-          <div class="date-item">${inputDate.value}</div>
+          <div class="date-item">${dateValue}</div>
         </div>
       `;
-      list.insertAdjacentHTML("beforeend", outerListAndNewDate);
-    } else {
-      outerListIndex = findDateLocation(inputDate, dateItem);
-    }
-    const outerListArr = document.querySelectorAll(".outer-list");
+    list.insertAdjacentHTML("beforeend", outerListAndNewDate);
+  } else {
+    outerListIndex = findDateLocation(dateValue, dateItem);
+  }
+  const outerListArr = document.querySelectorAll(".outer-list");
 
-    // input in time order
+  // finally, find out the index where to put todo
+  const outerListChildIdx = findTimeLocation(
+    outerListArr[outerListIndex],
+    timeValue
+  );
+  outerListArr[outerListIndex].children[outerListChildIdx]
+    .insertAdjacentElement("afterend", listWrapper);
+}
+
+``
+// insert todo item into list using input value
+function insertInputList(e) {
+  if (inputBox.value != "") {
+    const inputDate = document.querySelector(".date-input");
     const inputTime = document.querySelector(".time-input");
-    // finally, find out the index where to put todo
-    const outerListChildIdx = findTimeLocation(
-      outerListArr[outerListIndex],
-      inputTime
-    );
-    outerListArr[outerListIndex].children[outerListChildIdx]
-      .insertAdjacentElement("afterend", listWrapper);
-
+    const finishDate = `${inputDate.value}T${inputTime.value}`;
+    const scheduleId = localStorage.getItem("scheduleId");
+    const isFinished = false;
+    const content = null;
+    const title = inputBox.value;
+    const todoRequestDto = {
+      "title": title,
+      "content": content,
+      "isFinished": isFinished,
+      "finishDate": finishDate,
+      "scheduleId": scheduleId
+    }
+    if (scheduleId === undefined || scheduleId === null || scheduleId === "") {
+      alert("Select or Make Your Schedule First");
+      return;
+    }
+    $.ajax({
+      method: "POST",
+      url: `http://localhost:8080/todo/add`,
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify(todoRequestDto),
+      success: function (data) {
+        insertTodo(data, finishDate, title, content, false);
+      },
+      error: function () {
+        alert("failed to insert todo");
+      }
+    })
     // input box 초기화
     initInput();
   }
@@ -281,21 +358,19 @@ function deleteList(e) {
 
 // decide where to put the date and return the index which points to a place
 // to write list-wrapper
-function findDateLocation(inputDate, dateItem) {
-  const inputDateArr = inputDate.value.split("-");
+function findDateLocation(dateValue, dateItem) {
+  const inputDateArr = dateValue.split("-");
   const newDate = document.createElement("div");
   newDate.classList.add("date-item");
-  newDate.innerText = inputDate.value;
+  newDate.innerText = dateValue;
   const outerList = document.createElement("div");
   outerList.classList.add("outer-list");
   outerList.appendChild(newDate);
   for (let i = 0; i < dateItem.length; i++) {
     const date = dateItem[i].innerText.split("-");
-    console.log(date);
     if (inputDateArr[0] == date[0]) {
       if (inputDateArr[1] == date[1]) {
         if (inputDateArr[2] == date[2]) {
-          console.log("no date insert");
           return i;
         } else {
           if (inputDateArr[2] > date[2] && i == dateItem.length - 1) {
@@ -334,15 +409,15 @@ function findDateLocation(inputDate, dateItem) {
 
 // decide where to put the time and return the index which points to a place
 // to write to-do
-function findTimeLocation(outerList, inputTime) {
+function findTimeLocation(outerList, timeValue) {
   let outerListChildIdx = 0;
   const outerListChildLen = outerList.childElementCount;
-  const [inputHour, inputMin] = inputTime.value.split(":");
-  const onlyDateBoxLen = 1; // wrapper has only date box alone
-  if (outerListChildLen == onlyDateBoxLen) return outerListChildIdx;
+  const [inputHour, inputMin] = timeValue.split(":");
+  const NO_OUTER_LIST = 1; // wrapper has only date box alone
+  if (outerListChildLen == NO_OUTER_LIST) return outerListChildIdx;
   let compareHour, compareMin;
   for (outerListChildIdx = 1; outerListChildIdx < outerListChildLen; outerListChildIdx++) {
-    const deadline = outerList.children[outerListChildIdx].children[0].children[0].innerText;
+    const deadline = outerList.children[outerListChildIdx].children[1].children[0].innerText;
     [compareHour, compareMin] = deadline.split(":");
     if (inputHour <= compareHour && inputMin <= compareMin) return outerListChildIdx - 1;
     if (inputHour < compareHour) return outerListChildIdx - 1;
@@ -353,6 +428,7 @@ function findTimeLocation(outerList, inputTime) {
 function checkList(e) {
   let t = e.target.parentElement;
   let t2 = e.target.previousElementSibling;
+  const todoId = e.target.parentElement.children[0].innerText;
   if (t2.classList.contains("complete-list")) {
     t2.classList.remove("complete-list");
     gsap.to(t, { duration: 0.5, opacity: 1, ease: "line" });
@@ -361,8 +437,6 @@ function checkList(e) {
     gsap.to(t, { duration: 0.5, opacity: 0.5, ease: "line" });
   }
 }
-
-document.querySelector(".menu").addEventListener("click", openSideMenu);
 
 //make trash-btn function
 function trashCompleted() {
@@ -483,8 +557,16 @@ function memberInfo() {
 
 //init addBtn
 const addBtn = document.querySelector(".addButton");
-addBtn.addEventListener("click", insertList);
+addBtn.addEventListener("click", insertInputList);
 
 initInput();
 getClock();
 setInterval(getClock, 60000);
+
+getScheduleList();
+getTodoList(localStorage.getItem("scheduleId"));
+
+function valueCheck(value) {
+  if (value == undefined || value == null || value == "") return false;
+  return true;
+}

@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import my.todo.schedule.domain.schedule.Schedule;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -60,5 +62,4 @@ public class User {
     public void createScheduleList(List<Schedule> scheduleList) {
         this.scheduleList = scheduleList;
     }
-
 }

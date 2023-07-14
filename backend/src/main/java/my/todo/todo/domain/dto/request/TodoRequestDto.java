@@ -15,14 +15,18 @@ import java.sql.Timestamp;
 public class TodoRequestDto {
 
     private String title;
+
     private String content;
+
     private boolean isFinished;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Timestamp finishDate;
+
     private Long scheduleId;
 
     public Todo toEntity(Schedule schedule){
-        Todo todo = Todo.builder()
+        return Todo.builder()
                 .content(content)
                 .title(title)
                 .isFinished(isFinished)
@@ -32,6 +36,6 @@ public class TodoRequestDto {
 //                해결 방법 -> DTO 에서 Entity 로 바꿀 때 연관관계에 있는 객체는 꼭 영속성 컨텍스트 에서 가져오도록 하자
                 .schedule(schedule)
                 .build();
-        return todo;
     }
+
 }

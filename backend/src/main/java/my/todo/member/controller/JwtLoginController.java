@@ -8,26 +8,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.config.auth.PrincipalDetails;
 import my.todo.filter.jwt.JwtTokenProvider;
-import my.todo.global.error.NotAuthorizedException;
-import my.todo.global.error.UserNotFoundException;
-import my.todo.member.domain.dto.UserRequestDto;
-import my.todo.member.domain.dto.UserResponseDto;
-import my.todo.member.domain.user.Role;
+import my.todo.member.domain.dto.request.UserRequestDto;
+import my.todo.member.domain.dto.response.UserResponseDto;
 import my.todo.member.domain.user.User;
 import my.todo.member.service.UserJpaService;
-import my.todo.schedule.domain.schedule.Schedule;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.Optional;
 
 
 @RestController
