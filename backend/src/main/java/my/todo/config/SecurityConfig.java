@@ -53,7 +53,14 @@ public class SecurityConfig {
                 .hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                 .requestMatchers("/user/admin")
                 .hasAnyRole(Role.ADMIN.name())
-                .anyRequest().permitAll();
+                .requestMatchers("/schedule/*")
+                .hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+                .requestMatchers("/todo/*")
+                .hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+                .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .loginPage("http://localhost:5501/app.html");
         http
                 .oauth2Login()
                 .userInfoEndpoint().userService(myOAuth2UserService)// OAuth2 로그인 받아온 것을 myOAuth 서비스로 처리

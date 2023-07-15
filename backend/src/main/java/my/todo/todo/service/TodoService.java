@@ -49,8 +49,10 @@ public class TodoService {
         todo.updateContent(todoUpdateRequestDto.getContent());
         todo.updateIsFinished(todoUpdateRequestDto.isFinished());
         todo.updateFinishDate(todoUpdateRequestDto.getFinishDate());
-//        Todo: Dirty Checking 이 안되는 이유?
-//              -> @Transactional 이 안 걸려있었기 때문!
-//        customTodoRepository.save(todo);
+    }
+
+    public void updateFinishOfTodo(Long todoId, boolean isFinished){
+        Todo todo = customTodoRepository.getTodoById(todoId);
+        todo.updateIsFinished(isFinished);
     }
 }

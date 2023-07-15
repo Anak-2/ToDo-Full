@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.filter.jwt.JwtTokenProvider;
+import my.todo.global.error.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String accessToken = request.getHeader(accessHeader);
 
-        System.out.println("Call JwtAuthorizationFilter | accessToken :"+accessToken);
+        log.debug("Call JwtAuthorizationFilter | accessToken :"+accessToken);
 
 //        accessToken 이 없을 때
         if(accessToken == null || accessToken.equals("null")){
@@ -42,14 +43,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 //        accessToken 이 있을 때 Authentication 실행
         Authentication authentication = checkAccessToken(accessToken);
         Cookie[] cookies = request.getCookies();
-        System.out.println("Cookies: "+Arrays.toString(cookies));
 //        accessToken 에 문제가 있을 때
         if(authentication == null){
-            System.out.println("AccessToken Problem");
+            log.debug("AccessToken Has Problem");
 //            RefreshToken 을 쿠키에서 가져와서 AccessToken 재발급
             String cookieName = "refreshToken";
             if(cookies == null){
-                System.out.println("Cookie is null");
+                throw new UserNotFoundException("Cookie is null");
             }
             String rJwt = null;
             for(Cookie c : cookies){

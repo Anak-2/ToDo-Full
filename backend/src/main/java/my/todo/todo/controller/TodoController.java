@@ -83,8 +83,8 @@ public class TodoController {
         todoService.updateTodo(todoId, todoUpdateRequestDto);
     }
 //   update finished of todo
-    @PatchMapping(value = "/{todoId}")
-    public void updateFinishedOfTodo(@PathVariable Long todoId, @RequestParam boolean finished){
-
+    @PatchMapping(value = "/{todoId}/{isFinished}")
+    public void updateFinishedOfTodo(@PathVariable Long todoId, @PathVariable boolean isFinished){
+        todoService.updateFinishOfTodo(todoId, isFinished);
     }
 }

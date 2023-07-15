@@ -146,6 +146,7 @@ function lockEvent(lockElement) {
     xhrFields: {
       withCredentials: true
     },
+    headers: { "Content-Type": "application/json", 'Authorization': accessToken },
     data: JSON.stringify(requestData),
     success: function () {
       if (!locked) {
@@ -205,7 +206,7 @@ document.addEventListener("mouseup", function (e) {
 
 function getTodoListByScheduleId(e) {
   const scheduleId = e.parentElement.children[0].innerText;
-  localStorage.setItem("scheduleId", scheduleId);
+  sessionStorage.setItem("scheduleId", scheduleId);
   getTodoList(scheduleId);
 }
 
@@ -215,6 +216,11 @@ function getTodoList(scheduleId) {
   $.ajax({
     method: "GET",
     url: `http://localhost:8080/todo/todos?scheduleId=${scheduleId}`,
+    headers: { "Content-Type": "application/json", 'Authorization': accessToken },
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true
+    },
     success: function (data) {
       console.log(data);
       list.innerHTML = "";
@@ -308,7 +314,7 @@ function insertInputList(e) {
     const inputDate = document.querySelector(".date-input");
     const inputTime = document.querySelector(".time-input");
     const finishDate = `${inputDate.value}T${inputTime.value}`;
-    const scheduleId = localStorage.getItem("scheduleId");
+    const scheduleId = sessionStorage.getItem("scheduleId");
     const isFinished = false;
     const content = null;
     const title = inputBox.value;
@@ -326,7 +332,11 @@ function insertInputList(e) {
     $.ajax({
       method: "POST",
       url: `http://localhost:8080/todo/add`,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", 'Authorization': accessToken },
+      crossDomain: true,
+    xhrFields: {
+      withCredentials: true
+    },
       data: JSON.stringify(todoRequestDto),
       success: function (data) {
         insertTodo(data, finishDate, title, content, false);
@@ -545,6 +555,10 @@ function addTodo(todo) {
     type: "POST",
     url: "http://localhost:8080/todo/add",
     data: JSON.stringify(todo),
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true
+    },
     success: function (data, textStatus, request) {
 
     },
@@ -567,7 +581,7 @@ getClock();
 setInterval(getClock, 60000);
 
 getScheduleList();
-getTodoList(localStorage.getItem("scheduleId"));
+getTodoList(sessionStorage.getItem("scheduleId"));
 
 function valueCheck(value) {
   if (value == undefined || value == null || value == "") return false;

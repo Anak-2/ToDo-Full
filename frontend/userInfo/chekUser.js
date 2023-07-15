@@ -43,6 +43,7 @@ $.ajax({
       }
     }
     // ToDo: 이 js에서 선언한 변수를 다른 파일에서 쓸 수 있도록 더 좋은 방법 생각하기
+    // export, import 
     $('.user-name').text(data['username']);
     $('.user-name').val(data['username']);
     $('.id').val(data['id']);
