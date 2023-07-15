@@ -429,6 +429,9 @@ function checkList(e) {
   let t = e.target.parentElement;
   let t2 = e.target.previousElementSibling;
   const todoId = e.target.parentElement.children[0].innerText;
+  $.ajax({
+    method:""
+  })
   if (t2.classList.contains("complete-list")) {
     t2.classList.remove("complete-list");
     gsap.to(t, { duration: 0.5, opacity: 1, ease: "line" });
