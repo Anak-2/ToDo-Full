@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static my.todo.global.errormsg.UserError.*;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -43,7 +45,7 @@ public class UserJpaService {
             user.updatePassword(passwordEncoder.encode(user.getPassword()));
             userJpaRepository.save(user);
         }else{
-            throw new DuplicatedException("중복된 아이디 존재");
+            throw new DuplicatedException(DUPLICATED.getMsg());
         }
     }
 
@@ -58,7 +60,7 @@ public class UserJpaService {
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             return JwtTokenProvider.generateToken(authentication);
         }catch(Exception e){
-            throw new UserNotFoundException("No User Found");
+            throw new UserNotFoundException(USER_NOT_EXIST.getMsg());
         }
     }
 

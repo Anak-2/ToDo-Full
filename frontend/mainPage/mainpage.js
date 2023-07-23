@@ -206,12 +206,14 @@ document.addEventListener("mouseup", function (e) {
 
 function getTodoListByScheduleId(e) {
   const scheduleId = e.parentElement.children[0].innerText;
+  const scheduleTitle = e.innerText;
   sessionStorage.setItem("scheduleId", scheduleId);
-  getTodoList(scheduleId);
+  sessionStorage.setItem("scheduleTitle", scheduleTitle);
+  getTodoList(scheduleId, scheduleTitle);
 }
 
 // getTodoList when click schedule
-function getTodoList(scheduleId) {
+function getTodoList(scheduleId, scheduleTitle) {
   if (!valueCheck(scheduleId)) return;
   $.ajax({
     method: "GET",
@@ -222,7 +224,7 @@ function getTodoList(scheduleId) {
       withCredentials: true
     },
     success: function (data) {
-      console.log(data);
+      document.querySelector(".schedule-title").innerText = scheduleTitle;
       list.innerHTML = "";
       data.forEach(todo => {
         let date = todo['finishDate'];
@@ -334,9 +336,9 @@ function insertInputList(e) {
       url: `http://localhost:8080/todo/add`,
       headers: { "Content-Type": "application/json", 'Authorization': accessToken },
       crossDomain: true,
-    xhrFields: {
-      withCredentials: true
-    },
+      xhrFields: {
+        withCredentials: true
+      },
       data: JSON.stringify(todoRequestDto),
       success: function (data) {
         insertTodo(data, finishDate, title, content, false);
@@ -352,18 +354,34 @@ function insertInputList(e) {
 
 //delete one list
 function deleteList(e) {
-  let s = e.target.parentElement;
-  let outerList = s.parentElement;
-  let t1 = new TimelineMax({
-    //remove를 애니메이션 다 끝난 후 호출하기 위한 방법
-    onComplete: function () {
-      s.remove();
-      if (outerList.children.length == 1) {
-        outerList.remove();
-      }
+  let listWrapper = e.target.parentElement;
+  let todoId = listWrapper.children[0].innerText;
+  let outerList = listWrapper.parentElement;
+  $.ajax({
+    method: "DELETE",
+    url: `http://localhost:8080/todo/${todoId}`,
+    headers: { "Content-Type": "application/json", 'Authorization': accessToken },
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true
     },
-  });
-  t1.to(s, { duration: 0.5, opacity: 0, y: -50, ease: "line" });
+    success: function () {
+      let t1 = new TimelineMax({
+        //remove를 애니메이션 다 끝난 후 호출하기 위한 방법
+        onComplete: function () {
+          listWrapper.remove();
+          if (outerList.children.length == 1) {
+            outerList.remove();
+          }
+        },
+      });
+      t1.to(listWrapper, { duration: 0.5, opacity: 0, y: -50, ease: "line" });
+    },
+    error: function (jqXHR) {
+      console.log("code: " + jqXHR.status + " response: " + jqXHR.responseText);
+      console.log(jqXHR.responseText);
+    }
+  })
 }
 
 // decide where to put the date and return the index which points to a place
@@ -438,17 +456,32 @@ function findTimeLocation(outerList, timeValue) {
 function checkList(e) {
   let t = e.target.parentElement;
   let t2 = e.target.previousElementSibling;
+  let isFinished = null;
   const todoId = e.target.parentElement.children[0].innerText;
-  $.ajax({
-    method:""
-  })
   if (t2.classList.contains("complete-list")) {
     t2.classList.remove("complete-list");
+    isFinished = false;
     gsap.to(t, { duration: 0.5, opacity: 1, ease: "line" });
   } else {
     t2.classList.add("complete-list");
+    isFinished = true;
     gsap.to(t, { duration: 0.5, opacity: 0.5, ease: "line" });
   }
+  $.ajax({
+    method: "PATCH",
+    url: `http://localhost:8080/todo/${todoId}/${isFinished}`,
+    headers: { 'Content-Type': 'application/json', 'Authorization': accessToken, 'Access-Control-Allow-Origin': true },
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true
+    },
+    success: function (data, textStatus, request) {
+
+    },
+    error: function (jqXHR) {
+      alert(jqXHR.textStatus);
+    }
+  })
 }
 
 //make trash-btn function
@@ -547,26 +580,6 @@ function logout() {
   })
 }
 
-function addTodo(todo) {
-  var todo = {
-
-  }
-  $.ajax({
-    type: "POST",
-    url: "http://localhost:8080/todo/add",
-    data: JSON.stringify(todo),
-    crossDomain: true,
-    xhrFields: {
-      withCredentials: true
-    },
-    success: function (data, textStatus, request) {
-
-    },
-    error: function (request, status, error) {
-
-    }
-  })
-}
 
 function memberInfo() {
   location.href = "/userInfo/user-info.html";
@@ -581,7 +594,7 @@ getClock();
 setInterval(getClock, 60000);
 
 getScheduleList();
-getTodoList(sessionStorage.getItem("scheduleId"));
+getTodoList(sessionStorage.getItem("scheduleId"), sessionStorage.getItem("scheduleTitle"));
 
 function valueCheck(value) {
   if (value == undefined || value == null || value == "") return false;

@@ -57,8 +57,8 @@ $.ajax({
     $('.name').val(data['username']);
     $('.role').val(data['role']);
   },
-  error: function (request, status, error) {
-    alert("code:" + request.status + "\n관리자에게 문의하세요");
+  error: function (jqXHR) {
+    alert("code:" + jqXHR.status + "\n" + jqXHR.statusText);
     localStorage.removeItem("accessToken");
     location.href = "/app.html";
   }

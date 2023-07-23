@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.filter.jwt.JwtTokenProvider;
+import my.todo.global.error.NotAuthorizedException;
 import my.todo.global.error.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 //        accessToken 이 없을 때
         if(accessToken == null || accessToken.equals("null")){
+            log.debug("NO ACCESS HEADER FOUND");
             filterChain.doFilter(request,response);
             return;
         }
@@ -70,6 +72,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 authentication = checkAccessToken(accessToken);
             }else{
                 log.debug("Require Refresh Token");
+                throw new NotAuthorizedException("THERE IS NO AVAILABLE REFRESH TOKEN. Please Sign in again");
             }
         }
         if(authentication != null){

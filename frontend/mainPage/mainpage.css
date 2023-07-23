@@ -272,21 +272,30 @@ button {
     display: flex;
     /* when I use this code, horizontal scroll is created */
     /* width: 100vw; */
-    justify-content: center;
-    align-content: flex-start;
+    align-items: center;
     flex-wrap: wrap;
     padding: 10px 0px;
 }
 
+.schedule-title {
+    position: absolute;
+    align-self: center;
+    margin-left: 10%;
+    font-weight: 1000;
+    color: white;
+    font-size: 20px;
+}
+
 .list-input-container .list-input {
-    position: relative;
+    margin: 0 auto;
     width: 40%;
 }
 
 .list-input-container .list-input .input-info {
     position: absolute;
     /* z-index: 1; */
-    width: calc(100% - 40px);
+    /* width: calc(100% - 40px); */
+    width: calc(40% - 40px);
     background-color: rgb(233, 228, 228);
     overflow: hidden;
     /* height: 30px; */
@@ -410,6 +419,7 @@ button {
 .complete-list {
     text-decoration: line-through;
 }
+
 
 .trash-btn {
     overflow: hidden;
