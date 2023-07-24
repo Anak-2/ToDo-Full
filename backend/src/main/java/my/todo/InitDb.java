@@ -4,20 +4,16 @@ import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import my.todo.member.domain.user.User;
-import my.todo.member.repository.UserJpaRepository;
-import my.todo.member.service.UserJpaService;
+import my.todo.member.repository.UserRepository;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.repository.CustomScheduleRepository;
 import my.todo.schedule.service.ScheduleService;
 import my.todo.todo.domain.dto.request.TodoRequestDto;
-import my.todo.todo.repository.CustomTodoRepository;
 import my.todo.todo.service.TodoService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Component
@@ -35,7 +31,7 @@ public class InitDb {
     @Transactional
     @RequiredArgsConstructor
     static class InitService {
-        private final UserJpaRepository userJpaRepository;
+        private final UserRepository userRepository;
         private final ScheduleService scheduleService;
         private final CustomScheduleRepository customScheduleRepository;
         private final TodoService todoService;
@@ -48,8 +44,8 @@ public class InitDb {
                     .password("1234")
                     .build();
             user.updatePassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            userJpaRepository.save(user);
-            User findUser = userJpaRepository.getByUsername("1234");
+            userRepository.save(user);
+            User findUser = userRepository.getByUsername("1234");
 
             // schedule init
             scheduleService.add(findUser, ScheduleRequestDto.builder()

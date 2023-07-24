@@ -14,26 +14,44 @@
 <body>
     <div class="container">
         <div id="signBox">
-            <img class="logo" src="/img/아주대 50주년.png">
+            <div class="logo">
+                <img class="logo" src="/img/아주대 50주년.png"><span>TODO</span>
+            </div>
             <div id="heading">계정 생성</div>
             <!-- id 중복 -->
-            <p class="idError" style="color: red">id 오류 메시지</p>
             <!-- pw 에러 -->
-            <p class="pwError" style="color: red">pw 오류 메시지</p>
             <form id="login" method="post" action="">
                 <div class="form-group">
-                    <input type="text" id="idBox" placeholder="이메일 입력" autofocus required spellcheck="false">
+                    <input type="text" id="idBox" oninput="hideIdError()" placeholder="아이디 입력" autofocus spellcheck="false">
+                    <p class="idError error-class">id 오류 메시지</p>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="pwBox" placeholder="비밀번호 입력" requireds>
+                    <input type="password" id="pwBox" oninput="hidePwError()" placeholder="비밀번호 입력">
+                    <p class="pwError error-class">pw 오류 메시지</p>
+                </div>
+                <div class="form-group">
+                    <div class="email-container">
+                        <input type="text" id="emailBox" spellcheck="false" oninput="hideEmailError()" placeholder="이메일 입력">
+                        <span class="email-font">@gmail.com</span>
+                    </div>
+                    <p class="emailError error-class">email 오류 메시지</p>
+                </div>
+                <div class="auth-container">
+                    <div class="email-btn" onclick="sendEmail()">인증번호 전송</div>
+                    <div class="auth-input">
+                        <input type="text" id="authBox" oninput="hideAuthError()" placeholder="인증번호 입력" maxlength="4">
+                        <input type="checkbox" class="authCheck" onclick="checkAuth(event)">
+                        <p class="authError error-class">인증번호 오류 메시지</p>
+                        <p class="authSuccess true-class">인증 성공 메시지</p>
+                    </div>
                 </div>
                 <div class="google-btn">
                     <div class="google-icon"></div>
-                    <span class="google-btn-text">Sign in with Google</span><br>
+                    <span class="google-btn-text">Sign up with Google</span><br>
                 </div>
                 <div class="form-button">
-                    <input type="button" value="뒤로" onclick="history.back(-1)">
-                    <input type="button" value="다음" onclick="join()">
+                    <input type="button" class="back-btn" value="뒤로" onclick="history.back(-1)">
+                    <input type="button" class="next-btn" value="다음" onclick="join()">
                 </div>
             </form>
         </div>

@@ -11,7 +11,7 @@ import my.todo.filter.jwt.JwtTokenProvider;
 import my.todo.member.domain.dto.request.UserRequestDto;
 import my.todo.member.domain.dto.response.UserResponseDto;
 import my.todo.member.domain.user.User;
-import my.todo.member.service.UserJpaService;
+import my.todo.member.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,15 +27,15 @@ import java.net.URLEncoder;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/user")
-public class JwtLoginController {
+public class UserJwtController {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserJpaService userJpaService;
+    private final UserService userService;
 
     //    login
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody UserRequestDto.LoginDTO loginDTO, HttpServletResponse response) throws ServletException, IOException {
-        UserResponseDto.TokenInfo tokenInfo = userJpaService.login(loginDTO.getUsername(), loginDTO.getPassword());
+        UserResponseDto.TokenInfo tokenInfo = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
         addRefreshTokenToCookie(tokenInfo.getRefreshToken(), response);
         return new ResponseEntity<>(tokenInfo, HttpStatus.OK);
     }
@@ -47,13 +47,13 @@ public class JwtLoginController {
         String accessToken = response.getHeader("Authorization");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
-        return userJpaService.userInfo(accessToken, user);
+        return userService.userInfo(accessToken, user);
     }
 
     //    join
     @PostMapping(value = "/join")
     public void join(@RequestBody User user) {
-        userJpaService.join(user);
+        userService.join(user);
     }
 
     //    logout, delete refresh token
@@ -67,7 +67,7 @@ public class JwtLoginController {
     public ResponseEntity<?> update(@RequestBody UserRequestDto.UpdateDTO updateDTO){
 //        user needs to be updated
         User updateBeforeUser = getUserFromAuthentication();
-        userJpaService.userUpdate(updateBeforeUser.getUsername(), updateDTO);
+        userService.userUpdate(updateBeforeUser.getUsername(), updateDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -75,7 +75,7 @@ public class JwtLoginController {
     @DeleteMapping(value="/delete")
     public ResponseEntity<?> delete(@RequestBody UserRequestDto.DeleteDTO deleteDTO, HttpServletRequest request, HttpServletResponse response){
         User deleteBeforeUser = getUserFromAuthentication();
-        userJpaService.deleteUser(deleteBeforeUser);
+        userService.deleteUser(deleteBeforeUser);
         deleteRefreshTokenFromCookie(request, response);
         return ResponseEntity.ok().build();
     }

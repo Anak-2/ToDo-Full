@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.todo.config.auth.PrincipalDetails;
 import my.todo.member.domain.dto.response.UserResponseDto;
 import my.todo.member.domain.user.User;
-import my.todo.member.repository.UserJpaRepository;
+import my.todo.member.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -33,13 +33,13 @@ public class JwtTokenProvider {
     public static final long REFRESH_TOKEN_EXPIRE_TIME = 7*24*60*60*1000L; // 7d
 
     private static String secretKey;
-    private static UserJpaRepository userJpaRepository;
+    private static UserRepository userRepository;
     
 //    User Jpa Repository 와 @Value 를 스프링 컨테이너한테서 받기
     @Autowired
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserJpaRepository userJpaRepository){
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserRepository userRepository){
         JwtTokenProvider.secretKey = secretKey;
-        JwtTokenProvider.userJpaRepository = userJpaRepository;
+        JwtTokenProvider.userRepository = userRepository;
     }
 
     /*
@@ -96,7 +96,7 @@ public class JwtTokenProvider {
 //          AccessToken 에서 사용자 정보 추출
             DecodedJWT jwt = JWT.decode(accessToken);
             String username = jwt.getClaim("username").asString();
-            if(userJpaRepository.existsByUsername(username)){
+            if(userRepository.existsByUsername(username)){
     //          새 AccessToken 생성
                 return generateAccessToken(username);
             }else{
@@ -121,7 +121,7 @@ public class JwtTokenProvider {
                     .verify(accessToken);
             String username = jwt.getClaim("username").asString();
             if (username != null && !username.equals("")) {
-                User user = userJpaRepository.findByUsername(username).orElse(null);
+                User user = userRepository.findByUsername(username).orElse(null);
                 if(user != null){
                     PrincipalDetails principalDetails = new PrincipalDetails(user);
                     return new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());

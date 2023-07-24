@@ -2,7 +2,7 @@ package my.todo.todo.controller;
 
 import jakarta.transaction.Transactional;
 import my.todo.member.domain.user.User;
-import my.todo.member.repository.UserJpaRepository;
+import my.todo.member.repository.UserRepository;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.repository.CustomScheduleRepository;
@@ -28,7 +28,7 @@ import java.util.List;
 class TodoControllerTest {
 
     @Autowired
-    UserJpaRepository userJpaRepository;
+    UserRepository userRepository;
     @Autowired
     ScheduleService scheduleService;
     @Autowired
@@ -47,8 +47,8 @@ class TodoControllerTest {
                 .username("user1")
                 .password("1234")
                 .build();
-        userJpaRepository.save(user);
-        User findUser = userJpaRepository.getByUsername("user1");
+        userRepository.save(user);
+        User findUser = userRepository.getByUsername("user1");
         scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴1")
                 .isPublic(false)

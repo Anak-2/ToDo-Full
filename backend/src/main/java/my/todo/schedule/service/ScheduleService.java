@@ -3,15 +3,13 @@ package my.todo.schedule.service;
 import lombok.RequiredArgsConstructor;
 import my.todo.global.error.DuplicatedException;
 import my.todo.member.domain.user.User;
-import my.todo.member.repository.UserJpaRepository;
+import my.todo.member.repository.UserRepository;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
 import my.todo.schedule.domain.dto.request.ScheduleUpdateRequestDto;
 import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
-import my.todo.schedule.domain.dto.response.ScheduleWithTodoResponse;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.repository.CustomScheduleRepository;
 //import my.todo.schedule.repository.ScheduleRepositoryImpl;
-import my.todo.todo.domain.dto.response.TodoResponseDto;
 import my.todo.todo.repository.CustomTodoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +23,7 @@ public class ScheduleService {
 
     private final CustomScheduleRepository customScheduleRepository;
     private final CustomTodoRepository customTodoRepository;
-    private final UserJpaRepository userJpaRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ScheduleResponseDto add(User user, ScheduleRequestDto scheduleRequestDto) {
@@ -44,7 +42,7 @@ public class ScheduleService {
     }
 
     public List<ScheduleResponseDto> findScheduleList(String username){
-        User user = userJpaRepository.getByUsername(username);
+        User user = userRepository.getByUsername(username);
         return customScheduleRepository.getScheduleListByUser(user);
     }
 

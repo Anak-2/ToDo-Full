@@ -18,13 +18,6 @@ body {
     vertical-align: middle;
 }
 
-.logo span {
-    font-weight: bold;
-    font-size: 24px;
-    color: deepskyblue;
-}
-
-
 .container {
     display: flex;
     width: 100%;
@@ -43,6 +36,12 @@ body {
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
 }
 
+.logo span {
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(85, 142, 161);
+}
+
 #heading {
     font-size: 24px;
     font-weight: 600;
@@ -52,6 +51,9 @@ body {
 }
 
 .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
     font-size: 15px;
     margin-bottom: 16px;
 }
@@ -62,7 +64,7 @@ body {
     font-weight: 400;
 }
 
-#idBox {
+#idBox, #pwBox {
     border: none;
     border-bottom: solid 1px #0067B8;
     font-size: 15px;
@@ -71,26 +73,60 @@ body {
     padding: 6px 10px 6px 0px;
 }
 
-#idBox:focus {
+#emailBox{
+    border: none;
+    border-bottom: solid 1px #0067B8;
+    font-size: 15px;
+    height: 23px;
+    width: 70%;
+    padding: 6px 10px 6px 0px;
+}
+
+.email-container{
+    width: 100%;
+    display: flex;
+}
+.email-font{
+    color: #757575;
+}
+
+.auth-container{
+    display: flex;
+    vertical-align: middle;
+    margin-bottom: 10px;
+}
+
+.auth-input{
+    width: 63%;
+    max-width: 350px;
+}
+#authBox{
+    border: none;
+    width: 80%;
+    border-bottom: solid 1px #0067B8;
+    font-size: 15px;
+    height: 23px;
+    padding: 6px 10px 6px 0px;
+}
+.authCheck{
+    height: 23px;
+    vertical-align: middle;
+}
+
+#idBox:focus, #pwBox:focus, #emailBox:focus, #authBox:focus{
     outline: none;
+}
+
+.true-class{
+    color: rgb(26, 119, 46);
 }
 
 .idError,
-.pwError {
+.pwError,
+.emailError,
+.authError,
+.authSuccess {
     display: none;
-}
-
-#pwBox {
-    border: none;
-    border-bottom: solid 1px #0067B8;
-    font-size: 15px;
-    height: 23px;
-    width: 350px;
-    padding: 6px 10px 6px 0px;
-}
-
-#pwBox:focus {
-    outline: none;
 }
 
 .form-button {
@@ -113,18 +149,49 @@ body {
     font-weight: 500;
 }
 
-.form-button input:first-child {
+.email-btn{
+    display: flex;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #0067B8;
+    background-color: white;
+    color: #0067B8;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    max-height: 40px;
+    margin-right: 7%;
+}
+
+.resend-btn{
+    display: flex;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: #0067B8;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    max-height: 40px;
+    margin-right: 7%;
+}
+
+.email-btn:hover, .resend-btn:hover{
+    cursor: pointer;
+}
+
+.form-button .back-btn {
     background-color: rgba(0, 0, 0, 0.2);
     color: black;
     border-color: transparent;
 }
 
-.form-button input:hover {
+.form-button :hover {
     background-color: #044980;
     cursor: pointer;
 }
 
-.form-button input:first-child:hover {
+.form-button .back-btn:hover {
     background-color: #7c8c99;
 }
 
@@ -164,9 +231,19 @@ body {
     -webkit-animation-name: none;
 }
 
+/* Disabled Style */
+.disabled-class{
+    background-color: gray;
+    color: black;
+}
+.disabled-class:hover{
+    cursor: default;
+}
 /* Error Style */
 .error-class {
     color: red;
+    font-size: 14px;
+    margin: 0;
 }
 
 .error-input {

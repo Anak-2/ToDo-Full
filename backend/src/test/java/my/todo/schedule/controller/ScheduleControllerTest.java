@@ -1,12 +1,11 @@
 package my.todo.schedule.controller;
 
 import jakarta.transaction.Transactional;
-import my.todo.member.controller.JwtLoginController;
+import my.todo.member.controller.UserJwtController;
 import my.todo.member.domain.user.User;
-import my.todo.member.repository.UserJpaRepository;
-import my.todo.member.service.UserJpaService;
+import my.todo.member.repository.UserRepository;
+import my.todo.member.service.UserService;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
-import my.todo.schedule.domain.dto.request.ScheduleWithTodoRequest;
 import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import my.todo.schedule.domain.schedule.Schedule;
 import my.todo.schedule.repository.CustomScheduleRepository;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -35,11 +33,11 @@ class ScheduleControllerTest {
     @Autowired
     CustomScheduleRepository customScheduleRepository;
     @Autowired
-    JwtLoginController jwtLoginController;
+    UserJwtController userJwtController;
     @Autowired
-    UserJpaService userJpaService;
+    UserService userService;
     @Autowired
-    UserJpaRepository userJpaRepository;
+    UserRepository userRepository;
 
     @Test
     @DisplayName("스케쥴을_유저에_추가하는_테스트")
@@ -57,8 +55,8 @@ class ScheduleControllerTest {
                 .username("1234")
                 .password("1234")
                 .build();
-        userJpaRepository.save(user);
-        User findUser = userJpaRepository.getByUsername("user1");
+        userRepository.save(user);
+        User findUser = userRepository.getByUsername("user1");
         scheduleService.add(ScheduleRequestDto.builder()
                 .userId(findUser.getId())
                 .title("스케쥴1")
@@ -90,8 +88,8 @@ class ScheduleControllerTest {
                 .username("1234")
                 .password("1234")
                 .build();
-        userJpaRepository.save(user);
-        User findUser = userJpaRepository.getByUsername("user1");
+        userRepository.save(user);
+        User findUser = userRepository.getByUsername("user1");
         scheduleService.add(ScheduleRequestDto.builder()
                 .userId(findUser.getId())
                 .title("스케쥴1")

@@ -9,6 +9,17 @@ public class UserRequestDto {
 
     @Getter
     @Setter
+    public static class JoinDTO{
+        @NotEmpty
+        private String username;
+        @NotEmpty
+        private String password;
+        @NotEmpty
+        private String email;
+    }
+
+    @Getter
+    @Setter
     public static class LoginDTO{
         @NotEmpty
         private String username;

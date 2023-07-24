@@ -13,7 +13,7 @@ import java.util.Optional;
 // User -> Schedule (one to many) 컬렉션 조회는 Schedule Repository 에 맡기자
 // 왜냐! JPA 관점에서 보면 FK 가 있는 Schedule (연관관계의 주인) 에서 데이터를 조작하는게 더 자연스럽기 때문
 // 하지만 RDB 에선 기본적으로 양방향 연관관계이기 때문에 User <-> Schedule 양 쪽에서 조회가 가능한게 자연스럽기 때문에 생성은 해두었다
-public interface UserJpaRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long id);
     Optional<User> findByUsername(String username);
     boolean existsByUsername(String username);

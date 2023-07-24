@@ -9,7 +9,7 @@ import my.todo.global.error.UserNotFoundException;
 import my.todo.member.domain.dto.request.UserRequestDto;
 import my.todo.member.domain.dto.response.UserResponseDto;
 import my.todo.member.domain.user.User;
-import my.todo.member.repository.UserJpaRepository;
+import my.todo.member.repository.UserRepository;
 import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import my.todo.schedule.repository.CustomScheduleRepository;
 import org.springframework.http.HttpStatus;
@@ -28,9 +28,9 @@ import static my.todo.global.errormsg.UserError.*;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class UserJpaService {
+public class UserService {
 
-    private final UserJpaRepository userJpaRepository;
+    private final UserRepository userRepository;
 //    ToDo: User , Schedule 사이의 데이터 전송을 어떻게 구상할 지 생각하기
 //    ToDo: UserController 에서 User, Schedule Service 를 가져다 DTO 를 생성하는게 좋을지
 //          UserJpaService 에서 User, Schedule Repository 를 가져다 DTO 를 생성하는게 좋을지
@@ -41,9 +41,9 @@ public class UserJpaService {
     //    join
     public void join(User user) {
 //        duplicate check
-        if (!userJpaRepository.existsByUsername(user.getUsername())) {
+        if (!userRepository.existsByUsername(user.getUsername())) {
             user.updatePassword(passwordEncoder.encode(user.getPassword()));
-            userJpaRepository.save(user);
+            userRepository.save(user);
         }else{
             throw new DuplicatedException(DUPLICATED.getMsg());
         }
@@ -67,15 +67,15 @@ public class UserJpaService {
 //    update user password
     public void userUpdate(String updateBeforeUser, UserRequestDto.UpdateDTO updateDTO) {
 //            update by "dirty checking"
-        User user = userJpaRepository.getByUsername(updateDTO.getUsername());
-        user.updatePassword(updateDTO.getPassword());
+        User user = userRepository.getByUsername(updateDTO.getUsername());
+        user.updatePassword(passwordEncoder.encode(updateDTO.getPassword()));
     }
 //    logout
 
 //    delete
     public void deleteUser(User user){
         try{
-            userJpaRepository.delete(user);
+            userRepository.delete(user);
         }catch (IllegalArgumentException e){
             throw new UserNotFoundException(e.getMessage());
         }
@@ -93,7 +93,7 @@ public class UserJpaService {
     }
 
     public ResponseEntity<UserResponseDto> findUserByUsername(String username){
-        User user = userJpaRepository.getByUsername(username);
+        User user = userRepository.getByUsername(username);
         List<ScheduleResponseDto> scheduleResponseDtoList = customScheduleRepository.getScheduleListByUser(user);
         return new ResponseEntity<>(new UserResponseDto(user, scheduleResponseDtoList), HttpStatus.OK);
     }

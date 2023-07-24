@@ -23,7 +23,7 @@ body {
 .logo span {
     font-weight: bold;
     font-size: 24px;
-    color: deepskyblue;
+    color: rgb(85, 142, 161);
 }
 
 input[type=button]:hover {

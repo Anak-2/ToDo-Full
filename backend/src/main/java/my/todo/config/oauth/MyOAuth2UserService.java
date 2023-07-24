@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.todo.config.auth.PrincipalDetails;
 import my.todo.member.domain.OAuth2UserInfo;
 import my.todo.member.domain.user.User;
-import my.todo.member.repository.UserJpaRepository;
+import my.todo.member.repository.UserRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserJpaRepository userJpaRepository;
+    private final UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
@@ -43,16 +43,16 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new OAuth2UserInfo(attributes, provider);
         }
 
-        Optional<User> findUser = userJpaRepository.findByProviderAndProviderId(provider, oAuth2UserInfo.getProviderId());
+        Optional<User> findUser = userRepository.findByProviderAndProviderId(provider, oAuth2UserInfo.getProviderId());
 //          가입한 회원이 없으면 자동 가입해주기
         if(!findUser.isPresent()){
-            userJpaRepository.save(oAuth2UserInfo.toEntity());
+            userRepository.save(oAuth2UserInfo.toEntity());
         }
 //          가입한 회원이 있으면 업데이트만
         else{
             User updateUser = findUser.get();
             updateUser.updateEmail(oAuth2UserInfo.getEmail());
-            userJpaRepository.save(updateUser);
+            userRepository.save(updateUser);
         }
 
         return new PrincipalDetails(oAuth2UserInfo.toEntity(),attributes);

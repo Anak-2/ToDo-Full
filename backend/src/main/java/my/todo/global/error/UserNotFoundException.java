@@ -1,8 +1,10 @@
 package my.todo.global.error;
 
+import my.todo.global.errormsg.UserError;
+
 public class UserNotFoundException extends RuntimeException{
     public UserNotFoundException() {
-        super("User not found");
+        super(UserError.USER_NOT_EXIST.getMsg());
     }
 
     public UserNotFoundException(String message) {
