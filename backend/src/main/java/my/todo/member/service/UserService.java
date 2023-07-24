@@ -39,11 +39,12 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     //    join
-    public void join(User user) {
+    public void join(UserRequestDto.JoinDTO joinDTO) {
 //        duplicate check
-        if (!userRepository.existsByUsername(user.getUsername())) {
-            user.updatePassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+        if (!userRepository.existsByUsername(joinDTO.getUsername())) {
+            joinDTO.setPassword(passwordEncoder.encode(joinDTO.getPassword()));
+            joinDTO.setEmail(joinDTO.getEmail()+"@gmail.com");
+            userRepository.save(joinDTO.toEntity());
         }else{
             throw new DuplicatedException(DUPLICATED.getMsg());
         }

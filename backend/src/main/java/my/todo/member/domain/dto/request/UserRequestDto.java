@@ -16,6 +16,15 @@ public class UserRequestDto {
         private String password;
         @NotEmpty
         private String email;
+
+        public User toEntity(){
+            return User.builder()
+                    .username(username)
+                    .password(password)
+                    .email(email)
+                    .provider("google")
+                    .build();
+        }
     }
 
     @Getter

@@ -52,8 +52,8 @@ public class UserJwtController {
 
     //    join
     @PostMapping(value = "/join")
-    public void join(@RequestBody User user) {
-        userService.join(user);
+    public void join(@RequestBody UserRequestDto.JoinDTO joinDTO) {
+        userService.join(joinDTO);
     }
 
     //    logout, delete refresh token

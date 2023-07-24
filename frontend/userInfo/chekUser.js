@@ -48,9 +48,9 @@ $.ajax({
     $('.user-name').val(data['username']);
     $('.id').val(data['id']);
     if (data['password'] == null) {
-      $('.password').attr('placeholder', 'Empty');
+      $('.password').attr('disabled', true);
     } else {
-      $('.password').val(data['password']);
+      $('.password').attr('placeholder', "Encoded");
     }
     $('.create-date').val(data['createDate']);
     $('.email').val(data['email']);
