@@ -1,7 +1,7 @@
 package my.todo.schedule.repository;
 
 import lombok.RequiredArgsConstructor;
-import my.todo.global.error.ScheduleNotFoundException;
+import my.todo.global.error.notfoundException.ScheduleNotFoundException;
 import my.todo.member.domain.user.User;
 import my.todo.schedule.domain.dto.response.ScheduleResponseDto;
 import my.todo.schedule.domain.schedule.Schedule;

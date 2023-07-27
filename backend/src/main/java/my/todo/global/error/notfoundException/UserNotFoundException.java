@@ -1,4 +1,4 @@
-package my.todo.global.error;
+package my.todo.global.error.notfoundException;
 
 import my.todo.global.errormsg.UserError;
 

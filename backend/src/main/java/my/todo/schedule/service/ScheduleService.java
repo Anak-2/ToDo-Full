@@ -1,7 +1,8 @@
 package my.todo.schedule.service;
 
 import lombok.RequiredArgsConstructor;
-import my.todo.global.error.DuplicatedException;
+import my.todo.global.error.duplicatedException.DuplicatedException;
+import my.todo.global.errormsg.ScheduleError;
 import my.todo.member.domain.user.User;
 import my.todo.member.repository.UserRepository;
 import my.todo.schedule.domain.dto.request.ScheduleRequestDto;
@@ -29,7 +30,7 @@ public class ScheduleService {
     public ScheduleResponseDto add(User user, ScheduleRequestDto scheduleRequestDto) {
         Schedule schedule = scheduleRequestDto.toEntity(user);
         if(customScheduleRepository.existsScheduleByTitleAndUser(schedule.getTitle(), user)){
-            throw new DuplicatedException("Title Is Duplicated In Same User");
+            throw new DuplicatedException(ScheduleError.TITLE_DUPLICATED.getMsg());
         }
         customScheduleRepository.save(schedule);
         Schedule findSchedule = customScheduleRepository.getScheduleByTitleAndUser(schedule.getTitle(), user);

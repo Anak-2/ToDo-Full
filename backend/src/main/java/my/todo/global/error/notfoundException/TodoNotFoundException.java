@@ -1,8 +1,10 @@
-package my.todo.global.error;
+package my.todo.global.error.notfoundException;
+
+import my.todo.global.errormsg.TodoError;
 
 public class TodoNotFoundException extends RuntimeException{
     public TodoNotFoundException(){
-        super("Todo Not Found");
+        super(TodoError.TODO_NOT_FOUND.getMsg());
     }
     public TodoNotFoundException(String message) {
         super(message);

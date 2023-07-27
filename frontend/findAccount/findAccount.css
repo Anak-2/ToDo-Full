@@ -1,0 +1,93 @@
+#findAccountBox {
+    /* 자식 요소를 자기 기준으로 absolute하기 위해 relative 지정 */
+    /* position: relative; */
+    width: 450;
+    min-height: 400px;
+    /* box-sizing: content-box; */
+    overflow: hidden;
+    padding: 44px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+}
+
+#username-btn,
+#password-btn {
+    font-weight: 500;
+    margin: 10px 0px 10px 0px;
+}
+
+.inputBox #emailBox {
+    min-height: 30px;
+}
+
+#emailBox,
+#usernameBox {
+    border: none;
+    border-bottom: solid 1px #0067B8;
+    font-size: 18px;
+    height: 48px;
+}
+
+#emailBox:focus,
+#usernameBox:focus {
+    outline: none;
+}
+
+.email-font {
+    color: #757575;
+}
+
+.send-btn {
+    display: flex;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #0067B8;
+    background-color: white;
+    color: #0067B8;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.send-btn:hover {
+    cursor: pointer;
+}
+
+.login-link {
+    display: inline-block;
+    line-height: 50px;
+}
+
+.btn-outline-primary:hover {
+    background-color: rgba(181, 219, 231, 0.257);
+    border-color: rgba(181, 219, 231, 0.257);
+    color: rgb(35, 37, 61);
+}
+
+.back-btn {
+    float: right;
+}
+
+.email-container {
+    text-align: center;
+    /* 요소들을 가운데 정렬합니다. */
+}
+
+
+.send-btn,
+.emailBox,
+.email-font {
+    display: inline-block;
+    /* 인라인 블록으로 요소들을 나란히 배치합니다. */
+}
+
+.send-btn {
+    margin-right: 10px;
+    /* 버튼 사이에 간격을 주기 위한 마진 설정 */
+}
+
+/* Error */
+.emailError,
+.usernameError {
+    display: none;
+}

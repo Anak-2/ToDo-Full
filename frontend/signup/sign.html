@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MASTER OF TODO 계정</title>
+    <link rel="stylesheet" href="/common/loginStyle.css">
     <link rel="stylesheet" href="signStyle.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
-    <div class="container">
+    <div class="my-container">
         <div id="signBox">
             <div class="logo">
                 <img class="logo" src="/img/아주대 50주년.png"><span>TODO</span>
@@ -20,9 +21,10 @@
             <div id="heading">계정 생성</div>
             <!-- id 중복 -->
             <!-- pw 에러 -->
-            <form id="login" method="post" action="">
+            <form id="signup" method="post" action="">
                 <div class="form-group">
-                    <input type="text" id="idBox" oninput="hideIdError()" placeholder="아이디 입력" autofocus spellcheck="false">
+                    <input type="text" id="idBox" oninput="hideIdError()" placeholder="아이디 입력" autofocus
+                        spellcheck="false">
                     <p class="idError error-class">id 오류 메시지</p>
                 </div>
                 <div class="form-group">
@@ -31,7 +33,8 @@
                 </div>
                 <div class="form-group">
                     <div class="email-container">
-                        <input type="text" id="emailBox" spellcheck="false" oninput="hideEmailError()" placeholder="이메일 입력">
+                        <input type="text" id="emailBox" spellcheck="false" oninput="hideEmailError()"
+                            placeholder="이메일 입력">
                         <span class="email-font">@gmail.com</span>
                     </div>
                     <p class="emailError error-class">email 오류 메시지</p>
@@ -59,7 +62,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
         integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript" src="login.js"></script>
+    <script type="text/javascript" src="signup.js"></script>
 </body>
 
 </html>

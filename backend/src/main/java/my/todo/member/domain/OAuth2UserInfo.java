@@ -29,7 +29,7 @@ public class OAuth2UserInfo {
     }
 
     public String getEmail(){
-        return (String) attributes.get("my/todo/email");
+        return (String) attributes.get("email");
     }
 
     public String getPlatform(){

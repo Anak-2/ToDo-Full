@@ -57,18 +57,15 @@ class ScheduleControllerTest {
                 .build();
         userRepository.save(user);
         User findUser = userRepository.getByUsername("user1");
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴1")
                 .isPublic(false)
                 .build());
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴2")
                 .isPublic(false)
                 .build());
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴3")
                 .isPublic(false)
                 .build());
@@ -90,13 +87,12 @@ class ScheduleControllerTest {
                 .build();
         userRepository.save(user);
         User findUser = userRepository.getByUsername("user1");
-        scheduleService.add(ScheduleRequestDto.builder()
-                .userId(findUser.getId())
+        scheduleService.add(findUser, ScheduleRequestDto.builder()
                 .title("스케쥴1")
                 .isPublic(false)
                 .build());
         //when
-        Schedule findSchedule = customScheduleRepository.getScheduleByTitle("스케쥴1");
+        Schedule findSchedule = customScheduleRepository.getScheduleByTitleAndUser("스케쥴1",findUser);
         //then
         User findUser2 = findSchedule.getUser();
         System.out.println(findUser2.getUsername());

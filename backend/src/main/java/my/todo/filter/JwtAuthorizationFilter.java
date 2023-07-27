@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.filter.jwt.JwtTokenProvider;
 import my.todo.global.error.NotAuthorizedException;
-import my.todo.global.error.UserNotFoundException;
+import my.todo.global.error.notfoundException.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.Arrays;
 
 @Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {

@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>사용자 계정 로그인</title>
+    <link rel="stylesheet" href="/common/loginStyle.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 -
 
 <body>
-    <div class="container">
+    <div class="my-container">
         <div id="loginBox">
             <div class="logo">
                 <img class="logo" src="/img/아주대 50주년.png"><span>TODO</span>
@@ -40,8 +41,8 @@
                     <a id="findAccount" href="/findAccount/findAccount.html">본인 계정으로 로그인할 수 없습니까?</a>
                 </div>
                 <div class="form-button">
-                    <input type="button" value="뒤로">
-                    <input type="button" value="다음" onclick="loginProcess()">
+                    <input type="button" class="back-btn" value="뒤로" onclick="history.back(-1)">
+                    <input type="button" class="next-btn" value="다음" onclick="loginProcess()">
                 </div>
             </form>
         </div>

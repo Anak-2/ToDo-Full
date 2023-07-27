@@ -1,32 +1,3 @@
-html,
-body {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.logo {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.logo img {
-    vertical-align: middle;
-}
-
-.container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom right, #dcbbd9 20%, #baf7f0 100%);
-    justify-content: center;
-    align-items: center;
-}
-
 #signBox {
     box-sizing: content-box;
     /* height: 250px; */
@@ -34,20 +5,6 @@ body {
     overflow: hidden;
     background-color: white;
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
-}
-
-.logo span {
-    font-weight: bold;
-    font-size: 24px;
-    color: rgb(85, 142, 161);
-}
-
-#heading {
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 28px;
-    text-align: left;
-    margin: 15px 0px;
 }
 
 .form-group {
@@ -64,7 +21,8 @@ body {
     font-weight: 400;
 }
 
-#idBox, #pwBox {
+#idBox,
+#pwBox {
     border: none;
     border-bottom: solid 1px #0067B8;
     font-size: 15px;
@@ -73,7 +31,7 @@ body {
     padding: 6px 10px 6px 0px;
 }
 
-#emailBox{
+#emailBox {
     border: none;
     border-bottom: solid 1px #0067B8;
     font-size: 15px;
@@ -82,25 +40,27 @@ body {
     padding: 6px 10px 6px 0px;
 }
 
-.email-container{
+.email-container {
     width: 100%;
     display: flex;
 }
-.email-font{
+
+.email-font {
     color: #757575;
 }
 
-.auth-container{
+.auth-container {
     display: flex;
     vertical-align: middle;
     margin-bottom: 10px;
 }
 
-.auth-input{
+.auth-input {
     width: 63%;
     max-width: 350px;
 }
-#authBox{
+
+#authBox {
     border: none;
     width: 80%;
     border-bottom: solid 1px #0067B8;
@@ -108,16 +68,20 @@ body {
     height: 23px;
     padding: 6px 10px 6px 0px;
 }
-.authCheck{
+
+.authCheck {
     height: 23px;
     vertical-align: middle;
 }
 
-#idBox:focus, #pwBox:focus, #emailBox:focus, #authBox:focus{
+#idBox:focus,
+#pwBox:focus,
+#emailBox:focus,
+#authBox:focus {
     outline: none;
 }
 
-.true-class{
+.true-class {
     color: rgb(26, 119, 46);
 }
 
@@ -129,27 +93,7 @@ body {
     display: none;
 }
 
-.form-button {
-    float: right;
-    width: 360px;
-    height: 32px;
-    padding-left: 138px;
-    box-sizing: border-box;
-}
-
-.form-button input {
-    border: none;
-    color: #fff;
-    background-color: #0067b8;
-    overflow-wrap: normal;
-    padding: 4px 12px;
-    width: 108px;
-    height: 32px;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.email-btn{
+.email-btn {
     display: flex;
     border: 1px solid;
     border-radius: 5px;
@@ -163,7 +107,7 @@ body {
     margin-right: 7%;
 }
 
-.resend-btn{
+.resend-btn {
     display: flex;
     border: 1px solid white;
     border-radius: 5px;
@@ -176,24 +120,11 @@ body {
     margin-right: 7%;
 }
 
-.email-btn:hover, .resend-btn:hover{
+.email-btn:hover,
+.resend-btn:hover {
     cursor: pointer;
 }
 
-.form-button .back-btn {
-    background-color: rgba(0, 0, 0, 0.2);
-    color: black;
-    border-color: transparent;
-}
-
-.form-button :hover {
-    background-color: #044980;
-    cursor: pointer;
-}
-
-.form-button .back-btn:hover {
-    background-color: #7c8c99;
-}
 
 /* google button */
 .google-btn {
@@ -232,22 +163,13 @@ body {
 }
 
 /* Disabled Style */
-.disabled-class{
+.disabled-class {
     background-color: gray;
     color: black;
 }
-.disabled-class:hover{
-    cursor: default;
-}
-/* Error Style */
-.error-class {
-    color: red;
-    font-size: 14px;
-    margin: 0;
-}
 
-.error-input {
-    border-color: red;
+.disabled-class:hover {
+    cursor: default;
 }
 
 input[type=button]:hover {

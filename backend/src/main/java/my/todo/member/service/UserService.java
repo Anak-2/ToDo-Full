@@ -4,8 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.todo.filter.jwt.JwtTokenProvider;
-import my.todo.global.error.DuplicatedException;
-import my.todo.global.error.UserNotFoundException;
+import my.todo.global.error.duplicatedException.EmailDuplicatedException;
+import my.todo.global.error.duplicatedException.UsernameDuplicatedException;
+import my.todo.global.error.notfoundException.UserNotFoundException;
 import my.todo.member.domain.dto.request.UserRequestDto;
 import my.todo.member.domain.dto.response.UserResponseDto;
 import my.todo.member.domain.user.User;
@@ -40,14 +41,11 @@ public class UserService {
 
     //    join
     public void join(UserRequestDto.JoinDTO joinDTO) {
-//        duplicate check
-        if (!userRepository.existsByUsername(joinDTO.getUsername())) {
-            joinDTO.setPassword(passwordEncoder.encode(joinDTO.getPassword()));
-            joinDTO.setEmail(joinDTO.getEmail()+"@gmail.com");
-            userRepository.save(joinDTO.toEntity());
-        }else{
-            throw new DuplicatedException(DUPLICATED.getMsg());
-        }
+        joinDTO.setPassword(passwordEncoder.encode(joinDTO.getPassword()));
+        joinDTO.setEmail(joinDTO.getEmail()+"@gmail.com");
+        if(userRepository.existsByUsername(joinDTO.getUsername())) throw new UsernameDuplicatedException();
+        if(userRepository.existsByEmail(joinDTO.getEmail())) throw new EmailDuplicatedException();
+        userRepository.save(joinDTO.toEntity());
     }
 
     //    login using spring security

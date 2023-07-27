@@ -1,0 +1,125 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    /* font-size: 0; */
+    /* line-height: 0; */
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo img {
+    vertical-align: middle;
+}
+
+.logo span {
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(85, 142, 161);
+}
+
+input[type=button]:hover {
+    cursor: pointer;
+}
+
+.my-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom right, #dcbbd9 20%, #baf7f0 100%);
+    justify-content: center;
+    align-items: center;
+}
+
+#heading {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 28px;
+    text-align: left;
+    margin: 15px 0px;
+}
+
+.form-button {
+    padding-top: 20px;
+    width: 360px;
+    height: 32px;
+    padding-left: 138px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-button input {
+    border: none;
+    color: #fff;
+    background-color: #0067b8;
+    overflow-wrap: normal;
+    padding: 4px 12px;
+    width: 108px;
+    height: 32px;
+}
+
+.form-button .next-btn:hover {
+    background-color: #044980;
+}
+
+.form-button .back-btn:hover {
+    background-color: #99a4ad;
+}
+
+.form-button .back-btn {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: black;
+    border-color: transparent;
+}
+
+.inputBox {
+    border: none;
+    border-bottom: solid 1px #0067B8;
+    font-size: 20px;
+    height: 32px;
+    width: 350px;
+    padding: 6px 10px 6px 0px;
+}
+
+.inputBox:focus {
+    outline: none;
+}
+
+.inputBox:hover {
+    border-bottom-color: rgb(0, 0, 0, 6);
+}
+
+.inputBox::placeholder {
+    font-size: 18px;
+}
+
+a {
+    font-size: 15px;
+    text-decoration: none;
+    color: #0067B8;
+}
+
+a:hover {
+    color: #666666;
+    text-decoration: underline;
+}
+
+/* Error Style */
+.error-class {
+    color: red;
+    font-size: 14px;
+    margin: 0;
+}
+
+.error-input {
+    border-color: red;
+}
