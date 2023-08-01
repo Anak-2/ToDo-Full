@@ -14,7 +14,7 @@ function timeFormatting(source, delimiter = ':') {
 let inputBox = document.querySelector(".input-container .inputBox");
 let searchBox = document.querySelector(".searchBox");
 let list = document.querySelector(".list");
-// import { accessToken } from "../userInfo/chekUser.js"; -> cannot use import statement outside a module 문제 발생
+// import { accessToken } from "../userInfo/chekUser.js"; -> cannot use import statement outside a module 문제 발생 --> 받는 쪽도 모듈화 필요
 let accessToken = localStorage.getItem("accessToken");
 
 
@@ -239,10 +239,10 @@ function getTodoList(scheduleId, scheduleTitle) {
 
 function makeListWrapper(todoId, timeValue, title, finished) {
 
-  const listWrapper = document.createElement("div");
+  let listWrapper = document.createElement("div");
   listWrapper.classList.add("list-wrapper");
 
-  const todoIdDiv = `<div class="todo-id">${todoId}</div>`;
+  let todoIdDiv = `<div class="todo-id">${todoId}</div>`;
   listWrapper.insertAdjacentHTML("afterbegin", todoIdDiv);
 
   const listItem = document.createElement("li");
@@ -251,6 +251,7 @@ function makeListWrapper(todoId, timeValue, title, finished) {
     listWrapper.style.opacity = 0.5;
   }
   listItem.classList.add("list-item");
+  listItem.addEventListener("click", (event) => handleTodoContent(event));
   listItem.innerText = title;
 
   const deadline = document.createElement("span");
@@ -277,6 +278,15 @@ function makeListWrapper(todoId, timeValue, title, finished) {
   return listWrapper;
 }
 
+function makeTodoContentBox(content) {
+  let todoContentBox = document.createElement("div");
+  todoContentBox.classList.add("todo-content-box");
+  todoContentBox.classList.add("todo-content-hidden");
+  let todoContent = `<input type="textarea" class="todo-content" value=${content}>`
+  todoContentBox.insertAdjacentHTML("afterbegin", todoContent);
+  return todoContentBox;
+}
+
 //find location to insert list
 function insertTodo(todoId, date, title, content, finished) {
   const dateItem = document.querySelectorAll(".date-item");
@@ -285,6 +295,7 @@ function insertTodo(todoId, date, title, content, finished) {
   dateValue = dateFormatting(date, '-');
   timeValue = timeFormatting(date, ':');
   const listWrapper = makeListWrapper(todoId, timeValue, title, finished);
+  const todoContentBox = makeTodoContentBox("임시로 넣어보자");
 
   let outerListIndex = 0;
   // if there is no date-item, then makes new outer list and date box (date-item)
@@ -306,7 +317,8 @@ function insertTodo(todoId, date, title, content, finished) {
     timeValue
   );
   outerListArr[outerListIndex].children[outerListChildIdx]
-    .insertAdjacentElement("afterend", listWrapper);
+    .insertAdjacentElement("afterend", listWrapper)
+    .insertAdjacentElement("afterend", todoContentBox);
 }
 
 ``
@@ -439,7 +451,10 @@ function findDateLocation(dateValue, dateItem) {
 // to write to-do
 function findTimeLocation(outerList, timeValue) {
   let outerListChildIdx = 0;
-  const outerListChildLen = outerList.childElementCount;
+  console.log(outerList);
+  outerListChildLen = outerList.childElementCount;
+  // const listWrapper = outerList.querySelector(".list-wrapper");
+  // console.log(listWrapper);
   const [inputHour, inputMin] = timeValue.split(":");
   const NO_OUTER_LIST = 1; // wrapper has only date box alone
   if (outerListChildLen == NO_OUTER_LIST) return outerListChildIdx;
@@ -499,7 +514,32 @@ function trashCompleted() {
     }
   }
 }
-document.querySelector(".trash-svg").addEventListener("click", announceTrash);
+
+// show or hide todo-content-box
+function handleTodoContent(e) {
+  // let todoContent = e.parentElement.nextElementSibling;
+  let todoContent = e.target.parentElement.nextElementSibling;
+
+  if (todoContent.classList.contains("todo-content-hidden")) {
+    let t1 = gsap.timeline({
+      onStart: function () {
+        todoContent.classList.remove("todo-content-hidden");
+      },
+    });
+    t1.to(todoContent, { duration: 0, opacity: 0, height: 0 });
+    t1.to(todoContent, { duration: 0.5, opacity: 1, height: "auto", ease: "line" });
+  }
+  else {
+    let t1 = gsap.timeline({
+      onComplete: function () {
+        todoContent.classList.add("todo-content-hidden");
+      },
+    });
+    t1.to(todoContent, { duration: 0.5, opacity: 0, height: 0, ease: "line" });
+  }
+}
+
+document.querySelector(".trash-svg").addEventListener("click", trashCompleted);
 //make announcement when user clicks trash-btn
 function announceTrash() {
   trashCompleted();

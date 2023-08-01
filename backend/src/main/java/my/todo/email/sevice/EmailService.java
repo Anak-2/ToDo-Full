@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.SendFailedException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import my.todo.email.domain.EmailMessage;
 import my.todo.email.domain.response.EmailResponseDto;
 import my.todo.filter.jwt.JwtTokenProvider;
@@ -29,6 +30,7 @@ import java.util.Map;
 import static my.todo.email.domain.EmailSubject.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class EmailService {
 
@@ -125,7 +127,9 @@ public class EmailService {
             mimeMessageHelper.setSubject(emailMessage.getSubject());
             mimeMessageHelper.setText(emailMessage.getBody(), true);
             javaMailSender.send(mimeMessage);
-        }catch(MailException | MessagingException e){
+            log.info("send success");
+        }catch(MessagingException e){
+            log.info("send fail");
             e.printStackTrace();
             throw new RuntimeException(e);
         }

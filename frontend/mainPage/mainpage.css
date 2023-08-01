@@ -389,6 +389,10 @@ button {
     padding-left: 2%;
 }
 
+.list-container .list-item:hover {
+    cursor: pointer;
+}
+
 .list-item .deadline {
     float: right;
     margin-right: 10px;
@@ -415,6 +419,23 @@ button {
     cursor: pointer;
 }
 
+.outer-list .todo-content-box {
+    overflow: hidden;
+    background-color: rgb(216, 224, 221);
+}
+
+.todo-content-box .todo-content {
+    padding: 0px 5px;
+    background-color: rgb(216, 224, 221);
+    border: none;
+    min-height: 50px;
+    width: 100%;
+    font-size: 15px;
+}
+
+.todo-content-hidden {
+    display: none;
+}
 
 .complete-list {
     text-decoration: line-through;
