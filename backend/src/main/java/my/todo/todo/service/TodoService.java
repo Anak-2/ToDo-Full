@@ -29,9 +29,13 @@ public class TodoService {
         return new TodoResponseDto(customTodoRepository.getTodoById(todoId));
     }
 
+
 //    query todo list by schedule
     public List<TodoResponseDto> getTodosByScheduleId(Long scheduleId){return customTodoRepository.getTodoListByScheduleId(scheduleId);}
 
+    public List<TodoResponseDto> getTodosBySearchInput(Long scheduleId, String searchInput) {
+        return customTodoRepository.getMatchedTodoList(scheduleId, searchInput);
+    }
 //    add todo
     public Long addTodo(TodoRequestDto todoRequestDto){
         Schedule findSchedule = customScheduleRepository.getScheduleById(todoRequestDto.getScheduleId());
@@ -55,4 +59,5 @@ public class TodoService {
         Todo todo = customTodoRepository.getTodoById(todoId);
         todo.updateIsFinished(isFinished);
     }
+
 }

@@ -59,9 +59,16 @@ public class TodoController {
         return todoService.addTodo(todoRequestDto);
     }
 
+//    get todo list by schedule id
     @GetMapping(value="/todos")
     public List<TodoResponseDto> getTodoList(@RequestParam Long scheduleId){
         return todoService.getTodosByScheduleId(scheduleId);
+    }
+
+//    get todo list by search input
+    @GetMapping(value="/search")
+    public List<TodoResponseDto> getTodoListBySearch(@RequestParam Long scheduleId, @RequestParam String searchInput){
+        return todoService.getTodosBySearchInput(scheduleId, searchInput);
     }
 
 //    todoId 를 pathVariable 로 받게 된 이유 : API 방식이기 때문에 RequestMapping(...?id=id값) 을 이용해 현재 주소를 사용하기엔 API 스럽지 않다 (쿼리 스트링),

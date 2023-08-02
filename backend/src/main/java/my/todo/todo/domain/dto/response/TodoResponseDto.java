@@ -31,12 +31,12 @@ public class TodoResponseDto {
         this.isFinished = todo.isFinished();
     }
 
-//    public static TodoResponseDto of(Todo todo){
-//        return TodoResponseDto.builder()
-//                .content(todo.getContent())
-//                .todoId(todo.getId())
-//                .finishDate(todo.getFinishDate())
-//                .isFinished(todo.isFinished())
-//                .build();
-//    }
+    public static TodoResponseDto of(Todo todo){
+        return TodoResponseDto.builder()
+                .content(todo.getContent())
+                .todoId(todo.getId())
+                .finishDate(todo.getFinishDate())
+                .isFinished(todo.isFinished())
+                .build();
+    }
 }

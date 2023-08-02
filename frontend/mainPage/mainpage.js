@@ -18,16 +18,56 @@ let list = document.querySelector(".list");
 let accessToken = localStorage.getItem("accessToken");
 
 
-searchBox.addEventListener("keyup", function (e) {
-  let listItem = document.querySelectorAll(".list-container .list-item");
-  for (let i = 0; i < listItem.length; i++) {
-    if (listItem[i].innerText.includes(searchBox.value, 0)) {
-      listItem[i].parentElement.style.display = "flex";
-    } else {
-      listItem[i].parentElement.style.display = "none";
-    }
+// searchBox.addEventListener("keyup", function (e) {
+
+//   let listItem = document.querySelectorAll(".list-container .list-item");
+//   let listWrapper = listItem.parentElement;
+
+//   for (let i = 0; i < listItem.length; i++) {
+//     if (listItem[i].innerText.includes(searchBox.value, 0)) {
+//       listItem[i].parentElement.style.display = "flex";
+//     } else {
+//       listItem[i].parentElement.style.display = "none";
+//     }
+//   }
+// });
+
+document.querySelector(".searchButton").addEventListener("click", function (e) {
+  if (searchBox.value == "") return;
+  searchTodo(searchBox.value);
+})
+
+
+
+function searchTodo(searchInput) {
+
+  const scheduleId = sessionStorage.getItem('scheduleId');
+  if (scheduleId == undefined || scheduleId == null) {
+    alert("please select or make schedule first!");
+    return;
   }
-});
+
+
+  $.ajax({
+    method: 'GET',
+    url: `http://localhost:8080/todo/search?scheduleId=${scheduleId}&searchInput=${searchInput}`,
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true
+    },
+    headers: { 'Authorization': accessToken },
+    success: function (data) {
+      list.innerHTML = "";
+      data.forEach(todo => {
+        let date = todo['finishDate'];
+        insertTodo(todo['todoId'], date, todo['title'], todo['content'], todo['finished']);
+      })
+    },
+    error: function (jqXHR) {
+      alert(jqXHR.responseText);
+    }
+  })
+}
 
 function initInput() {
   const inputDate = document.querySelector(".date-input");
@@ -146,7 +186,6 @@ function lockEvent(lockElement) {
     xhrFields: {
       withCredentials: true
     },
-    headers: { "Content-Type": "application/json", 'Authorization': accessToken },
     data: JSON.stringify(requestData),
     success: function () {
       if (!locked) {
@@ -225,6 +264,7 @@ function getTodoList(scheduleId, scheduleTitle) {
     },
     success: function (data) {
       document.querySelector(".schedule-title").innerText = scheduleTitle;
+      // first empty list container and then insert todos
       list.innerHTML = "";
       data.forEach(todo => {
         let date = todo['finishDate'];
@@ -282,7 +322,7 @@ function makeTodoContentBox(content) {
   let todoContentBox = document.createElement("div");
   todoContentBox.classList.add("todo-content-box");
   todoContentBox.classList.add("todo-content-hidden");
-  let todoContent = `<input type="textarea" class="todo-content" value=${content}>`
+  let todoContent = `<input type="textarea" class="todo-content" value="${content}">`
   todoContentBox.insertAdjacentHTML("afterbegin", todoContent);
   return todoContentBox;
 }
@@ -290,25 +330,16 @@ function makeTodoContentBox(content) {
 //find location to insert list
 function insertTodo(todoId, date, title, content, finished) {
   const dateItem = document.querySelectorAll(".date-item");
-  const NO_ITEM = 0;
   date = new Date(date);
   dateValue = dateFormatting(date, '-');
   timeValue = timeFormatting(date, ':');
   const listWrapper = makeListWrapper(todoId, timeValue, title, finished);
-  const todoContentBox = makeTodoContentBox("임시로 넣어보자");
+  const todoContentBox = makeTodoContentBox("ContentBox에 넣을 값");
 
   let outerListIndex = 0;
-  // if there is no date-item, then makes new outer list and date box (date-item)
-  if (dateItem.length == NO_ITEM) {
-    const outerListAndNewDate = `
-        <div class="outer-list">
-          <div class="date-item">${dateValue}</div>
-        </div>
-      `;
-    list.insertAdjacentHTML("beforeend", outerListAndNewDate);
-  } else {
-    outerListIndex = findDateLocation(dateValue, dateItem);
-  }
+
+  outerListIndex = findDateLocation(dateValue, dateItem);
+
   const outerListArr = document.querySelectorAll(".outer-list");
 
   // finally, find out the index where to put todo
@@ -316,7 +347,12 @@ function insertTodo(todoId, date, title, content, finished) {
     outerListArr[outerListIndex],
     timeValue
   );
-  outerListArr[outerListIndex].children[outerListChildIdx]
+
+  // get outerlist's children and calculate the list wrapper where
+  // todo needs should be inserted
+  const outerListChild = outerListArr[outerListIndex].children;
+  const listWrapperIdx = outerListChildIdx * 2;
+  outerListChild[listWrapperIdx]
     .insertAdjacentElement("afterend", listWrapper)
     .insertAdjacentElement("afterend", todoContentBox);
 }
@@ -367,6 +403,7 @@ function insertInputList(e) {
 //delete one list
 function deleteList(e) {
   let listWrapper = e.target.parentElement;
+  let todoContentBox = listWrapper.nextElementSibling;
   let todoId = listWrapper.children[0].innerText;
   let outerList = listWrapper.parentElement;
   $.ajax({
@@ -382,12 +419,14 @@ function deleteList(e) {
         //remove를 애니메이션 다 끝난 후 호출하기 위한 방법
         onComplete: function () {
           listWrapper.remove();
+          todoContentBox.remove();
           if (outerList.children.length == 1) {
             outerList.remove();
           }
         },
       });
-      t1.to(listWrapper, { duration: 0.5, opacity: 0, y: -50, ease: "line" });
+      t1.to(listWrapper, { duration: 0.3, opacity: 0, y: -50, ease: "line" });
+
     },
     error: function (jqXHR) {
       console.log("code: " + jqXHR.status + " response: " + jqXHR.responseText);
@@ -396,76 +435,110 @@ function deleteList(e) {
   })
 }
 
+// *** Todo: change to binary search algorithm
 // decide where to put the date and return the index which points to a place
 // to write list-wrapper
 function findDateLocation(dateValue, dateItem) {
-  const inputDateArr = dateValue.split("-");
+
+  // if date item is empty, init
+  if (dateItem.length == 0) {
+    const outerListAndNewDate = `
+        <div class="outer-list">
+          <div class="date-item">${dateValue}</div>
+        </div>
+      `;
+    list.insertAdjacentHTML("beforeend", outerListAndNewDate);
+    return 0;
+  }
+
+  // Variable that checks whether inputDate should be placed before an existing date 
+  let isBefore = false;
+
+  const inputDateArr = dateValue.split("-").map((e) => parseInt(e));
+  let dateIndex = 0;
+
+  for (dateIndex = 0; dateIndex < dateItem.length; dateIndex++) {
+
+    const date = dateItem[dateIndex].innerText.split("-")
+      .map((e) => parseInt(e));
+
+    if (inputDateArr[0] == date[0]) { // same year
+      if (inputDateArr[1] == date[1]) { // same month
+        if (inputDateArr[2] == date[2]) { // same day
+          return dateIndex;
+        }
+        // compare day
+        else if (inputDateArr[2] < date[2]) {
+          isBefore = true;
+          break;
+        }
+      }
+      //compare month
+      else if (inputDateArr[1] < date[1]) {
+        isBefore = true;
+        break;
+      }
+    }
+    // compare year
+    else if (inputDateArr[0] < date[0]) {
+      isBefore = true;
+      break;
+    }
+  }
+
+  // make date item
   const newDate = document.createElement("div");
   newDate.classList.add("date-item");
   newDate.innerText = dateValue;
   const outerList = document.createElement("div");
   outerList.classList.add("outer-list");
   outerList.appendChild(newDate);
-  for (let i = 0; i < dateItem.length; i++) {
-    const date = dateItem[i].innerText.split("-");
-    if (inputDateArr[0] == date[0]) {
-      if (inputDateArr[1] == date[1]) {
-        if (inputDateArr[2] == date[2]) {
-          return i;
-        } else {
-          if (inputDateArr[2] > date[2] && i == dateItem.length - 1) {
-            dateItem[i].parentElement.insertAdjacentElement(
-              "afterend",
-              outerList
-            );
-            return i + 1;
-          } else if (inputDateArr[2] < date[2]) {
-            dateItem[i].parentElement.insertAdjacentElement(
-              "beforebegin",
-              outerList
-            );
-            return i;
-          }
-        }
-      } else if (inputDateArr[1] > date[1] && i == dateItem.length - 1) {
-        dateItem[i].parentElement.insertAdjacentElement("afterend", outerList);
-        return i + 1;
-      } else if (inputDateArr[1] < date[1]) {
-        dateItem[i].parentElement.insertAdjacentElement(
-          "beforebegin",
-          outerList
-        );
-        return i;
-      }
-    } else if (inputDateArr[0] > date[0] && i == dateItem.length - 1) {
-      dateItem[i].parentElement.insertAdjacentElement("afterend", outerList);
-      return i + 1;
-    } else if (inputDateArr[0] < date[0]) {
-      dateItem[i].parentElement.insertAdjacentElement("beforebegin", outerList);
-      return i;
-    }
+
+  if (isBefore) {
+    dateItem[dateIndex].parentElement.insertAdjacentElement("beforebegin", outerList);
+  } else {
+    dateItem[dateIndex - 1].parentElement.insertAdjacentElement("afterend", outerList);
   }
+
+  return dateIndex;
 }
 
+// *** Todo: change to binary search algorithm
 // decide where to put the time and return the index which points to a place
 // to write to-do
 function findTimeLocation(outerList, timeValue) {
-  let outerListChildIdx = 0;
-  console.log(outerList);
-  outerListChildLen = outerList.childElementCount;
-  // const listWrapper = outerList.querySelector(".list-wrapper");
-  // console.log(listWrapper);
-  const [inputHour, inputMin] = timeValue.split(":");
-  const NO_OUTER_LIST = 1; // wrapper has only date box alone
-  if (outerListChildLen == NO_OUTER_LIST) return outerListChildIdx;
+
+  const NO_OUTER_LIST = 0; // wrapper has only date box alone
+  let outerListChildIdx = 0; // Index where to put the todo from outer list
+
+  let deadlineElements = outerList.querySelectorAll(".deadline");
+  if (deadlineElements.length == 0) return outerListChildIdx;
+
+  deadlineElements = Array.from(deadlineElements);
+
+  const [inputHour, inputMin] = timeValue.split(":").map((e) => parseInt(e));
+
+  // compare time with input 'timeValue'
   let compareHour, compareMin;
-  for (outerListChildIdx = 1; outerListChildIdx < outerListChildLen; outerListChildIdx++) {
-    const deadline = outerList.children[outerListChildIdx].children[1].children[0].innerText;
-    [compareHour, compareMin] = deadline.split(":");
-    if (inputHour <= compareHour && inputMin <= compareMin) return outerListChildIdx - 1;
-    if (inputHour < compareHour) return outerListChildIdx - 1;
-  }
-  return outerListChildIdx - 1;
+
+  // console.log("inputHour: " + inputHour + " inputMin: ") + inputMin;
+  deadlineElements.forEach((deadlineElement) => {
+
+    // Get Deadline
+    deadline = deadlineElement.innerText;
+
+    // split deadline to HH, MM
+    [compareHour, compareMin] = deadline.split(":").map((e) => parseInt(e));
+    // console.log("compareHour: " + compareHour + " compareMin: " + compareMin);
+
+    if (inputHour <= compareHour) {
+      if (inputHour < compareHour || (inputHour == compareHour && inputMin < compareMin)) return outerListChildIdx;
+    }
+
+    outerListChildIdx++;
+  });
+
+  return outerListChildIdx;
 }
 
 function checkList(e) {
@@ -527,7 +600,7 @@ function handleTodoContent(e) {
       },
     });
     t1.to(todoContent, { duration: 0, opacity: 0, height: 0 });
-    t1.to(todoContent, { duration: 0.5, opacity: 1, height: "auto", ease: "line" });
+    t1.to(todoContent, { duration: 0.2, opacity: 1, height: "auto", ease: "line" });
   }
   else {
     let t1 = gsap.timeline({
@@ -535,7 +608,7 @@ function handleTodoContent(e) {
         todoContent.classList.add("todo-content-hidden");
       },
     });
-    t1.to(todoContent, { duration: 0.5, opacity: 0, height: 0, ease: "line" });
+    t1.to(todoContent, { duration: 0.2, opacity: 0, height: 0, ease: "line" });
   }
 }
 
@@ -611,6 +684,8 @@ function logout() {
     },
     success: function (data, textStatus, request) {
       localStorage.removeItem('Authorization');
+      sessionStorage.removeItem('scheduleTitle');
+      sessionStorage.removeItem('scheduleId');
       alert("로그인 페이지로 이동합니다");
       location.href = "/app.html";
     },

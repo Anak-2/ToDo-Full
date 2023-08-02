@@ -356,7 +356,7 @@ button {
 } */
 
 .list-container .list {
-    min-width: 300px;
+    width: 80%;
     list-style: none;
     font-size: 1rem;
     display: block;

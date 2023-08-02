@@ -23,7 +23,7 @@ public class CustomTodoRepository {
         List<Todo> todoList = todoRepository.findByScheduleId(scheduleId);
         return todoList.stream()
                 .map(TodoResponseDto::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Todo getTodoByTitle(String title){
@@ -39,10 +39,17 @@ public class CustomTodoRepository {
         List<Todo> todoList = todoRepository.findAll();
         return todoList.stream()
                 .map(TodoResponseDto::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void delete(Todo todo) {
         todoRepository.delete(todo);
+    }
+
+    public List<TodoResponseDto> getMatchedTodoList(Long scheduleId, String searchInput) {
+        List<Todo> matchedTodoList = todoRepository.findByKeywordLike(scheduleId, searchInput);
+        return matchedTodoList.stream()
+                .map(TodoResponseDto::new)
+                .toList();
     }
 }
