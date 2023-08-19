@@ -83,15 +83,18 @@ public class TodoController {
     public void deleteTodo(@PathVariable Long todoId){
         todoService.deleteTodo(todoId);
     }
+
 //    update todo
 //    TODO: 근데 수정 권한이 없는 사용자가 바꾸려는 시도를 막기 위해 암호화한 ID 를 사용해야겠는데... uuid?
     @PatchMapping(value = "/{todoId}")
     public void updateTodo(@PathVariable Long todoId, @RequestBody TodoUpdateRequestDto todoUpdateRequestDto){
         todoService.updateTodo(todoId, todoUpdateRequestDto);
     }
-//   update finished of todo
+
+//   update state of todo
     @PatchMapping(value = "/{todoId}/{isFinished}")
     public void updateFinishedOfTodo(@PathVariable Long todoId, @PathVariable boolean isFinished){
         todoService.updateFinishOfTodo(todoId, isFinished);
     }
+
 }

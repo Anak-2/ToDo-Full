@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Deprecated
 @Entity
 @Getter
 @NoArgsConstructor

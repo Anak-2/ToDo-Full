@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Todo {
+
     @Id @GeneratedValue
     private Long id;
 
@@ -30,11 +31,10 @@ public class Todo {
 //    @Lob @Basic(fetch=FetchType.LAZY)
 //    @Column(name="contents", columnDefinition = "BLOB")
 //    private byte[] fileAttachment;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
-
-    private String hyperLink;
 
 
     public void updateTitle(String title) {
