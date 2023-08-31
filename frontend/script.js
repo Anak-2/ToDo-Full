@@ -15,7 +15,7 @@ function loginProcess() {
   if (!flag) {
     return;
   }
-  var foo = {
+  var user_info = {
     username: username,
     password: password,
   };
@@ -28,7 +28,7 @@ function loginProcess() {
     xhrFields: {
       withCredentials: true,
     },
-    data: JSON.stringify(foo), // WEB 에서 정보를 보낼 때 문자열이어야 한다
+    data: JSON.stringify(user_info), // WEB 에서 정보를 보낼 때 문자열이어야 한다
     success: function (result) {
       // refresh token 은 back 에서 cookie 에 저장
       accessToken = result.accessToken;

@@ -422,6 +422,8 @@ button {
 .outer-list .todo-content-box {
     overflow: hidden;
     background-color: rgb(216, 224, 221);
+    display: flex;
+    align-items: center;
 }
 
 .todo-content-box .todo-content {
@@ -431,6 +433,23 @@ button {
     min-height: 50px;
     width: 100%;
     font-size: 15px;
+}
+
+.todo-content-btn {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    border: none;
+    overflow: hidden;
+    background: url('/img/update-img.png') no-repeat;
+    /* Vertically center the image */
+    background-position: center calc(50%);
+    background-size: contain;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 .todo-content-hidden {

@@ -18,27 +18,13 @@ let list = document.querySelector(".list");
 let accessToken = localStorage.getItem("accessToken");
 
 
-// searchBox.addEventListener("keyup", function (e) {
-
-//   let listItem = document.querySelectorAll(".list-container .list-item");
-//   let listWrapper = listItem.parentElement;
-
-//   for (let i = 0; i < listItem.length; i++) {
-//     if (listItem[i].innerText.includes(searchBox.value, 0)) {
-//       listItem[i].parentElement.style.display = "flex";
-//     } else {
-//       listItem[i].parentElement.style.display = "none";
-//     }
-//   }
-// });
-
 document.querySelector(".searchButton").addEventListener("click", function (e) {
   if (searchBox.value == "") return;
   searchTodo(searchBox.value);
 })
 
 
-
+// search todo within ceratin schedule by search input
 function searchTodo(searchInput) {
 
   const scheduleId = sessionStorage.getItem('scheduleId');
@@ -110,6 +96,7 @@ function insertSchedule(id, title, isPublic) {
     <img class="lock ${isLocked}" onClick="lockEvent(this)" src="${imgSrc}">
     </li>`);
 }
+
 // insert schedule in list
 function addSchedule() {
   let title = document.querySelector(".schedule-inputBox").value;
@@ -138,12 +125,15 @@ function addSchedule() {
     }
   })
 };
+
 document.querySelector(".schedule-inputBox").addEventListener("keyup", function (e) {
   if (e.keyCode === 13) {
     addSchedule();
   }
 });
+
 document.querySelector(".schedule-add-btn").addEventListener("click", addSchedule);
+
 // get shcedule list from backend
 function getScheduleList() {
   $.ajax({
@@ -708,8 +698,8 @@ initInput();
 getClock();
 setInterval(getClock, 60000);
 
-getScheduleList();
-getTodoList(sessionStorage.getItem("scheduleId"), sessionStorage.getItem("scheduleTitle"));
+// getScheduleList();
+// getTodoList(sessionStorage.getItem("scheduleId"), sessionStorage.getItem("scheduleTitle"));
 
 function valueCheck(value) {
   if (value == undefined || value == null || value == "") return false;

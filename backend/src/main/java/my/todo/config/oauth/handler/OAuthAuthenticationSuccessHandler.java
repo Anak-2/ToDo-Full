@@ -27,7 +27,7 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
         String targetUrl = "http://localhost:5501/signup/sign.html";
         UserResponseDto.TokenInfo token = JwtTokenProvider.generateToken(authentication);
 
-//        보내는 RESPONSE 에 COOKIE 담아서 처리 (Set-Cookie)
+//        보내는 RESPONSE 에 REFRESH_TOKEN 을 COOKIE 담아서 전송 (Set-Cookie)
         Cookie cookie = new Cookie("refreshToken", URLEncoder.encode(token.getRefreshToken(), "UTF-8"));
         cookie.setMaxAge((int) JwtTokenProvider.ACCESS_TOKEN_EXPIRE_TIME);
         cookie.setSecure(true);
@@ -35,7 +35,8 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
         cookie.setPath("/");
         response.addCookie(cookie);
 
-//        보내는 URL에 ACCESS TOKEN 정보 담아서 처리 (프론트에서 URL 파싱해서 정보 처리)
+//        보내는 URL 에 ACCESS_TOKEN 정보 담아서 처리 (프론트에서 URL 파싱해서 정보 처리)
+//        ToDo: 보안에 취약한 방법이다. Http Only Cookie 에 Access Token 을 저장하고 DB 에 Refresh Token 을 저장하는 방식 고려
         targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("accessToken", token.getAccessToken())
                 .queryParam("refreshToken", token.getRefreshToken())

@@ -35,9 +35,11 @@ import static my.todo.email.domain.EmailSubject.*;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
+
     private final SpringTemplateEngine templateEngine;
 
     private final UserRepository userRepository;
+
     private final UserService userService;
 
     public EmailResponseDto.AuthDto sendAuthMail(String to){

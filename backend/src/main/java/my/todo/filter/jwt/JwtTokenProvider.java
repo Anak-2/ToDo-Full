@@ -92,6 +92,7 @@ public class JwtTokenProvider {
             DecodedJWT rJwt = JWT.require(HMAC512(secretKey)).build()
                     .verify(refreshToken);
 //            ToDo: RefreshToken 저장하는 저장소 따로 만들기 -> refresh token 이 유효하지만 서버에 없을 경우 오류 처리 못함
+//                  해결 상상: Redis 를 이용한 인메모리 서버 구성
 
 //          AccessToken 에서 사용자 정보 추출
             DecodedJWT jwt = JWT.decode(accessToken);

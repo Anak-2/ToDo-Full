@@ -21,6 +21,7 @@ class TodoApplicationTests {
 
 	@Autowired
 	UserRepository userRepository;
+
 	@Autowired
     UserService userService;
 

@@ -13,7 +13,7 @@
         integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- login user check -->
-    <script src="/userInfo/chekUser.js" type="module"></script>
+    <!-- <script src="/userInfo/chekUser.js" type="module"></script> -->
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
@@ -100,27 +100,34 @@
                     fill="#CCD0D2" />
             </svg>
         </div>
+        <!-- put todo list in this tag -->
         <ul class="list">
-            <!-- <div class="outer-list">
-                <div class="date-item">2023-8-1</div>
+            <div class="outer-list">
+                <div class="date-item">2023-8-2</div>
                 <div class="list-wrapper">
-                    <div class="todo-id">104</div>
-                    <li class="list-item" onclick="handleTodoContent(this)">스케쥴 수정할 수 있는 버튼<span
-                            class="deadline">21:42</span></li>
-                    <button class="complete-check">✅</button><button class="delete-btn">❌</button>
+                    <div class="todo-id">184</div>
+                    <li class="list-item">asefsa<span class="deadline">11:21</span></li><button
+                        class="complete-check">✅</button><button class="delete-btn">❌</button>
                 </div>
-                <div class="todo-content-box">
-                    <input type="textarea" class="todo-content" value="컨텐츠">
+                <div class="todo-content-box" style="opacity: 1;">
+                    <input type="textarea" class="todo-content" value="ContentBox에 넣을 값">
+                    <input type="button" class="todo-content-btn">
                 </div>
+                <div class=" list-wrapper" style="opacity: 0.5;">
+                    <div class="todo-id">171</div>
+                    <li class="complete-list list-item">world<span class="deadline">21:19</span></li><button
+                        class="complete-check">✅</button><button class="delete-btn">❌</button>
+                </div>
+                <div class="todo-content-box todo-content-hidden"><input type="textarea" class="todo-content"
+                        value="ContentBox에 넣을 값"></div>
+                <div class="list-wrapper" style="opacity: 0.5;">
+                    <div class="todo-id">174</div>
+                    <li class="complete-list list-item">fe<span class="deadline">21:20</span></li><button
+                        class="complete-check">✅</button><button class="delete-btn">❌</button>
+                </div>
+                <div class="todo-content-box todo-content-hidden"><input type="textarea" class="todo-content"
+                        value="ContentBox에 넣을 값"></div>
                 <div class="list-wrapper">
-                    <div class="todo-id">103</div>
-                    <li class="list-item">스케쥴 누르면 펼치지는 창<span class="deadline">21:42</span></li>
-                    <button class="complete-check">✅</button><button class="delete-btn">❌</button>
-                </div>
-                <div class="todo-content-box">
-                    <p class="todo-content">컨텐츠</p>
-                </div>
-            </div> -->
         </ul>
     </div>
     <script type="text/javascript" src="mainpage.js"></script>

@@ -14,13 +14,20 @@ import java.util.Optional;
 // 왜냐! JPA 관점에서 보면 FK 가 있는 Schedule (연관관계의 주인) 에서 데이터를 조작하는게 더 자연스럽기 때문
 // 하지만 RDB 에선 기본적으로 양방향 연관관계이기 때문에 User <-> Schedule 양 쪽에서 조회가 가능한게 자연스럽기 때문에 생성은 해두었다
 public interface UserRepository extends JpaRepository<User, Long> {
+
     Optional<User> findById(Long id);
+
     Optional<User> findByUsername(String username);
+
     Optional<User> findByEmail(String email);
+
     boolean existsByUsername(String username);
+
     boolean existsByEmail(String email);
+
     //    OAuth 유저를 찾기 위한 메서드
     Optional<User> findByProviderAndProviderId(String provider, String providerId);
+
 //    ToDo 문제: update query 만들기
 //    ToDo 해결: jpql 의 dirty check 으로 save() 하면 자동으로 update 쿼리 나감
 

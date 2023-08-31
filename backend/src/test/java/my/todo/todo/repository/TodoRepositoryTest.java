@@ -2,56 +2,52 @@ package my.todo.todo.repository;
 
 import jakarta.persistence.EntityManager;
 import my.todo.todo.domain.todo.Todo;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @RunWith(SpringRunner.class)
-@Transactional
-@Slf4j
-@SpringBootTest
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class TodoRepositoryTest {
 
     @Autowired
     TodoRepository todoRepository;
 
-    EntityManager em;
-
-    public TodoRepositoryTest(EntityManager em){
-        this.em = em;
-    }
+    @Autowired
+    TestEntityManager testEntityManager;
 
     @Test
-    @DisplayName("Todo의 Content 업데이트")
     void find_todo_and_content_update(){
+
         String UPDATE_MESSAGE = "Content Updated";
 
         //given
-        System.out.println("업데이트1");
         Todo todo = make_todo();
         Todo savedTodo = todoRepository.save(todo);
-        em.flush();
+        testEntityManager.flush();
         Todo findTodo = todoRepository.findById(savedTodo.getId()).orElseThrow();
 
         //when
-        System.out.println("업데이트2");
         findTodo.updateContent(UPDATE_MESSAGE);
-        em.flush();
+        testEntityManager.flush();
         Todo findUpdatedTodo = todoRepository.findById(findTodo.getId()).orElseThrow();
 
         //then
-        System.out.println("업데이트3");
         String updatedMessage = findUpdatedTodo.getContent();
-        Assertions.assertEquals(UPDATE_MESSAGE, updatedMessage);
+        Assertions.assertThat(updatedMessage).isEqualTo(UPDATE_MESSAGE);
     }
 
     public Todo make_todo(){

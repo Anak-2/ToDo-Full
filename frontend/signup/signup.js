@@ -152,6 +152,7 @@ function sendEmail() {
     },
     error: function (jqXhr) {
       // TODO: Email이 존재하지 않을 때 에러와 Email 이 이미 인증됐을 때 에러를 구분하는 좋은 방법
+      // 해결 상상: Back 에서 서로 다른 메시지를 보낸 것을 Front 에서 캐치하기
       console.log(jqXhr.responseText);
       document.querySelector(".authError").innerText = "이메일 전송 실패";
       document.querySelector(".authError").style.display = "inline-block";
