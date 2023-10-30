@@ -11,12 +11,12 @@ import java.util.List;
 
 @Getter
 public class ScheduleWithTodoResponse {
-    private long id;
+    private final long id;
     @NonNull
-    private String title;
+    private final String title;
     @JsonProperty("isPublic")
     private boolean isPublic = false;
-    private List<TodoResponseDto> todoResponseDtoList;
+    private final List<TodoResponseDto> todoResponseDtoList;
 
     public ScheduleWithTodoResponse(Schedule schedule, List<TodoResponseDto> todoResponseDtoList){
         this.id = schedule.getId();

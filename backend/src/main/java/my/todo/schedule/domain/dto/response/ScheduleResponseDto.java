@@ -8,8 +8,6 @@ import java.sql.Timestamp;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-@AllArgsConstructor
 public class ScheduleResponseDto {
 
     private long id;
@@ -24,5 +22,22 @@ public class ScheduleResponseDto {
         this.createdDate = schedule.getCreatedDate();
         this.title = schedule.getTitle();
         this.isPublic = schedule.isPublic();
+    }
+
+    @Builder
+    public ScheduleResponseDto(long id, Timestamp createdDate, @NonNull String title, boolean isPublic) {
+        this.id = id;
+        this.createdDate = createdDate;
+        this.title = title;
+        this.isPublic = isPublic;
+    }
+
+    public static ScheduleResponseDto toResponse(Schedule schedule){
+        return ScheduleResponseDto.builder()
+                .id(schedule.getId())
+                .isPublic(schedule.isPublic())
+                .title(schedule.getTitle())
+                .createdDate(schedule.getCreatedDate())
+                .build();
     }
 }

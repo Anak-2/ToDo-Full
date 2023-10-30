@@ -23,7 +23,6 @@ import java.util.List;
 public class ScheduleService {
 
     private final CustomScheduleRepository customScheduleRepository;
-    private final CustomTodoRepository customTodoRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -34,12 +33,7 @@ public class ScheduleService {
         }
         customScheduleRepository.save(schedule);
         Schedule findSchedule = customScheduleRepository.getScheduleByTitleAndUser(schedule.getTitle(), user);
-        return ScheduleResponseDto.builder()
-                .id(findSchedule.getId())
-                .title(findSchedule.getTitle())
-                .createdDate(findSchedule.getCreatedDate())
-                .isPublic(findSchedule.isPublic())
-                .build();
+        return ScheduleResponseDto.toResponse(findSchedule);
     }
 
     public List<ScheduleResponseDto> findScheduleList(String username){
@@ -52,7 +46,6 @@ public class ScheduleService {
         Schedule schedule = customScheduleRepository.getScheduleById(scheduleUpdateRequestDto.getId());
         schedule.updateTitle(scheduleUpdateRequestDto.getTitle());
         schedule.updateIsPublic(scheduleUpdateRequestDto.isPublic());
-        System.out.println("isPublic: "+scheduleUpdateRequestDto.isPublic());
     }
 
     @Transactional
